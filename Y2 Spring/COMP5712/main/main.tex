@@ -1,0 +1,101 @@
+\documentclass[12pt]{article}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage[hyphens,spaces,obeyspaces]{url}
+\usepackage{listings}
+\lstset{language=C++,
+	basicstyle=\ttfamily,
+	keywordstyle=\color{blue}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	commentstyle=\color{green}\ttfamily,
+	morecomment=[l][\color{magenta}]{\#}
+}
+
+\usepackage{bm}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{mathtools}
+
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{multicol}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% \usepackage[noend]{algpseudocode}
+\graphicspath{ {../images/} }
+\usepackage[super]{nth}
+\usepackage{subfiles}
+\providecommand{\main}{..}
+
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=blue,
+	linkbordercolor=blue,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black
+}
+
+
+\theoremstyle{definition}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}[theorem]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\x}{\bm{x}}
+\newcommand{\y}{\bm{y}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+
+\pagestyle{fancy}
+% \fancyhf{}
+\rhead{\nouppercase\leftmark}
+\chead{Aaron Wang}
+\lhead{COMP5712 Notes}
+
+\title{
+{\LARGE COMP5712 - Combinatorial Optimization} \\
+\textbf{\large Taught by Sunil Arya}\\
+\textbf{\large Notes by Aaron Wang}
+}
+
+\date{}
+
+\begin{document}
+
+
+\maketitle\thispagestyle{fancy}
+\tableofcontents
+\newpage
+\subfile{../3-26/3-26}
+
+
+\end{document}
+
+

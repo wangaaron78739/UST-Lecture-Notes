@@ -1,0 +1,117 @@
+
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+\section{March 22, 2019}
+\subsection{Eigenvalue Decomposition}
+
+		\definition
+		Let $A \in \R^{n\times n}$ be a square matrix. A non-zero vector $x$ is an \underline{\textbf{eigenvector}} of $A$ with  $\lambda\in \C$ being the corresponding \underline{\textbf{eigevalue}} if: \[
+		Ax=\lambda x		.\]  	
+
+\begin{itemize}
+		\itemsep0.3cm
+				\item Even if $A$ is a real matrix, its eigenvalue and eigenvectors can be complex
+				\item The set of eigenvalues of $A$ is called the spectrum of $A$. The spectral radius $\rho\left( A \right) $ is the maximum value $\left| \lambda \right| $ over all eigenvalues of $A$.
+				\item If $\left(\lambda,x \right) $ is an eigenpair of $A$, then:
+						\begin{align*}
+								\left( \lambda^2,x \right) &\textrm{ is a eigenpair of }A^2\\
+								\left( \lambda-\sigma,x \right) &\textrm{ is a eigenpair of }A-\sigma I\\
+								\left( \frac{1}{\lambda-\sigma},x \right) &\textrm{ is a eigenpair of }\left( A-\sigma I \right) ^{-1}
+						.\end{align*}
+\begin{proof}
+							Since $\left( \lambda,x \right) $ is an eigenpair of $A$, $Ax=\lambda x$ Multiplying both sides by $A$ from the left:\[
+				A\cdot A=\lambda A x \implies A^2x=\lambda Ax=\lambda\cdot\lambda x=\lambda^2 x
+				.\] 
+				\[
+						Ax-\sigma x=\lambda x-\sigma x \implies \left( A-\sigma I \right) x=\left( \lambda-\sigma\right)x\]\[\implies x=\left( \lambda-\sigma \right) \left( A-\sigma I \right) ^{-1}x\implies\left( A-\sigma I \right) ^{-1}x
+				.\]		
+\end{proof}
+\end{itemize}
+\begin{definition}
+	Two matrices $A$ and $B$ are \underline{\textbf{similar}} with each other if there exists a nonsingular matrix $T$ such that \[
+		B=TAT^{-1}
+		.\]  
+\end{definition}
+\begin{theorem}
+	\underline{If $A$ and $B$ are similar, then $A$ and $B$ have the same eigenvalues.}
+\end{theorem}
+\begin{proof}
+		Since $A,B$ are similar, $B=TAT^{-1}$, which implies $A=T^{-1}BT$. If $\left( \lambda, x \right) $ is an eigenpair of $A$, then $Ax=\lambda x$, so that \[
+				T^{-1}BTx=\lambda x\implies B\left( Tx \right) =\lambda\left( Tx \right) 
+		.\] Thus, $\left( \lambda, Tx \right) $ is an eigenpair of $B$. i.e. any eigenvalue of $A$ is an eigenvalue of $B$. The reverse is similar.
+\end{proof}
+\begin{definition}
+		An eigenvalue decomposition of a square matrix $A\in \R^{n\times n}$ is a factorization \[
+		A=X\Lambda X^{-1}
+		,\] where $X\in\C^{n\times n}$ is non-singular and $\Lambda\in\C^{n\times n}$ is diagonal.
+\end{definition}
+\begin{itemize}
+		\item If $A\in \R^{n\times n}$ admits an eigenvalue decomposition, then \[
+		AX=X\Lambda
+	.\] If we rewrite $X=[x_1\space x_2\space \ldots\space x_n]$ with $x_{i}\in \C^{n}$ the $i$-th column of $x$, and $\Lambda=\text{diag}(\lambda_1,\lambda_2\ldots,\lambda_n)=\begin{bmatrix} \lambda_1&&\\&\ddots&\\&&\lambda_n \end{bmatrix} $ with $\lambda_{i}\in \C$ being the $i$-th diagonal of $\Lambda$, then \[
+	A[x_1\space x_2\space \ldots\space x_n]=[x_1\space x_2\space \ldots\space x_n]\begin{bmatrix} \lambda_1&&\\&\ddots&\\&&\lambda_n \end{bmatrix}
+	.\] \[
+		\implies [Ax_1\space Ax_2\space \ldots\space Ax_n]=[\lambda_1 x_1\space \lambda_2 x_2\space \ldots\space \lambda_n x_n]
+	.\] \[
+		\implies Ax_{i}=\lambda_ix_{i},\quad i=1,2\ldots,n
+	.\] 
+	In other words $\left( \lambda_i,x_{i} \right) ,i=1,2,\ldots,n$ are eigenpairs of $A$.
+\item Since $X$ is nonsingular, $x_{i}$ are linearly independent. So, $x_{i}$ are $n$ independent eigenvectors, which span $\C^{n}$.
+\item Eigenvalue decomposition implies $X^{-1}\Lambda X - \Lambda$, so that we also say $A$ is diagonalizable.
+\item Eigenvalue decomposition does not always exist, as a square matrix $A\in \R^{n\times n}$ does not always have $n$ independent eigenvectors.
+\item Though $A\in \R^{n\times n}$ is real, the eigenvalue decomposition may be complex.
+\end{itemize}
+\subsection{Characteristic Polynomial}
+\begin{definition}
+	The \underline{\textbf{characteristic polynomial}} of $A\in \R^{n\times n}$ denoted $P_A$ is a degree $n$ polynomial defined by \[
+		P_A(z)=\text{det}(zI-A),\quad \text{where }z\in\C
+	.\] 
+\end{definition}
+Let $\left( \lambda_1,x \right) $ be an eigenpair of $A$. Then $Ax=\lambda x$, which is equivalent to: \[
+	\left( \lambda I-A \right) x=0
+.\] 
+Since $x$ is non-zero, $\lambda I-A$ has a non-zero solution. Therefore,  $\lambda I-A$ is singular. That is $\text{det}(\lambda I-A)=P_A(\lambda)=0$. Thus, $\lambda$ is an eigenvalue of $A$ iff $P_A(\lambda)=0$, and the corresponding eigenvector  $x$ are non-zero solutions of $\left( \lambda I-A \right) x=0$.
+\begin{example}
+	$A=\begin{bmatrix} 0&1\\0 &0 \end{bmatrix} $. The characteristic polynomial is: \[
+		P_A(z)=\text{det}\left(zI-\begin{bmatrix} 0&1\\0&0 \end{bmatrix} \right)=\text{det}\left( \begin{bmatrix} z&-1\\0&z \end{bmatrix}  \right) =z^2
+	.\] Therefore, $P_A(\lambda)=\lambda^2=0\implies \lambda_1=\lambda_2=0$ are the eigenvalues of $A$.
+	
+	For eigenvectors, solve $(0I-A)=0$, i.e. \[
+	\begin{bmatrix} 0&-1\\0&0 \end{bmatrix} x=0\implies x=\begin{bmatrix} q\\0 \end{bmatrix} 
+.\] As there is only one independent eigenvector, $A$ is not diagonalizable (i.e. no eigenvalue decomposition.
+\end{example}
+\begin{example}
+	$A=\begin{bmatrix} 0&-1\\1&0 \end{bmatrix} $. The characteristic polynomial is: \[
+		P_A(z)=\text{det}\left( \begin{bmatrix} z&1\\-1&z \end{bmatrix}  \right) =z^2+1
+	.\] Therefore, $P_A(\lambda)=\lambda^2+1=0 \implies \lambda_1=i,\quad \lambda_2=-i$ are the eigenvalues. \\For eigenvector of $\lambda_1=i$, solve $\left( i I-A= \right) x=0$, i.e. \[
+		\begin{bmatrix} i&1\\-1&i \end{bmatrix} x=0\implies x=\alpha\begin{bmatrix} i\\1 \end{bmatrix} \quad \alpha\in \C
+	.\] Therefore, a corresponding eigenvector is $x_{i}=\begin{bmatrix} i\\1 \end{bmatrix} $.\\For eigenvector of $\lambda_2=-i$: \[
+		\begin{bmatrix} -i&1\\-1&-i \end{bmatrix} x=0\implies x=\beta\begin{bmatrix} i\\-1 \end{bmatrix} \quad\beta\in \C
+	.\] The corresponding eigenvector is $x_2=\begin{bmatrix} i\\-1 \end{bmatrix} $.\\ As such, define $X=\begin{bmatrix} x_1&x_2 \end{bmatrix} =\begin{bmatrix} i&i\\1&-1 \end{bmatrix},\Lambda=\begin{bmatrix} \lambda_1&\\&\lambda_2 \end{bmatrix} =\begin{bmatrix} i&\\&-i \end{bmatrix},X^{-1}=\begin{bmatrix} -\frac{1}{2}&\frac{1}{2}\\-\frac{1}{2}i&-\frac{1}{2} \end{bmatrix} $,\\Therefore $A=X\Lambda X^{-1}$ \[
+	\begin{bmatrix} 0&-1\\1&0 \end{bmatrix} =\begin{bmatrix} i&i\\1&-1 \end{bmatrix} \begin{bmatrix} i&\\&-i \end{bmatrix} \begin{bmatrix} -\frac{1}{2}i&\frac{1}{2}\\-\frac{1}{2}i&-\frac{1}{2} \end{bmatrix} 
+	.\] This shows that a real matrix may have a complex eigenvalue decomposition.
+\end{example}
+\begin{remark}
+However, we don't usually solve the characteristic equation, as polynomial root-finding is not numerically stable in general.
+	
+\end{remark}
+\subsection{Special Case: Symmetric Matrix and SPD Matrix}
+Assume $A\in \R^{n\times n}$ is symmetric. Then
+\begin{enumerate}
+	\item The eigenvalues of $A$ are real.
+		\begin{proof}
+			Let $\left( \lambda,x \right) $ be an eigenpair of $A$. Then, $Ax=\lambda x$.\\Multiply both sides by $x^{*}\equiv \overline{x^{*}}$ (conjugate transpose) from the left: \[
+			x^{*}Ax=\lambda x^{*}x\implies \lambda= \frac{x^*Ax}{x^*x}
+		.\] 
+		\begin{itemize}
+			\item $x^*Ax$ is real because $\overline{x^*Ax}=\overline{\left( x^*Ax \right)^{T} }=\overline{x^{T}A^{T}\overline{x}}=x^*Ax$
+			\item $x^*x$ is also real, because $\overline{x^{*}x}=\overline{\left( x^*x \right) ^{T}}=\overline{x^{T}\overline{x}}=x^*x$.
+			\item As such, $\lambda= \frac{x^*Ax}{x^*x}$ is real.
+\end{itemize}
+		\end{proof}
+\end{enumerate}
+\end{document}
+
+
