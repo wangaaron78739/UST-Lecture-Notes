@@ -1,0 +1,131 @@
+\documentclass[12pt]{article}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage[hyphens,spaces,obeyspaces]{url}
+\usepackage{listings}
+\lstset{language=C++,
+		basicstyle=\ttfamily,
+		keywordstyle=\color{blue}\ttfamily,
+		stringstyle=\color{red}\ttfamily,
+		commentstyle=\color{green}\ttfamily,
+		morecomment=[l][\color{magenta}]{\#}
+}
+
+\usepackage{bm}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{mathtools}
+
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{multicol}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% \usepackage[noend]{algpseudocode}
+\graphicspath{ {./images/} }
+\usepackage[super]{nth}
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+
+\newtheorem*{remark}{Remark}
+
+\setcounter{secnumdepth}{0}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\x}{\bm{x}}
+\newcommand{\y}{\bm{y}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+
+\pagestyle{fancy}
+% \fancyhf{}
+\chead{Aaron Wang}
+\rhead{\nouppercase\leftmark}
+\lhead{MATH3322 - Notes}
+\cfoot{\thepage}
+\title{
+{\LARGE MATH3322 - Matrix Computation} \\
+\textbf{\large Instructor: Jianfeng Cai} 
+}
+
+\date{}
+
+\begin{document}
+\maketitle\thispagestyle{fancy}
+\tableofcontents
+\newpage
+
+\section{Eigenvalue Decomposition}
+
+		\definition
+	 Let $A \in \R^{n\times n}$ be a square matrix. A non-zero vector $x$ is an eigenvector of $A$ with  $\lambda\in \C$ being the corresponding eigevalue if: \[
+		Ax=\lambda x		.\]  	
+
+\begin{itemize}
+		\itemsep0.3cm
+				\item Even if $A$ is a real matrix, its eigenvalue and eigenvectors can be complex
+				\item The set of eigenvalues of $A$ is called the spectrum of $A$. The spectral radius $\rho\left( A \right) $ is the maximum value $\left| \lambda \right| $ over all eigenvalues of $A$.
+				\item If $\left(\lambda,x \right) $ is an eigenpair of $A$, then:
+						\begin{align*}
+								\left( \lambda^2,x \right) &\textrm{ is a eigenpair of }A^2\\
+								\left( \lambda-\sigma,x \right) &\textrm{ is a eigenpair of }A-\sigma I\\
+								\left( \frac{1}{\lambda-\sigma},x \right) &\textrm{ is a eigenpair of }\left( A-\sigma I \right) ^{-1}
+						.\end{align*}
+\begin{proof}
+							Since $\left( \lambda,x \right) $ is an eigenpair of $A$, $Ax=\lambda x$ Multiplying both sides by $A$ from the left:\[
+				A\cdot A=\lambda A x \implies A^2x=\lambda Ax=\lambda\cdot\lambda x=\lambda^2 x
+				.\] 
+				\[
+						Ax-\sigma x=\lambda x-\sigma x \implies \left( A-\sigma I \right) x=\left( \lambda-\sigma\right)x\]\[\implies x=\left( \lambda-\sigma \right) \left( A-\sigma I \right) ^{-1}x\implies\left( A-\sigma I \right) ^{-1}x
+				.\]		
+\end{proof}
+\end{itemize}
+\begin{definition}
+		Two matricies $A$ and $B$ are similar with each other if there exists a nonsingular matrix $T$ such that \[
+		B=TAT^{-1}
+		.\]  
+\end{definition}
+\begin{theorem}
+		If $A$ and $B$ are similar, then $A$ and $B$ have the same eigenvalues.
+\end{theorem}
+\begin{proof}
+		Since $A,B$ are similar, $B=TAT^{-1}$, which implies $A=T^{-1}BT$. If $\left( \lambda, x \right) $ is an eigenpair of $A$, then $Ax=\lambda x$, so that \[
+				T^{-1}BTx=\lambda x\implies B\left( Tx \right) =\lambda\left( Tx \right) 
+		.\] Thus, $\left( \lambda, Tx \right) $ is an eigenpair of $B$. i.e. any eigenvalue of $A$ is an eigenvalue of $B$. The reverse is similar.
+\end{proof}
+\begin{definition}
+		An eigenvalue decomposition of a square matrix $A\in \R^{n\times n}$ is a factorization \[
+		A=X\Lambda X^{-1}
+		,\] where $X\in\C^{n\times n}$ is non-singular and $\Lambda\in\C^{n\times n}$ is diagonal.
+\end{definition}
+\begin{itemize}
+		\item If $A\in \R^{n\times n}$ admits an eigenvalue decomposition, then \[
+		AX=X\Lambda
+.\] If we rewrite $X=[x_1\space x_2\space \ldots\space x_n]$
+\end{itemize}
+\newpage
+\section{ Decomposition}
+
+\end{document}
+
