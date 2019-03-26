@@ -3,8 +3,8 @@
 
 
 \begin{document}
-\section{March 22, 2019}
-\subsection{Eigenvalue Decomposition}
+\section{March 22nd, 2019}
+\subsection{Eigenvalue Decomposition}\index{eigenvalue decomposition}
 
 		\definition
 		Let $A \in \R^{n\times n}$ be a square matrix. A non-zero vector $x$ is an \underline{\textbf{eigenvector}} of $A$ with  $\lambda\in \C$ being the corresponding \underline{\textbf{eigevalue}} if: \[
@@ -29,13 +29,13 @@
 				.\]		
 \end{proof}
 \end{itemize}
-\begin{definition}
+\begin{definition}\index{similar matrices}
 	Two matrices $A$ and $B$ are \underline{\textbf{similar}} with each other if there exists a nonsingular matrix $T$ such that \[
 		B=TAT^{-1}
 		.\]  
 \end{definition}
 \begin{theorem}
-	\underline{If $A$ and $B$ are similar, then $A$ and $B$ have the same eigenvalues.}
+	If $A$ and $B$ are similar, then $A$ and $B$ have the same eigenvalues.
 \end{theorem}
 \begin{proof}
 		Since $A,B$ are similar, $B=TAT^{-1}$, which implies $A=T^{-1}BT$. If $\left( \lambda, x \right) $ is an eigenpair of $A$, then $Ax=\lambda x$, so that \[
@@ -43,7 +43,7 @@
 		.\] Thus, $\left( \lambda, Tx \right) $ is an eigenpair of $B$. i.e. any eigenvalue of $A$ is an eigenvalue of $B$. The reverse is similar.
 \end{proof}
 \begin{definition}
-		An eigenvalue decomposition of a square matrix $A\in \R^{n\times n}$ is a factorization \[
+	An \underline{\textbf{eigenvalue decomposition}} of a square matrix $A\in \R^{n\times n}$ is a factorization \[
 		A=X\Lambda X^{-1}
 		,\] where $X\in\C^{n\times n}$ is non-singular and $\Lambda\in\C^{n\times n}$ is diagonal.
 \end{definition}
@@ -64,8 +64,8 @@
 \item Though $A\in \R^{n\times n}$ is real, the eigenvalue decomposition may be complex.
 \end{itemize}
 \subsection{Characteristic Polynomial}
-\begin{definition}
-	The \underline{\textbf{characteristic polynomial}} of $A\in \R^{n\times n}$ denoted $P_A$ is a degree $n$ polynomial defined by \[
+\begin{definition}\index{characteristic polynomial}
+	The \bful{characteristic polynomial} of $A\in \R^{n\times n}$ denoted $P_A$ is a degree $n$ polynomial defined by \[
 		P_A(z)=\text{det}(zI-A),\quad \text{where }z\in\C
 	.\] 
 \end{definition}

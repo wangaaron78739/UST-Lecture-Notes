@@ -48,6 +48,10 @@
 	urlcolor=black
 }
 
+\usepackage{makeidx}
+\makeindex
+
+
 
 \theoremstyle{definition}
 
@@ -73,12 +77,14 @@
 \newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
 \newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
 
+\newcommand{\bful}[1]{\underline{\textbf{#1}}}
 
 \pagestyle{fancy}
-% \fancyhf{}
-\rhead{\nouppercase\leftmark}
-\chead{Aaron Wang}
-\lhead{MATH3322 Notes}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\fancyhf{}
+\rhead{\fancyplain{}{MATH3322 Notes}}
+\lhead{\fancyplain{}{\rightmark }} 
+\cfoot{\fancyplain{}{\thepage}}
 
 \title{
 {\LARGE MATH3322 - Matrix Computation} \\
@@ -94,5 +100,9 @@
 \newpage
 
 \subfile{../3-22/3-22}
+\appendix
+\newpage
+\addcontentsline{toc}{section}{Index}
+\printindex
 \end{document}
 

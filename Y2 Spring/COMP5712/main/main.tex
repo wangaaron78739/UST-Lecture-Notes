@@ -18,7 +18,6 @@
 \usepackage{bm}
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
 \usepackage{mathtools}
-
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage{fancyhdr}
@@ -48,6 +47,8 @@
 	urlcolor=black
 }
 
+\usepackage{makeidx}
+\makeindex
 
 \theoremstyle{definition}
 
@@ -74,10 +75,12 @@
 \newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
 
 \pagestyle{fancy}
-% \fancyhf{}
-\rhead{\nouppercase\leftmark}
-\chead{Aaron Wang}
-\lhead{COMP5712 Notes}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\fancyhf{}
+\rhead{\fancyplain{}{COMP 5712 Notes}}
+\lhead{\fancyplain{}{\rightmark }} 
+\cfoot{\fancyplain{}{\thepage}}
+
 
 \title{
 {\LARGE COMP5712 - Combinatorial Optimization} \\
@@ -94,7 +97,12 @@
 \tableofcontents
 \newpage
 \subfile{../3-26/3-26}
+ 
 
+\appendix
+\newpage
+\addcontentsline{toc}{section}{Index}
+\printindex
 
 \end{document}
 

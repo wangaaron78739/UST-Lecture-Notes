@@ -6,8 +6,7 @@
 
 
 \section{March 26th, 2019}
-\subsection{Flow Decomposition}
-
+\subsection{Flow Decomposition}\index{flow decomposition}
 \begin{lemma}
 	Let $\left( G=(V,E),s,t,c \right) $ be a flow network. Let $f$ be a flow in this network. Then there is a collection of feasible flows  $f_1,f_2,\ldots f_k$ and a collection of $s-t$ paths $p_1,\ldots,p_k$.
 \end{lemma}
@@ -55,7 +54,7 @@ As such for  $t\approx 2|E|\ln OPT+1$, $res_t<1\implies res_t=0$. Look at formal
 
 The $\log(OPT)$ factor in the running time is awkward for many people, so we will try to remove it.
 
-\subsection{Edmonds-Karp Algorithm}
+\subsection{Edmonds-Karp Algorithm}\index{Edmonds-Karp Algorithm}
 \begin{definition}[Strongly Polynomial vs Weakly Polynomial]
 	An algorithm runs in \textbf{strongly} poly time if, assuming unit time arithmetic operations (e.g. $+,-$), the running time is polynomial in the  $\#$ of numerical operations given as input (polynomial only in $|V|,|E|$).
 \end{definition}
