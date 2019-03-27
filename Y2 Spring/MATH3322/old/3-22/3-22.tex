@@ -1,3 +1,4 @@
+
 \documentclass[../main/main.tex]{subfiles}
 
 
@@ -5,10 +6,10 @@
 \section{March 22nd, 2019}
 \subsection{Eigenvalue Decomposition}\index{eigenvalue decomposition}
 
-\begin{definition}
-	Let $A \in \R^{n\times n}$ be a square matrix. A non-zero vector $x$ is an \vocab{eigenvector} of $A$ with  $\lambda\in \C$ being the corresponding \vocab{eigenvalue} if: \[
+		\definition
+		Let $A \in \R^{n\times n}$ be a square matrix. A non-zero vector $x$ is an \underline{\textbf{eigenvector}} of $A$ with  $\lambda\in \C$ being the corresponding \underline{\textbf{eigevalue}} if: \[
 		Ax=\lambda x		.\]  	
-\end{definition}
+
 \begin{itemize}
 		\itemsep0.3cm
 				\item Even if $A$ is a real matrix, its eigenvalue and eigenvectors can be complex
@@ -29,7 +30,7 @@
 \end{proof}
 \end{itemize}
 \begin{definition}\index{similar matrices}
-	Two matrices $A$ and $B$ are \vocab{similar} with each other if there exists a nonsingular matrix $T$ such that \[
+	Two matrices $A$ and $B$ are \underline{\textbf{similar}} with each other if there exists a nonsingular matrix $T$ such that \[
 		B=TAT^{-1}
 		.\]  
 \end{definition}
@@ -42,7 +43,7 @@
 		.\] Thus, $\left( \lambda, Tx \right) $ is an eigenpair of $B$. i.e. any eigenvalue of $A$ is an eigenvalue of $B$. The reverse is similar.
 \end{proof}
 \begin{definition}
-	An \vocab{eigenvalue decomposition} of a square matrix $A\in \R^{n\times n}$ is a factorization \[
+	An \underline{\textbf{eigenvalue decomposition}} of a square matrix $A\in \R^{n\times n}$ is a factorization \[
 		A=X\Lambda X^{-1}
 		,\] where $X\in\C^{n\times n}$ is non-singular and $\Lambda\in\C^{n\times n}$ is diagonal.
 \end{definition}
@@ -64,7 +65,7 @@
 \end{itemize}
 \subsection{Characteristic Polynomial}
 \begin{definition}\index{characteristic polynomial}
-	The \vocab{characteristic polynomial} of $A\in \R^{n\times n}$ denoted $P_A$ is a degree $n$ polynomial defined by \[
+	The \bful{characteristic polynomial} of $A\in \R^{n\times n}$ denoted $P_A$ is a degree $n$ polynomial defined by \[
 		P_A(z)=\text{det}(zI-A),\quad \text{where }z\in\C
 	.\] 
 \end{definition}
@@ -88,7 +89,7 @@ Since $x$ is non-zero, $\lambda I-A$ has a non-zero solution. Therefore,  $\lamb
 		\begin{bmatrix} i&1\\-1&i \end{bmatrix} x=0\implies x=\alpha\begin{bmatrix} i\\1 \end{bmatrix} \quad \alpha\in \C
 	.\] Therefore, a corresponding eigenvector is $x_{i}=\begin{bmatrix} i\\1 \end{bmatrix} $.\\For eigenvector of $\lambda_2=-i$: \[
 		\begin{bmatrix} -i&1\\-1&-i \end{bmatrix} x=0\implies x=\beta\begin{bmatrix} i\\-1 \end{bmatrix} \quad\beta\in \C
-	.\] The corresponding eigenvector is $x_2=\begin{bmatrix} i\\-1 \end{bmatrix} $.\\ Define $X=\begin{bmatrix} x_1&x_2 \end{bmatrix} =\begin{bmatrix} i&i\\1&-1 \end{bmatrix},\Lambda=\begin{bmatrix} \lambda_1&\\&\lambda_2 \end{bmatrix} =\begin{bmatrix} i&\\&-i \end{bmatrix},X^{-1}=\begin{bmatrix} -\frac{1}{2}&\frac{1}{2}\\-\frac{1}{2}i&-\frac{1}{2} \end{bmatrix} $,\\Therefore $A=X\Lambda X^{-1}$ \[
+	.\] The corresponding eigenvector is $x_2=\begin{bmatrix} i\\-1 \end{bmatrix} $.\\ As such, define $X=\begin{bmatrix} x_1&x_2 \end{bmatrix} =\begin{bmatrix} i&i\\1&-1 \end{bmatrix},\Lambda=\begin{bmatrix} \lambda_1&\\&\lambda_2 \end{bmatrix} =\begin{bmatrix} i&\\&-i \end{bmatrix},X^{-1}=\begin{bmatrix} -\frac{1}{2}&\frac{1}{2}\\-\frac{1}{2}i&-\frac{1}{2} \end{bmatrix} $,\\Therefore $A=X\Lambda X^{-1}$ \[
 	\begin{bmatrix} 0&-1\\1&0 \end{bmatrix} =\begin{bmatrix} i&i\\1&-1 \end{bmatrix} \begin{bmatrix} i&\\&-i \end{bmatrix} \begin{bmatrix} -\frac{1}{2}i&\frac{1}{2}\\-\frac{1}{2}i&-\frac{1}{2} \end{bmatrix} 
 	.\] This shows that a real matrix may have a complex eigenvalue decomposition.
 \end{example}
