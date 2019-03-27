@@ -110,6 +110,17 @@ Assume $A\in \R^{n\times n}$ is symmetric. Then
 			\item As such, $\lambda= \frac{x^*Ax}{x^*x}$ is real.
 \end{itemize}
 		\end{proof}
+	\item Eigenvectors corresponding to distinct eigenvalues are orthogonal.
+	\item $A$ is always diagonalizable, and the eigenvalue decomposition has a special form \[
+	A=Q\Lambda Q^{T}
+	\] where $Q\in \R^{n\times n}$ is orthonormal and $\Lambda\in \R^{n\times n}$ is diagonal.
+\item If $A$ is SPD, then all eigenvalues are positive. 
+\item If $A$ is SPSD, then all eigenvalues are non-negative.
+	\begin{proof}
+		Let $\left( \lambda,x \right) $ a be an eigenpair of $A$. then $Ax=\lambda x$, and $\lambda,x$ are real. So \[
+		x^{T}Ax=\lambda x^{T}x\implies \lambda=\frac{x^{T Ax}}{x^{T}x}>0
+		.\] if $A$ is SPD. If  $A$ is SPSD, then $\lambda=\frac{x^{T}Ax}{x^{T}x}\ge 0$, since $x^{T}Ax\ge 0$.
+	\end{proof}
 \end{enumerate}
 \end{document}
 
