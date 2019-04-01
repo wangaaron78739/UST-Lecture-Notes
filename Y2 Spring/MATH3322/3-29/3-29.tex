@@ -1,0 +1,48 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March 29th, 2019}
+\subsection{Inverse Power Iteration}
+If $\lambda_i,\ i\in 1,\ldots,n$ with $|\lambda_1|\ge |\lambda_2|\ge \ldots\ge |\lambda_n|$ are eigenvalues of $A$, then  $\frac{1}{\lambda_i}$ are eigenvalues of $A^{-1}$ and \[
+\frac{1}{|\lambda_1|}\le \frac{1}{|\lambda_2|}\le \ldots\le \frac{1}{|\lambda_n|}
+.\]  Therefore, we can apply power iteration to $A^{-1}$ to get $\lambda_n$ and hence $x_n$. This is called the inverse power iteration.
+\begin{algo}
+	\begin{enumerate}
+		\item Choose $y^{(0)}\in \R^{n}$ s.t. $\|y^{(0)}\|_2=1$
+		\item for $k=1,2,\ldots$
+			\[
+				z^{(k)}=A^{-1}y^{(k-1)}
+			\]\[
+			y^{(k)}=\frac{z^{(k)}}{\|z^{(k)}\|_2}
+			\]\[
+			\mu^{(k)}=\left( y^{(k)} \right)^{T}Ay^{(k)} 
+			.\]  
+	\end{enumerate}
+\end{algo}
+\begin{remark}
+	\begin{enumerate}
+		\item From the convergence of power iteration, if: 
+			\begin{itemize}
+				\item $\langle y^{(0)},x_n\rangle\neq 0$ 
+				\item $\frac{1}{|\lambda_n|}>\frac{1}{|\lambda_{n-1}|}$ (i.e. $|\lambda_n|<|\lambda_{n-1}|$)
+				\item $A^{-1}$ is symmetric (always true because $A$ is symmetric.
+			\end{itemize}
+			then the limit of the iteration is: \[
+				y^{(k)}\to \pm x_n, \quad \mu^{(k)}\to \lambda_n
+			,\] with a rate $\left( \frac{\left| \lambda_n \right|}{\left| \lambda_{n-1} \right|}  \right)^{\frac{k}{2}} $
+\item We need to solve $Az^{(k)}=y^{(k-1)}$ in each iteration, which can be done by Gaussian Elimination. But we only need to compute $A=LU$ before the iteration and then, in each iteration, we obtain: \[
+		z^{(k)}=U^{-1}L^{-1}y^{(k_-1)}
+,\] which is just a forward and backward substitution. 
+\begin{itemize}
+	\item  Thus the total computational cost is: \[
+			O(n^3)+O\left(n^2\cdot \log\left( \frac{1}{\epsilon} \right) \right)
+		\] for an $\epsilon$-solution, ($O(n^3)$ for the LU decomposition)
+\end{itemize}
+\item If $|\lambda_n|$ is very close to 0, then, $A$ is very close to singular, meaning that the solution of $Az^{(k)}=y^{\left( k-1 \right) }$ may have a large error. However, we can still get a very accurate solution.
+\end{enumerate}
+\end{remark}
+\subsection{Shifted Inverse Power Iteration}
+\end{document}
+

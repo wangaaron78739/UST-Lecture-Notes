@@ -110,10 +110,43 @@ We will show $|\langle y^{(k)},x\rangle|\to 1$. It is the same as $1-\langle y^{
 	A^{k}y^{(0)}=\begin{bmatrix} x_1&x_2&\ldots&x_n \end{bmatrix}\begin{bmatrix} \lambda_1^{k} v_1\\ \vdots\\ \lambda_n^{k} v_n\end{bmatrix}=\sum_{i=1}^{n} \lambda_i^{k}v_ix_i,\ v_i\in \R,\ x_i\in \R^{n} 
 	.\] Because $x_i$ are othronormal,  \[
 	\|A^{k}y^{(0)}\|^{2}_2=\sum_{i=1}^{n} \lambda^{2k}_i v^2_1 = \sum_{i=1}^{n} |\lambda_i|^{2k}|v_i|^{2}=|\lambda_1|^{2k}|v_1|^2\left( 1+\ldots \right)\ge \left( |\lambda_1|^{k}|v_1| \right)^2  
-	.\]  and  \[
+	\]  and  \[
 	\langle y^{(k)}, x_1\rangle^2=\frac{1}{\|A^ky^{(0)}\|^2_2}\langle A^ky^{(0)},x_1\rangle^2=\frac{1}{\|A^ky^{(0)}\|^2_2}\langle \sum_{i=1}^{n} \lambda_i^{k}v_ix_i,x_1\rangle^2=\frac{1}{\|A^ky^{(0)}\|^2_2}\left( \lambda_1^{k}v_1 \right)^2 
 	.\] 
+	%\[
+	%	1-\langle y^{(k)},x_1\rangle^2=\frac{1}{\|A^{k}y^{(0)}\|^2_2}\left( \|A^k y^{(0)}^2_2\|- |\lambda^k_1 v_1|^2 \right) 
+	%.\]
+\[
+	\le \left| \frac{\lambda_2}{\lambda_1}^{2k} \right| \left( \left| \frac{v_2}{v_1} \right|^2+\left| \frac{v_3}{v_1} \right|^2+\left| \frac{v_4}{v_1} \right|^2+\ldots+ \left| \frac{v_n}{v_1} \right|^2\right) =C_0^2\left| \frac{\lambda_2}{\lambda_1}^{k} \right| 
+.\] Thus  \[
+\sqrt{1-\langle y^{(k)},x_1\rangle^2}\le C_0\left| \frac{\lambda_2}{\lambda_1}^{k} \right| 
+.\] Because $C_0<+\infty$, as $v_1=\angle x_1,y^{(0)}\neq0$ by assumption, \[
+\sqrt{1-\langle y^{(k)},x_1\rangle^2}\le C_0\left| \frac{\lambda_2}{\lambda_1}^{k} \right|\to 0, \text{ as } k \to \infty 
+.\]\[
+\langle y^{(k)},x_1\rangle^2\ge 1-C_0^2\left| \frac{\lambda_2}{\lambda_1}^{2k} \right| \implies \langle y^{(k)},x_1\rangle^2\le \|y^{(k)}\|^2_2\|x_1\|^2_2=1
+.\] So \[
+1-C_0^2\left| \frac{\lambda_2}{\lambda_1}^{2k} \right| \le 1
+.\]  If $\langle y^{(k)},x_1\rangle\ge 0$, then  \[
+\|y^{(k)}-x_1\|_2=\sqrt{\|y^{(k)}\|^2_2+\|x_1\|^2_2-2\langle y^{(k)},x_1\rangle}=\sqrt{2-2\langle y^{(k)},x_1\rangle}\le \left( 2-2\sqrt{1-C_0^2\left| \frac{\lambda_2}{\lambda_1}^{2k}  \right|}   \right) ^{\frac{1}{2}}
+.\] I give up  will do this later
 \end{proof}
+\begin{remark}
+	\begin{enumerate}
+		\item $\langle y^{(k)}, x_1\rangle=\cos \theta$. Genearlly,  \[
+				\cos \angle(x,y) = \frac{\langle x,y\rangle}{\|x\|_2\|y\|_2}
+		.\] 
+	\item The convergenec rate depends on $\left| \frac{\lambda_2}{\lambda_1} \right| <1$, the smaller $\left| \frac{\lambda_2}{\lambda_1} \right| $, the faster the convergence. When $|\lambda_1|=|\lambda_2|$, the power iteration may not converge.
+	\item When $\langle y^{(0)},x_1\rangle=0$, then $C_0=+\infty$, so $y$ will not converge to  $\lambda_1$.
+	\item In power iteration, only one matrix-product and several vector operations are used, the ocst per step is $O(n^2)$. If we want an approximate eigenvalue/eigenvector of error $\epsilon$, we need to choose $k$, s.t. \[
+	C\left| \frac{\lambda_2}{\lambda_1} \right| ^{\frac{k}{2}}\le \epsilon\implies\left| \frac{\lambda_1}{\lambda_2} \right| ^{\frac{k}{2}}\ge \frac{c}{\epsilon}
+	.\] \[
+	\frac{k}{2}\log\left| \frac{\lambda_1}{\lambda_2} \right| \ge \log\left( \frac{c}{\epsilon} \right) \implies k\ge \frac{\log\left( \frac{c}{\epsilon} \right) }{\log\left( \left| \frac{\lambda_1}{\lambda_2} \right|  \right) }\sim O\left( \log\left( \frac{1}{\epsilon} \right)  \right) 
+	.\] Then the total computational cost is \[
+	O\left( \log\left( \frac{1}{\epsilon} \right)\cdot n^2 \right)
+	.\] 
+\item Only the matrix-cector product involving $A $ is needed. This means that $A$ is not needed explicitly, only the subroutine to compute  $Ax$ is sufficient.
+	\end{enumerate}
+\end{remark}
 \end{document}
 
 
