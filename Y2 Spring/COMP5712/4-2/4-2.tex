@@ -1,0 +1,88 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April  2nd, 2019}
+\subsection{Matching on Bipartite Graphs Part 2}
+\begin{theorem}[Konig's Theorem]
+	In a bipartite graph, the size of the max matching \vocab{equals} the size of the min vertex cover.
+\end{theorem}
+\begin{remark}
+	This is an example of an exact integrality relaxation.
+\end{remark}
+\begin{proof}
+	Let $C=(R \cap S) \cup (L-S)$.
+	\begin{claim}
+	C is a vertex cover.
+	\end{claim}
+	\begin{claim}
+There is no vertex cover of size smaller than $|C|$.
+	\end{claim}
+	Recall that the capacity of the min cut $S$ is: \[
+		S=|(L-S)|+|R\cap S|=|C|
+	.\] By the max-flow min-cut theorem, the value of the max flow is $|C|$, which is also the value of the max matching. From weak duality, we have the size of any vertex cover is greater than the size of the max matching, thus claim 1.4 is proven. \\
+
+	Note that this is a vertex cover because there is no edges from $L \cap S$ to $R-S$, as such, if there were an edge exiting  $L \cap  S$, then it would edge in $R\cap S$. Similar logic can be applied to $R-S$. In addition, note that direct edges out of $s$ and the direct edges into $t$ are artificial.
+\end{proof}
+\subsection{Linear Program of Max Flow}
+\begin{remark}
+	Note that the min-cut problem is an integer linear program. As such, the dual of the max-flow is not the min-cut (as the max-flow is an LP). Rather the dual is the LP relaxation of the min-cut problem.
+\end{remark}
+We will use the primal dual framework to gain a deeper understanding.\\
+
+Consider the flow network $G=(V,E)$, with source $s$, sink $t$, and capacities $c$. The LP for the max flow is:\\
+
+\begin{tabular}{rl}
+	Maximize: &$\sum_{v} f(s,v)$ \\
+	Subject to:& $\sum_{u} f(u,v)=\sum_{w}f(v,w),\quad \forall v\in V-\{s,t\} $\\
+			   &$f(u,v)\le c(u,v),\quad \forall (u,v) \in E$\\
+			   &$f(u,v)\ge 0,\quad\forall (u,v)\in E$
+\end{tabular}\\
+
+Note that we would have a dual variable for each edge and vertex (which would be difficult). Instead think of the flow as a collection of paths with flows traveling through the path from $s$ to $t$.
+\begin{remark}
+	Note that the number of possible paths is exponential, however we will stil consider, as it will give simpler structure (we do not need to worry about flow constraints).
+\end{remark}
+Let us introduce variable $x_p$, denoting the flows on path $p$. For each possible $s-t$ path, let $P$ denote the set of all such $s-t$ paths. The LP will be as follows:\\
+
+\begin{tabular}{rl}
+	Maximize: &$\sum_{p\in P}x_p$ \\
+	Subject to:& $\sum_{p \in P:\ (u,v)\in p} x_p\le c(u,v),\quad \forall (u,v)\in E$\\
+			   &$x_p\ge 0,\quad\forall p \in P$
+\end{tabular}\\
+
+Dual: Introduce a variable $y(u,v)$ for each edge $(u,v)$:\\
+
+\begin{tabular}{rl}
+	Minimize: &$\sum_{(u,v)\in E}c(u,v)y(u,v)$\\
+	Subject to: & $\sum_{(u,v)\in p}y(u,v) \ge 1,\quad\forall p\in P$\\
+				&$y(u,v)\ge 0,\quad\forall (u,v)\in E$
+\end{tabular}\\
+
+\begin{description}
+	\item[Intepretation:] Dual is assigning weights of edges:
+		\begin{itemize}
+			\item Think of $y(u,v)$ as the "length" of the edge $(u,v)$
+			\item The constraints say that the length of each path is at least 1 - i.e. distance [length of shortest path] of $t$ from $s$ is at least 1.
+		\end{itemize}
+	\item[Goal:] To "separate" $s$ and $t$ while minimizing the total capacity selected.
+\end{description}
+\begin{remark}
+	Note that if the non negativity constraint was integer, then it would be the ILP of the min-cut. 
+\end{remark}
+
+\begin{lemma}
+	For every feasible cut $A$ in the flow network, there is a feasible solution whose cost is the same as the capacity of $A$.
+\end{lemma}
+\begin{proof}
+	Note that if we assign $y(u,v)$ to 1 for all edges crossing the cut, we would have a feasible solution.
+\end{proof}
+\begin{lemma}
+	Given any feasible solution $y(u,v),\ \forall (u,v)\in E$, it  is possible to find a cut $A$ such that: \[
+		c(A)\le \sum_{(u,v)}c(u,v)y(u,v)
+	.\] This means that if we have the optimal solution for the dual, we can find a cut that is just as good.
+\end{lemma}
+
+\end{document}
+
