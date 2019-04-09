@@ -21,7 +21,7 @@
 						.\end{align*}
 \begin{proof}
 							Since $\left( \lambda,x \right) $ is an eigenpair of $A$, $Ax=\lambda x$ Multiplying both sides by $A$ from the left:\[
-				A\cdot A=\lambda A x \implies A^2x=\lambda Ax=\lambda\cdot\lambda x=\lambda^2 x
+				A\cdot A x=\lambda A x \implies A^2x=\lambda Ax=\lambda\cdot\lambda x=\lambda^2 x
 				.\] 
 				\[
 						Ax-\sigma x=\lambda x-\sigma x \implies \left( A-\sigma I \right) x=\left( \lambda-\sigma\right)x\]\[\implies x=\left( \lambda-\sigma \right) \left( A-\sigma I \right) ^{-1}x\implies\left( A-\sigma I \right) ^{-1}x
@@ -84,7 +84,7 @@ Since $x$ is non-zero, $\lambda I-A$ has a non-zero solution. Therefore,  $\lamb
 \begin{example}
 	$A=\begin{bmatrix} 0&-1\\1&0 \end{bmatrix} $. The characteristic polynomial is: \[
 		P_A(z)=\text{det}\left( \begin{bmatrix} z&1\\-1&z \end{bmatrix}  \right) =z^2+1
-	.\] Therefore, $P_A(\lambda)=\lambda^2+1=0 \implies \lambda_1=i,\quad \lambda_2=-i$ are the eigenvalues. \\For eigenvector of $\lambda_1=i$, solve $\left( i I-A= \right) x=0$, i.e. \[
+	.\] Therefore, $P_A(\lambda)=\lambda^2+1=0 \implies \lambda_1=i,\quad \lambda_2=-i$ are the eigenvalues. \\For eigenvector of $\lambda_1=i$, solve $\left( i I-A \right) x=0$, i.e. \[
 		\begin{bmatrix} i&1\\-1&i \end{bmatrix} x=0\implies x=\alpha\begin{bmatrix} i\\1 \end{bmatrix} \quad \alpha\in \C
 	.\] Therefore, a corresponding eigenvector is $x_{i}=\begin{bmatrix} i\\1 \end{bmatrix} $.\\For eigenvector of $\lambda_2=-i$: \[
 		\begin{bmatrix} -i&1\\-1&-i \end{bmatrix} x=0\implies x=\beta\begin{bmatrix} i\\-1 \end{bmatrix} \quad\beta\in \C
@@ -101,7 +101,7 @@ Assume $A\in \R^{n\times n}$ is symmetric. Then
 \begin{enumerate}
 	\item The eigenvalues of $A$ are real.
 		\begin{proof}
-			Let $\left( \lambda,x \right) $ be an eigenpair of $A$. Then, $Ax=\lambda x$.\\Multiply both sides by $x^{*}\equiv \overline{x^{*}}$ (conjugate transpose) from the left: \[
+			Let $\left( \lambda,x \right) $ be an eigenpair of $A$. Then, $Ax=\lambda x$.\\Multiply both sides by $x^{*}\equiv \overline{x^{T}}$ (conjugate transpose) from the left: \[
 			x^{*}Ax=\lambda x^{*}x\implies \lambda= \frac{x^*Ax}{x^*x}
 		.\] 
 		\begin{itemize}
@@ -118,7 +118,7 @@ Assume $A\in \R^{n\times n}$ is symmetric. Then
 \item If $A$ is SPSD, then all eigenvalues are non-negative.
 	\begin{proof}
 		Let $\left( \lambda,x \right) $ a be an eigenpair of $A$. then $Ax=\lambda x$, and $\lambda,x$ are real. So \[
-		x^{T}Ax=\lambda x^{T}x\implies \lambda=\frac{x^{T Ax}}{x^{T}x}>0
+		x^{T}Ax=\lambda x^{T}x\implies \lambda=\frac{x^{T}Ax}{x^{T}x}>0
 		.\] if $A$ is SPD. If  $A$ is SPSD, then $\lambda=\frac{x^{T}Ax}{x^{T}x}\ge 0$, since $x^{T}Ax\ge 0$.
 	\end{proof}
 \end{enumerate}

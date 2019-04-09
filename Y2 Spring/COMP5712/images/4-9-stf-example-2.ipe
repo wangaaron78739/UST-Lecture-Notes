@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70206" creator="Ipe 7.2.11">
-<info created="D:20190409095023" modified="D:20190409095842"/>
+<info created="D:20190409095023" modified="D:20190409103037"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -272,7 +272,7 @@ h
 <path stroke="black">
 16 0 0 16 480 656 e
 </path>
-<path stroke="black">
+<path stroke="red" pen="ultrafat">
 190.973 784.033 m
 191.979 720 l
 </path>
@@ -280,15 +280,15 @@ h
 204.765 713.647 m
 242.816 742.934 l
 </path>
-<path stroke="black">
+<path stroke="red" pen="ultrafat">
 206.328 792.879 m
 244.338 762.954 l
 </path>
-<path stroke="black">
+<path stroke="red" pen="ultrafat">
 206.963 805.666 m
 464.012 800.627 l
 </path>
-<path stroke="black">
+<path stroke="red" pen="ultrafat">
 472.137 786.066 m
 430.333 759.11 l
 </path>
@@ -296,7 +296,7 @@ h
 481.852 784.107 m
 481.422 671.937 l
 </path>
-<path stroke="black">
+<path stroke="red" pen="ultrafat">
 424.93 738.724 m
 471.883 669.788 l
 </path>
@@ -319,5 +319,89 @@ h
 <text matrix="1 0 0 1 6.17959 -1.41643" transformations="translations" pos="209.241 737.58" stroke="black" type="label" width="9.963" height="6.42" depth="0" valign="baseline" style="math">12</text>
 <text transformations="translations" pos="312.88 733.023" stroke="black" type="label" width="43.48" height="7.473" depth="2.49" valign="baseline" style="math">r(s,t)=1</text>
 <text matrix="1 0 0 1 -10.6767 3.78757" transformations="translations" pos="322.617 714.628" stroke="black" type="label" width="46.103" height="7.473" depth="2.49" valign="baseline" style="math">r(u,v)=1</text>
+<text matrix="1 0 0 1 -4.25711 -6.95432" transformations="translations" pos="448 784" stroke="black" type="label" width="4.981" height="6.42" depth="0" valign="baseline" style="math">6</text>
+<path stroke="red">
+25.0361 0 0 25.0361 191.751 801.223 e
+</path>
+<path stroke="red">
+24.2635 0 0 24.2635 191.977 705.915 e
+</path>
+<path stroke="green">
+32.1731 0 0 32.1731 192 704 e
+</path>
+<path stroke="green">
+165.501 784.7
+174.545 773.596
+248.833 731.155
+279.879 731.429
+284.29 768.442
+251.835 798.951
+198.58 837.622
+154.01 824.84 u
+</path>
+<path stroke="red">
+22.0846 0 0 22.0846 480 800 e
+</path>
+<path stroke="green">
+397.738 739.145
+395.398 769.407
+467.351 828.01
+492.972 831.503
+515.192 808.605
+505.642 769.576
+404.846 720.455 u
+</path>
+<path stroke="blue">
+392.26 726.807
+387.867 782.595
+434.841 822.128
+487.578 837.353
+519.258 814.208
+516.989 783.451
+484.883 749.845
+433.542 723.533
+403.268 724.298 u
+</path>
+<path stroke="red">
+22.037 0 0 22.037 479.846 656.917 e
+</path>
+<path stroke="green">
+29.3809 0 0 29.3809 479.009 657.35 e
+</path>
+<path stroke="blue">
+37.9551 0 0 37.9551 477.639 657.426 e
+</path>
+<path stroke="blue">
+153.009 823.244
+149.599 683.589
+186.732 649.404
+238.633 676.888
+286.487 728.706
+301.113 778.531
+249.848 831.247
+161.912 842.278 u
+</path>
+<path stroke="orange">
+143.819 823.124
+140.071 670.885
+184.814 647.625
+255.412 668.689
+306.434 751.478
+299.362 808.952
+239.57 841.248
+151.073 843.786 u
+</path>
+<path stroke="orange">
+448.974 620.139
+382.736 716.422
+367.627 783.088
+400.85 828.897
+450.37 840.982
+523.458 831.161
+533.973 780.616
+532.363 649.096
+501.066 604.966
+458.827 615.522 u
+</path>
 </page>
 </ipe>
