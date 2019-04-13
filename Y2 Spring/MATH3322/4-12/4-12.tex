@@ -1,0 +1,123 @@
+\documentclass[../main/main.tex]{subfiles}
+
+\usepackage{dsfont}
+
+
+\begin{document}
+
+\section{April 12th, 2019}
+\subsection{QR Algorithm for Non-Symmetric Matrix}
+\begin{itemize}
+	\item Phase 1: We can not reduce $A$ to a tridiagonal matrix. Instead we reduce $A$ to an upper Hessenberg Matrix
+		\begin{definition}
+			A \vocab{Hessenberg matrix} is a special kind of square matrix, one that is "almost" triangular. To be exact, an upper Hessenberg matrix has zero entries below the first subdiagonal, and a lower Hessenberg matrix has zero entries above the first superdiagonal.
+		\end{definition}
+	\[
+		\begin{bmatrix} 1&0\\0&H_1 \end{bmatrix} A = \begin{bmatrix} \times &\times &\cdots & \times \\ \times&\times &\cdots &\times \\ 0 &\times &\cdots &\times \\ \vdots &\vdots&\cdots&\vdots\\0&\times &\cdots&\times   \end{bmatrix} 
+		\implies \begin{bmatrix}  1&0\\0&H_1 \end{bmatrix} A \begin{bmatrix} 1&0\\0&H_1 \end{bmatrix} ^{T}=\begin{bmatrix} \times &\times &\cdots & \times \\ \times&\times &\cdots &\times \\ 0 &\times &\cdots &\times \\ \vdots &\vdots&\cdots&\vdots\\0&\times &\cdots&\times   \end{bmatrix} \]\[
+	\vdots
+	\]\[
+Q^{(0)}A\left( Q^{(0)} \right) ^{T}=\begin{bmatrix} \times &\times &\cdots & \times \\ \times&\times &\cdots &\times \\ 0 &\times &\cdots &\times \\ \vdots &\vdots&\cdots&\vdots\\0&0&\cdots&\times  \end{bmatrix} 
+\] which is a Hessenberg Matrix. 
+\item Phase 2: 
+	\begin{algo} For $k=1,2,\ldots$ 
+		\begin{itemize}
+			\item Computer the QR Decomposition of $A^{(k)}=Q^{(k)}R^{(k)}$ 
+			\item $A^{(k)}=R^{(k)}Q^{(k)}$.
+		\end{itemize}
+	\end{algo}
+\item Note that $A^{(k)}=R^{(k)}Q^{(k)}$ is also a hessenberg Matrix:
+	\begin{itemize}
+\item For $A^{(k)}=R^{(k)}Q^{(k)}=R^{(k)}\left( G_k^{(1)} \right)^{T}\left( G_k^{(2)} \right)^{T} \cdots\left( G_k^{(n-1)} \right)^{T}$: \[
+		R^{(k)}\left( G_k^{(1)} \right) ^{T}= \begin{bmatrix} \times &\times &\times &\cdots&\times \\&\times &\times &\cdots&\times \\ &&\times &\cdots&\times \\&&&\ddots &\vdots\\&&&&\times  \end{bmatrix} \begin{bmatrix} c_1&-s_1&&&\\ s_1 & c_1 &&&\\ &&&&\\&&&I&\\&&&& \end{bmatrix} = \begin{bmatrix} \times &\times &\times &\cdots&\times \\ +&\times &\times &\cdots&\times \\ &&\times &\cdots&\times \\&&&\ddots &\vdots\\&&&&\times  \end{bmatrix} 
+.\] \[
+R^{(k)}\left( G_k^{(1)} \right) ^{T}\left( G_k^{(2)} \right) ^{T}=
+\begin{bmatrix} \times &\times &\times &\cdots&\times \\ +&\times &\times &\cdots&\times \\ &+&\times &\cdots&\times \\&&&\ddots &\vdots\\&&&&\times  \end{bmatrix} 
+.\] 
+	\end{itemize}
+\item The idea is to first make it a Hessenberg Matrix, and then using Givens Rotation to remove the subdiagonal, giving us a upper triangular matrix.
+\end{itemize}
+The computational cost for the full QR algorithm is $O(n^{3})+O(n^2\cdot k)$, where $k$ is the number of iterations (usually $O(n)$ ).\\
+
+The algorithm generates $A^{(k)}$ satisfies: \[
+	A^{(k)}=\left( Q^{(k)} \right) ^{T}\cdots\left( Q^{(0)} \right) ^{T}AQ^{(0)}\cdots Q^{(k)}
+\] which is similar to $A$, meaning that  $A^{(k)}$ has the same eigenvalues of $A$.\\
+
+However, we don't expect that this gives the eigenvalue decomposition of $A$. This is because:
+\begin{enumerate}
+	\item the eigenvectors $A$ are not necessarily orthogonal. (but $Q^{(i)}$ are orthogonal matrices), meaning that $X=Q^{(0)}\cdots Q^{(k)}$ is orthogonal.
+	\item the eigenvalue decomposition of $A$ may not exist.
+\end{enumerate}
+
+This QR algorithm converges to the Schur decomposition
+\begin{definition}
+	For any matrix $A\in R^{n\times n}$, there exists $Q,S\in \R^{n\times n}$ such that \[
+	A=QSQ^{T}
+	,\] where
+	\begin{itemize}
+		\item $Q\in \R^{n\times n}$ is orthogonal, i.e. $Q^{T}Q=\Q^{T}=I$. 
+		\item $S\in \R^{n\times n}$ is a block upper triangular matrix, with $1\times 1$ or $2\times 2$ diagonal blocks.
+			(i.e., there exists a partition of $S$:  \[
+				S= \begin{bmatrix} S_{11}&S_{12}&\cdots &S_{1p} \\ & S_{22} & \cdots & S_{2p}\\ &&\ddots & \\ &&&S_{pp} \end{bmatrix} \quad S_{ii}\text{ is either $1\times 1$ or $2\times 2$}
+			.\]  Furthermore:
+			\begin{itemize}
+				\item if $S_{ii}\in \R^{1\times 1}$, then it is an eigenvalue of $A$
+				\item if  $S_{ii}\in \R^{2\times 2}$, then $S_{ii} = \begin{bmatrix} q&-b\\b&a \end{bmatrix} $, with $a\pm bi$ being eigenvalues of $A$. 
+				\item The blocks $S_{ii}$ can be sorted s.t. \[
+						|\text{eig}(S_{11})|\ge |\text{eig}(S_{22})|\ge \ldots\ge |\text{eig}(S_{pp})|
+				.\] 
+			\end{itemize}
+	\end{itemize}
+\end{definition}
+\begin{theorem}
+	Under mild assumption, the QR algorithm converges to the Schur decomposition, more precisely, \[
+		A^{(k)}\to S
+	\] and \[
+	Q^{(0)}Q^{(1)}\ldots Q^{(k)}\to Q
+	.\] We can get eigenvalues of $A$ from $S$ and the eigenvectors of $A$ from $Q$. 
+\end{theorem}
+\begin{remark}
+	Note that when $A$ is symmetric, the Schur decomposition is the same as the eigenvalue decomposition, as $S$ would by symmetric and upper triangular, i.e. $S$ is diagonal. Because of this, all eigenvalues of $A$ are real, since $S_{ii}\in \R^{1\times 1}$.
+\end{remark}
+\begin{remark}
+	There is no direct formula for the Schur decomposition, since it is related to the eigenvalues of the matrix, which are the roots of a polynomial, which doesn't have a general closed form solution.
+\end{remark}
+\begin{example}
+	Consider: \[
+		A=\begin{bmatrix} 1&-\frac{1}{\sqrt{2} }&-\frac{1}{\sqrt{2} } \\ \frac{1}{\sqrt{2} }&\frac{3}{2} & -\frac{1}{2} \\ \frac{1}{\sqrt{2} } &\frac{1}{2}&\frac{1}{2} \end{bmatrix} 
+	.\] Since $A$ is non-symmetric, then we would not have a unitary eivenvalue decomposition.\\ 
+	The Schur decomposition of $A$ is: \[
+		A=QSQ^{T}=\begin{bmatrix} 1&&\\ &\frac{1}{\sqrt{2} }&\frac{1}{\sqrt{2} }\\ & \frac{1}{\sqrt{2} } & -\frac{1}{\sqrt{2} } \end{bmatrix} \begin{bmatrix} 1 & -1 &\\ 1 & 1 & 1 \\ &&1 \end{bmatrix} \begin{bmatrix} 1&&\\& \frac{1}{\sqrt{2} } &\frac{1}{\sqrt{2} } \\ & \frac{1}{\sqrt{2} } & -\frac{1}{\sqrt{2} } \end{bmatrix} 
+	.\] So the eigenvalues of $A$ are: 
+	\begin{itemize}
+		\item $1=\text{det}(S_{22})$
+		\item $1\pm i=\text{det}(S_{11})$
+	\end{itemize}
+\end{example}
+	\subsection{Case Studies C - Applications of Eigenvalue Decomposition}
+	Case Study I: Find the roots of a polynomial $p(x)$. Let  \[
+		p(x)=a_0+a_1x+a_2x^2+\ldots+a_{n-1}x^{n-1}+x^{n}
+	.\] There are $n$ solutions (roots) of $p(x)=0$ in $\C$. We want to find all the roots of $p$.\\
+
+	Instead of using a root finding algorithm, we will use the eigenvalue decomposition to do so: 
+	\begin{itemize}
+		\item Construct \[
+				 A_p = \begin{bmatrix} 0&&&&&a_0 \\ 1&\ddots &&&&a_1\\ &\ddots&\ddots&&&\vdots\\&&\ddots&\ddots&&\vdots \\ &&&\ddots&0&a_{n-2}\\&&&&1&a_{n-1} \end{bmatrix} 
+			 .\] Then: \[
+			 \text{det}(\lambda I - A_p= a_0+a_1\lambda+a_2\lambda^2+\ldots+a_{n-1}\lambda^{n-1}+\lambda^{n}
+		 .\] This means that the eigenvalues of $A_p$ are the roots of $p(x)$, meaning we can use the QR algorithm to find eigenvalues of $A_p$ This is widely used in available software packages.
+	\end{itemize}
+	\begin{remark}
+		The reason why we might want to use the Schur decomposition to do so is because it is numerically stable due to the unitary transformation.
+	\end{remark}
+	Case Study II: Ranking webpages. Once agian we have \[
+		\Pi = \frac{1-p}{n}\mathds{1} + pA\Pi
+	\]\[
+	(I-pA)\Pi = \frac{1-p}{n}\mathds{1}
+	\]\[
+	(I-pA)\Pi=\frac{1-p}{n}\mathds{1}\mathds{1}^{T}\Pi
+	\]\[
+	(pA+\frac{1-p}{n}\mathds{1} \mathds{1}^{T})\Pi=\Pi
+	.\]    This is in the form of an eigenvalue problem
+\end{document}
+
