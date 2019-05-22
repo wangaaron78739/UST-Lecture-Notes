@@ -93,7 +93,7 @@ We can run the FF method to find the maximum matching, as all capacities are int
 \end{theorem}
 
 \begin{proof}
-	Suppose that $G$ does not have a perfect matching and  $|L|=|LR|$. Then we will prove that  $\exists A\subseteq L$ such that $|A|>|N(A)|$, i.e. (2) will be violated. We will use the same reduction to the max-flow problem. Recall the flow network $G'$ as before.
+	Suppose that $G$ does not have a perfect matching and  $|L|=|R|$. Then we will prove that  $\exists A\subseteq L$ such that $|A|>|N(A)|$, i.e. (2) will be violated. We will use the same reduction to the max-flow problem. Recall the flow network $G'$ as before.
 	\begin{figure}[h!]
 		\centering
 		\includegraphics[width=0.45\textwidth]{3-28-bipartite-mincut}
@@ -105,7 +105,7 @@ We can run the FF method to find the maximum matching, as all capacities are int
 	|L-S|+|R\cap S|
 	.\] 
 
-	Note that there is no edges from $L\cap S$ that goes to $R\cap (V-S)$, since the capacity of the cup would be infinite, which would violate the max flow min cut thoerem, since the max flow is clearly finite. This means that  \[
+	Note that there is no edges from $L\cap S$ that goes to $R\cap (V-S)$, since the capacity of the cut could be infinite (if all edges crossing the bipartition have infinite capacity), which would violate the max flow min cut thoerem, since the max flow is clearly finite. This means that  \[
 		N(L\cap S)\subseteq R\cap S
 	.\]
 	Since $G$ does not have a perfect matching, if we let $|L|=|R|=n$,  \[

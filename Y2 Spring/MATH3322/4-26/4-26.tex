@@ -1,0 +1,39 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 26th, 2019}
+\subsection{SVD}
+Let $A\in \R^{m\times n}$ (with $m\ge =n$).
+Following from the previous lecture we have that the eigenvalues of $AA^{T}$ are: \[
+\lambda_1,\lambda_2,\ldots,\lambda_n,0,0,\ldots,0
+\] with corresponding eigenvectors: \[
+u_1,u_2,\ldots,u_n,u_{n+1},\ldots u_{m}
+.\] Them: \[
+A A^{T}= \begin{bmatrix} u_1&u_2&\ldots&u_n &u_{n+1}&\ldots \end{bmatrix} \begin{bmatrix} \lambda_1 \end{bmatrix} 
+=U\Lambda U^T.\] 
+
+
+\[
+	(A A^{T})(Av_1)=A(A^{T}Av_i)=A(\lambda_iv_i)=\lambda_i(Av_i)
+\] \[
+\implies Av_i \text{ is an eigenvector of $A A^{T}$ with eigenvalue $\lambda_i$}
+\] \[
+\implies Av_i = \sigma_i u_i, \quad i=1,2,\ldots,n \quad\quad(a)
+.\]   
+\[
+	(A^T A)(A^Tv_1)=A^T(AA^Tv_i)=A^T(\lambda_iv_i)=\lambda_i(A^Tv_i)
+\] \[
+\implies A^Tu_i \text{ is an eigenvector of $A^T A$ with eigenvalue $\lambda_i$}
+\] \[
+\implies A^Tv_i = \tilde\sigma_i u_i, \quad i=1,2,\ldots,n \quad\quad(b)
+.\]   Let's find $\sigma_i$ and $tilde \sigma_i$ :
+\[
+	(b) \implies v^T_i A^T u_i = \tilde\sigma_i v^T_i v_i = \tilde\sigma_i
+.\] \[
+(a) \implies u^T_i A v
+.\] 
+
+\end{document}
+

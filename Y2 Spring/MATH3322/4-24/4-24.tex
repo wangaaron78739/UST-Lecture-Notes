@@ -1,0 +1,63 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 24th, 2019}
+\subsection{Case Studies 3}
+Let
+\begin{itemize}
+	\item $W=[w_{ij}]$ 
+	\item $D=\text{diag}(W_1)$
+\end{itemize}
+Define $L=D-W$. Computer the eigenvector $x_{n-1}$ corresponding to $\lambda_{n-1}$, the 2nd smallest eigenvalue of $L$. Define: \[
+	S=\{i\mid x_{n-1}(i)>0\} 
+\] and \[
+S^C= \{i\mid x_{n-1}(i)\le 0\} 
+.\]  However, this method doesn't work well, as it tends to produce unbalanced groups, with one being huge and the other tiny. A better cut would be a ``normalized cut''. \\
+
+To make the two groups have similar sizes, define the size of a group: \[
+	\text{Vol}(A)=\sum\limits_{\substack{i\in A\\j\in V}}w_{ij}
+.\] 
+\begin{definition}
+	A normalized cut of $A$ and $B$ is: \[
+		N_{cut}(A,B)= \frac{\text{cut}(A,B)}{\text{Vol}(A)}+\frac{\text{cut}(A,B)}{\text{Vol}(B)}
+	.\] This is minimized if and only if $\text{cut}(A,B)$ is minimized and $\text{Vol}(A)$ and $\text{Vol}(B)$ are similar. However, this is not solvable, so we just solve: \[
+	\min_{S\subseteq V}N_{vut}(S,\overline{S}), \quad\text{where $\overline{S}=V\setminus S$}
+	.\] This again cannot be efficiently solved, so it can be solved approximately by an eigenvector/eigenvalue solver:\\
+
+	Define $z\in \R^{m}$ by:
+	\[
+	z_i=\begin{cases}
+		\frac{1}{\text{Vol}(S)}\quad \text{ if $i\in S$}\\
+	-\frac{1}{\text{Vol}(\overline{S})}\quad\text{ if $i\not\in S$}	\end{cases}
+	.\] Then \[
+	z^{T}Lz=Z^{T}(D-W)z
+	.\] 
+\end{definition}
+\subsection{Singular Value Decomposition (SVD)}
+If $A\in \R^{n\times n}$ is symmetric, then  \[
+A=U\Lambda U^T
+,\] where $U\in \R^{n\times n}$ satisfies $U^{T}U=U U^{T}=I$ and $\Lambda\in \R^{n\times n}$ is diagonal. This allows $A$ to be it numerically stable.\\
+
+However, this only only applies if $A$ is a square and symmetric matrix. As such, we would like to extend the decomposition to any matrix, regardless of if they are square or symmetric. This is SVD. \\
+
+Let $A\in R^{m\times n}$ with $m\ge n$ be an arbitrary real matrix (we can generalize this to $m<n$ and complex matrix). We will make use of the following facts:
+\begin{itemize}
+	\item Since $A^{T}A\in R^{n\times n}$ is square, symmetric, and SPSD, there exists an eigenvector decomposition of $A^{T}A$. \\
+
+Let $(\lambda_i,v_i),i=1,2,\ldots, n$ be the eigenpairs of $A^{TA}$, with \[
+\lambda_1\ge \lambda_2\ge \ldots\ge \lambda_n\ge 0
+.\] So \[
+A^{T}A=V\Lambda V^{T}, V=\begin{bmatrix} v_1&v_2&\ldots&v_n \end{bmatrix}, \Lambda=\begin{bmatrix} \lambda_1&&\\&\ddots&\\\lambda_n \end{bmatrix} 
+.\] 
+\item $A^{T}\in R^{m\times m}$ is also square, symmetric, and SPSD. 
+	\begin{theorem}
+		Let $A\in R^{m\times n}$ and $B\in \R^{m\times m}$. Let $\lambda_1,\ldots,\lambda_n$ be eigenvalues of $BA$. Then the eigenvalues of $AB$ are  \[
+			\lambda_1, \lambda_2, \ldots,\lambda_n,\underbrace{0,\ldots,0}_\text{m-n 0's}
+		.\] 
+	\end{theorem}
+	By this theorem, the eigenvalues of
+\end{itemize}
+\end{document}
+

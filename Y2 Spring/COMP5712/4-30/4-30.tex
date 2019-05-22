@@ -1,0 +1,98 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 30th, 2019}
+\subsection{Randomized Multiway Cut Problem}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=0.4\textwidth]{4-30-rand}
+	\caption{For $k=3$}
+	\label{fig:4-30-rand}
+\end{figure}
+\begin{itemize}
+	\item Select $r\in (0,1)$ uniformly at random
+	\item Consider ``corners" of simplex in random order
+	\item Each corner considered ``grabs" all vertices within ``ball-distance''  $r$ from it that have not yet been grabbed. i.e. \[
+			u\in B(S,r)
+	.\] 
+	\item The last corner considered grabs all remaining vertices.
+	\item To achieve an approximation factor of $1.5$, we need to show that the probability that $u$ and $v$ are assigned to different corners is $\le \frac{3}{4 \| x_u-x_v\|}$.
+\end{itemize}
+
+\begin{lemma}
+	$u\in B(S_i,r)$ if and only if $1-x^i_u\le r$.
+\end{lemma}
+\begin{proof}
+	Ball distance of $x_u$ from $S_i = \frac{1}{2}\|x_u-S_i\|$ \[
+		=\frac{1}{2}\left[ (1-x_u^i)+ \sum_{j\neq i} x_u^j \right]=\frac{1}{2}\left[ (1-x^i_u)+(1-x^i_u \right] =1-x^i_u
+	.\] This is because the $j$-th component $S_i$ is $0$ for all $j\neq i$ and $1$ for $j=i$, and $\sum x^j_u=1$.
+\end{proof}
+
+\begin{definition}
+	We say that an index $i$ \vocab{cuts} $(u,v)$ if \underline{exactly} one of $x_u$ and $x_v$ is contained in ball $B(S_i,r)$.
+\end{definition}
+
+For $x_u$ and $x_v$ to be assigned in different corner, it if necessary that there is some index that cuts  $(u,v)$. This is not sufficient since $u$ and $v$ could both be grabbed by a vertex, but another vertex later on might cut the edge (since they are selected in a random order).\\
+
+When does index $i$ cut $(u,v)?$ In fact, what is the probability that index  $i$ cuts $(u,v).$ From the lemma above, we only need to look at that $i$-th coordinate of $x_u^i$. \\
+
+WLOG, assume that $x_u$ is closer to $S_i$. Then \[\text{$(u,v)$ is cut by index $i$ iff  $r\in (1-x^i_u,1-x^i_v)$}.\] \[
+	\implies \text{Pr(index $i$ cuts $(u,v)$)}= \frac{(1-x^v_i)-(1-x^u_i)}{1}=|x^i_u-x^i_v|
+.\] \\
+Now we have: \[
+	\text{Pr($(u,v)\in $ multicut)}= \text{Pr($u $ \& $  v$ are cut by index  $i$)}\] \[
+	\le \sum_i \text{Pr($u $ \& $ v$ are cut by index $i$ )}
+	=\sum_i |x^i_u-x^i_v|= \|x_u-x_v\|.\] 
+Now we would like to tighten the restriction to achieve an upper bound of $\frac{3}{4}\|x_u-x_v\|$. Note that we have not yet used the fact that ``corners'' are considered in random order.
+
+\begin{definition}
+	We day that an index $i$ \vocab{settles} $(u,v)$ if $i$ is the first index in the random permutation such that at least one of $u$ or $v$ belongs to $B(S_i,r)$.
+\end{definition} 
+
+Intuitively, $i$ decides whether $(u,v)$ will be in the multiway cut or not. Let us define the following events:
+\begin{itemize}
+	\item $S_i$ : Event that index  $i$ settles $(u,v)$.
+	\item $X_i$ : Event that index $i$ settles $(u,v)$.
+\end{itemize}
+Then: \[
+	\text{Pr}\left[ (u,v)\in \text{ multicut} \right] \le \sum_i \text{Pr}(S_i \wedge X_i)
+.\] This is because $(u,v)$ is in the multiway cut only if there is some index $i$ that both settles and cuts $(u,v)$, i.e. it is the first index that separates $u$ and $v$. This is clearly necessary, but it is not sufficient, since it could be the last index.
+
+Let $l$ be the index such that $S_i$ is closest to one of the two endpoints of $(u,v)$. That is, $i=l$ minimizes the quantity $\min\left(\|S_i-u\|,\|S_i-v\|\right)$
+
+\begin{claim}
+	Index $i\neq l$ cannot settle edge $(u,v)$ if $l$ is ordered before $i$ in the random permutation.
+\end{claim}
+\begin{proof}
+	If index $i$  were to settle $(u,v)$, then it would be $l$.
+\end{proof}
+We need to compute $\text{Pr}(S_i\wedge X_i)$ for index $i$. There are 2 cases: $i\neq l$ and $i=l$.
+ \begin{enumerate}
+	\item For $i\neq l$, we have:  \[
+			\text{Pr}\left[ S_i\wedge X_i \right]\]\[ =\text{Pr}\left[ S_i\wedge X_i\ |\ l \text{ occurs after $i$ in permutation} \right] \times \text{Pr}[ l \text{ occurs after $i$ in permutation]} \]\[+ \text{Pr}\left[ S_i \wedge X_i\ |\ l\text{ occurs before $i$ in permutation} \right] \times \text{Pr}\left[ l \text{ occurs before $i$ in permutation} \right] 
+			\] \[=\frac{1}{2}\text{Pr}[S_i \wedge X_i\ |\ l\text{ occurs after $i$ in permutation}] \le \frac{1}{2}\text{Pr}[X_i] = \frac{1}{2}|x_u^i-x_v^i|
+	.\] 
+\item For $i=l$ we have:  \[
+		\text{Pr}[S_l \wedge X_l]\le  \text{Pr}[X_l]=|x_u^l-x_v^l|
+.\]
+\end{enumerate}
+This means that: \[
+	\text{Pr}\left[ (u,v)\in \text{ multicut} \right] \le \sum_i \text{Pr}(S_i \wedge X_i) \le 
+	\frac{1}{2}\sum_{i\neq l} |x^i_u-x^i_v|+|x_u^l-x_v^l|
+.\] 
+\begin{lemma}
+	For any index $l$ and any $2$ vertices $u$ and $v$, \[
+	|x^l_u-x_v^l|\le \frac{1}{2}\|x_u-x_v\|
+	.\] 
+\end{lemma}
+\begin{proof}
+	$|x_u^l-x_v^l|=\left| \left(1-\sum\limits_{j\neq l} x^j_u\right) - \left( 1-\sum\limits_{j\neq l} x_v^l \right)  \right|=\left| \sum\limits_{j\neq l} \left( x_v^j-x_u^j \right)  \right| \le \sum\limits_{i\neq j} |x_v^j-x_u^j|+\|x_v^l-x_u^l\| $
+\end{proof}
+\[
+\text{Pr}\left[ (u,v)\in \text{ multicut} \right]  \le 
+\frac{1}{2}\sum_{i} |x^i_u-x^i_v|+ \frac{1}{2}|x_u^l-x_v^l|\le \frac{1}{2}\|x_u-x_v\|+\frac{1}{2}\times \frac{1}{2} \|x_u-x_v\|=\frac{3}{4}\|x_u-x_v\|
+.\] 
+\end{document}
+
