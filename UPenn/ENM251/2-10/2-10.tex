@@ -1,0 +1,185 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 10th, 2020}
+\subsection{Review from MATH 240}
+Consider the homogenous equation: \[
+	a_2(x)y''(x) + a_1y'(x)+a_0(x)y(x)=0
+.\] Note that this is homogeneous since $y(x) = 0$ is a valid solution. A general solution to a 2nd order lienar homogeneous ODE can be expressed as \[
+y(x) = c_1y_1(x) + c_2y_2(x)
+,\]  where $c_1$ and $c_2$ are arbitrary constrants and $y_1(x)$ and $y_2(x)$ are any two solutions to the ODE for which: \[
+\underbrace{y_1(x) y_2'(x)-y_1'(x)y_2(x)}_{\text{Wronskian of $y_1$ and $y_2$}}\neq 0
+.\] Note that the LHS can be experssed as a determinant: \[
+\text{det}\left(\begin{bmatrix} y_1(x)&y_2(x)\\y'_1(x)&y'_2(x) \end{bmatrix} \right)
+.\] Which is known as the \vocab{Wronskian}\index{Wronskian} of $y_1$ and $y_2$.
+\begin{example} \label{coneq}
+	Consider $y''(x)-3y'(x)+3y(x)=0$, we have:  \[
+		y_1(x)=e^{x}\quad y_2(x) = e^{2x}
+	.\] and \[
+	\text{det}\left( \begin{bmatrix} y_1&y_2\\y_1'&y_2' \end{bmatrix}  \right) = \text{det}\left( \begin{bmatrix} e^{x}&e^{2x}\\e^{x}&e^{2x} \end{bmatrix}  \right)  2e^{3x}-e^{3x}=e^{3x}\neq 0
+	.\] Meaning that the solution is of the form: \[
+	y(x) = c_1e^{x}+c_2e^{3x}
+	.\] 
+\end{example}
+\begin{remark}
+	Note that we only the Wronskian to not be the 0 function, and that it's ok for certain values of $x$ for the Wronkian to be 0.
+\end{remark}
+\begin{example}
+	If we used $y_1(x)=e^{x}$ and $y_2(x)=2e^{x}$, then we'd get a Wronskian equal to 0, which would not work.
+\end{example}
+\subsection{Constant Coefficients}
+Consider: \[
+	ay''(x)+by'(x)+cy(x)=0
+,\] where $a,b$ and  $c$  are constants.
+\begin{example}
+	Example \ref{coneq} is an example of a constant equation with $a=1$, $b=-3$, and $c=2$.  
+\end{example}
+Let us create a table to help us solve this problem. First we contstruct the descriminant: $D=b^2-4ac$. Depending on what value $D$ is, we have: 
+\begin{table}[htpb]
+	\centering
+	\caption{Table to Compute $ay''+by'+cy=0$}
+	\label{tab:label}
+	\begin{tabular}{c|c|c|c}
+		$D$ &$y_1(x)$ & $y_2(x)$\\
+	\hline
+		$D<0$&  $e^{\alpha x}\cos(\beta x)$ & $e^{\alpha x}\sin(\beta x)$ &$\alpha=-\frac{b}{2a}$ $\beta=\sqrt{-D} /2a$\\
+	\hline
+		$D= 0$&  $e^{\alpha x}$ & $xe^{\alpha x}$ &$\alpha=-\frac{b}{2a}$	\\
+	\hline
+	$D> 0$&  $e^{\alpha x}\cosh(\gamma x)$ & $e^{\alpha x}\sin(\gamma x)$ &$\alpha=-\frac{b}{2a}$ $\beta=\sqrt{D} /2a$\\
+	&  $e^{(\alpha-\gamma) x}$ & $e^{(\alpha+\gamma) x}$ &$\alpha=-\frac{b}{2a}$ $\beta=\sqrt{D} /2a$\\
+	\end{tabular}
+\end{table}
+
+\begin{example}
+	Consider $4y''+y'+y=0$. The discrminant is $D=b^2-4ac=-15<0$. Using the first row of the previous table, we have: \[
+		\alpha = -\frac{1}{8}\quad \beta=\frac{\sqrt{15}}{8}
+	.\] This means that: \[
+	y(x) = c_1e^{-\frac{1}{8}x}\cos\left( \frac{x\sqrt{15} }{8} \right) +c_2e^{-\frac{1}{8}x}\sin\left( \frac{x\sqrt{15} }{8} \right) 
+	.\] 
+\end{example}
+\begin{example}
+	Consider $4y''+4y'+y=0$. Note that  $D=b^2-4ac=16-16=0$, thus using the second row, we have: \[
+	\alpha=-\frac{b}{2a}=-\frac{4}{8}=-\frac{1}{2}
+	.\] Thus we have: \[
+	y(x) = c_1e^{-\frac{1}{2}x}+c_2xe^{-\frac{1}{2}x}
+	.\] 
+\end{example}
+\begin{example}
+	Consider $y''-3y'+2y=0$, note that  $D>0$. We can either use the third or 4th row of the table. First we have: \[
+	\alpha= \frac{3}{2}\quad \gamma=\frac{1}{2}
+	.\] Thus we can write this as either: \[
+	y(x) = c_1 e^{\frac{3}{2}x}\cosh(\frac{1}{2}x)+c_2e^{\frac{3}{2}x}\sinh(\frac{1}{2}x)
+	\] or \[
+	y(x) = c_1e^{(\frac{3}{2}-\frac{1}{2})x}+c_2e^{(\frac{3}{2}+\frac{1}{2})x} = c_1e^{x}+c_2e^{2x}
+	.\]  
+\end{example}
+\subsection{Cauchy-Euler/Equidimentional Equation}
+\begin{definition}\index{equidimensional equations} \index{Cauchy-Euler Equation}
+	A \vocab{equidimensional} or \vocab{Cauchy-Euler} 2nd order linear homogenous ODE is a equation of the form: \[
+		ax^2y''(x)+bxy'(x)+cy(x)=0
+	.\] for some constant $a,b,c$.
+\end{definition}
+\begin{remark}
+	Note that the exponent of the $x$ matches the derivative of $y$.
+\end{remark}
+Again, we can just use a table to solve these equations by checking the value of  \[
+	D=(b-a)^2-4ac
+.\]  
+\begin{table}[htpb]
+	\centering
+	\caption{Table to solve Cauchy-Euler Equations}
+	\label{tab:label}
+	\begin{tabular}{c|c|c|c}
+		$D$&$y_1(x)$  &$y_2(x)$  & \\
+		\hline
+		$D<0$ & $|x|^{\alpha}\cos(\beta\ln|x|)$  & $|x|^{\alpha}\sin(\beta\ln|x|)$  & $\alpha=-\frac{b-a}{2a}$ $\beta=\sqrt{-D} /2a$\\
+		\hline
+		$D=0$ & $|x|^{\alpha}$  & $|x|^{\alpha}\ln|x|$  & $\alpha=-\frac{b-a}{2a}$\\
+		\hline
+		$D>0$ & $|x|^{\alpha}\cosh(\gamma\ln|x|)$  & $|x|^{\alpha}\sinh(\gamma\ln|x|)$  & $\alpha=-\frac{b-a}{2a}$ $\gamma=\sqrt{D} /2a$\\
+		 & $|x|^{\alpha-\gamma}$  & $|x|^{\alpha+\gamma}$  & $\alpha=-\frac{b-a}{2a}$ $\gamma=\sqrt{D} /2a$\\
+	\end{tabular}
+\end{table}
+\begin{example}
+	Consider $3x^2y''+2xy'+5y=0$, where $a=3,b=2,c=5$. Note that:  \[
+		d=(b-a)^2-4ac=(2-3)^2-4(3)(5)=-59<0
+	.\] Thus we have: \[
+	\alpha=-\frac{b-a}{2a}=\frac{1}{6},\quad\beta=\frac{\sqrt{59}	}{6}
+	.\] Thus we have: \[
+	y(x) = c_1x^{\frac{1}{6}}\cos(\frac{\sqrt{59}}{6}\ln x)+c_2x^{\frac{1}{6}}\sin(\frac{\sqrt{59} }{6}\ln x)
+	.\] for $x>0$.
+\end{example}
+
+\begin{example}
+	Consider $x^2y''+2xy'-2y=0$, $x>0$, i.e. $a=1,b_=2,c=-2$. Note that $D=(b-a)^2-4ac=9>0$, thus we have: \[
+		\alpha= \frac{-(2-1)}{2(1)}=-\frac{1}{2}\quad \gamma= \frac{\sqrt{9} }{2(1)}=\frac{3}{2}
+	.\] With the general solution being: 
+	\[
+		y(x) =c_1x^{-\frac{1}{2}}\cosh(\frac{3}{2}\ln x)+c_2x^{-\frac{1}{2}}\sinh(\frac{3}{2}\ln x)
+	.\] or \[
+	y(x) = c_1 x^{-2}+c_2 x
+	.\] 
+\end{example}
+\subsection{Other Stuff from Math 240}
+If we once again consider the equation $a_2(x)y''(x)+a_1(x)y'(x)+a_0y(x)=0$. Note that as we mentioned earlier, we need two linearly independent non-zero solutions to get the general solution. If we only have one, say $y_1(x)$, a second linearly independent solution $y_2(x)$ can be constructed using \vocab{Abel's equation} \index{Abel's Equation}: \[
+	y_2(x) = Ay_1(x) \int \frac{e^{-\int \frac{a_1(x)}{a_2(x)}~dx}}{y_1^2(x)}dx
+.\] For any non-zero constant $A$.
+
+\begin{remark}
+	Derivation is in the notes.
+\end{remark}
+\begin{example}
+	Consider $xy''+(1-x)y'-y=0$. Suppose we're told that one solution is  $y_1(x)=e^{x}$. A second solution would be: \[
+		y_2(x) = Ae^{x}\int \frac{e^{- \int \frac{1-x}{x}~dx}}{(e^{x})^2}~dx
+	.\] \[ 
+	 = Ae^{x}\int \frac{e^{\int 1-\frac{1}{x}~dx}}{e^{2x}}~dx
+	 = Ae^{x}\int \frac{e^{x-\ln x}}{e^{2x}}~dx
+	 = Ae^{x}\int \frac{e^{-x}}{x}~dx
+ .\] Which doesn't have a nice answer (oops)
+\end{example}
+\begin{remark}
+	Note that whenever $a_2(x)+a_1(x)+a_0(x)=0$, one solution is always $y_1(x)=e^{x}$, since we'd have $y''=y'=y=e^{x}$.
+\end{remark}
+\begin{example}\label{nonhom1}
+	Consider $(1-x)y''+xy'-y=0$. Since we have $y_1(x) = e^{x}$, we have: \[ 
+		y_2(x) = Ae^{x}\int \frac{e^{- \int \frac{x}{1-x}~dx}}{(e^{x})^2}~dx
+	.\]\[ 
+y_2(x) = Ae^{x}\int \frac{e^{x+\ln(x-1)}}{e^{2x}}~dx =Ae^{x}\int \frac{x-1}{e^{x}}~dx = Ae^{x}(-xe^{-x})=-Ax
+	.\]  Picking $A=-1$, we have: $y_2(x) = x$, thus the general solution would be: \[
+	y(x) = c_1e^{x}+c_2x
+	.\] 
+\end{example}
+\subsection{Non-Homogeneous Equations}
+Now let's consider non-homogeneous equations: \[
+	a_2(x)y''(x)+a_1(x)y'(x)+a_0y(x)=b(x)
+.\] A general solution is given by: \[
+y(x)=c_1y_1(x)+c_2y_2(x)+y_p(x)
+.\] Where $c_1,c_2$ are arbitrary constants, $y_1,y_2$ are two linearly independent solutions to the homogeneous equation (where $b(x)= 0$), and  $y_p$ is any \vocab{particular solution} to the non-homogeneous equation.
+
+When $\frac{b(x)}{a_0(x)}=$ a  constant, then $y_p(x)=\frac{b(x)}{a(x)}$ works, otherwise: \[
+	y_p(x) = \int^x G(t,x) \frac{b(t)}{a_2(t)}~dt
+.\] Where: \[
+G(t,x) = \frac{y_1(t)y_2(x)-y_1(x)y_2(t)}{y_1(t)y_2'(y)-y_1'(t)y_2(t)}
+.\] 
+\begin{remark}
+	$G(t,x)$ is known as the \vocab{Green's function} associated with the ODE\index{Green's function}.
+\end{remark}
+\begin{remark}
+	When solving the integral, treat all $x$'s as constant, then afterwards, replace all $t$ 's with $x$ 's.
+\end{remark}
+\begin{example}
+	Consider the equation solved in \ref{nonhom1}. We have: \[
+		y_1(x)=e^{x}\quad y_2(x) = x
+	.\] 	\[
+	y_1'(x) = e^{x} \quad y_2(x)= 1
+	.\] Thus we have: \[
+	G(t,x) = \frac{e^{t}x-e^{x}t}{e^{t}(1)-e^{t}t} = \frac{x-te^{x-t}}{1-t}
+	.\] Thus we have: \[
+	y_p(x) = \int^x \frac{x-t e^{x-t}}{1-t} \frac{(t-1)^2}{1-t}~dt = \int^x x-t e^{x-t}~dt = xt -e^{x}(t-1)e^{-t}\bigg\rvert^x = x^2-x+1
+	.\] 
+\end{example}
+\end{document}
+

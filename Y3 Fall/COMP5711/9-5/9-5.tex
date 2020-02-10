@@ -1,0 +1,240 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{September  5th, 2019}
+\subsection{Amortization Analysis}
+A lot of time, with the right data structure, algorithm design can be made easier, such as \vocab{heapsort}. The analysis of these algorithms are also usually a lot easier, e.g. in heapsort, Insert and Extract-Min are both $O(\log n)$, making heapsort $O(n\log n)$.\\
+
+The default analysis is worst-case analysis. However, sometimes the worst case is too pessimistic. 
+\begin{example}
+	We have a stack with the two operations:
+	\begin{itemize}
+		\item $\text{PUSH}(S,x)$ 
+		\item $\text{POP}(S)$
+	\end{itemize}
+	Suppose we want to add a new operation \[
+		\text{MULTIPOP}(S,k)
+	.\] Which just pops $k$ times or until the stack is empty.\\
+
+	The worst case cost for MULTIPOP in the sequence is $O(n)$, since the stack size is at most $n$, making the cost of the sequence $O(n^2)$. This is correct, but we can improve it, since we know the structure of the data structure. \\
+
+	Intuitively, if we make $n$ operations, we cannot have all taking $O(n)$ time. Observing that an object can only POPed once, we have the that the number of POPs is at most the number of PUSHs, which is at most $n$.\\
+	
+	As such, the \vocab{amortized} cost of an operation is $O(n)/n=O(1)$.
+\end{example}
+\begin{remark}
+	The reason why we are able to improve the bound is because we know more information about the inner workings of the data structure, otherwise if we only know the interface, $O(n^2)$ the only thing we can have.
+\end{remark}
+\begin{definition}
+	The \vocab{amortized cost} of an operation on a data structure is: \[
+		A(n)=\frac{1}{n}\max_{\sigma,\left| \sigma \right| =n}T(\sigma	)
+	,\] where the max is taken over all sequences $\sigma$ of $n$ such operations, and $T(\sigma)$ is the total running time over $\sigma$.
+\end{definition}
+\begin{remark}
+	In other words, we are finding the longest running time of any $\sigma$ and dividing per operation.
+\end{remark}
+\begin{definition}
+	When there are $k$ types of operations, $\text{op}_{i}$, they have amortized costs $A_i(n)$, respectively, if for any  $\sum_{i} n_i=n$,\[
+		n_1A_1(n)+n_2A_2(n)+\ldots+n_kA_k(n)\ge \max_\sigma T(\sigma)
+	.\] Where the max is taken over all sequences $\sigma$ of $n$ operations that consists of $n_i$ $\text{op}_i$'s.
+\end{definition}
+\begin{example}
+	Suppose we have a binary counter $A$, initialized to all $0$. We have the operation INCREMENT($A$), which increments the counter to the next number by changing the bits.\\
+
+	Note that a single execution of INCREMENT takes  $O(\log n)$ time in the worst case (when $A$ contains all $1$'s), giving it a $O(n\log n)$ bound in the worst case. However, note that the total number of flips is: \[
+		\sum_{i=0}^{\log n-1} \frac{n}{2^{i}}=O(n)
+	.\] Making the amortized cost $O(1)$.
+		%\begin{algorithm}[h!]
+	%%\caption{Local Minima Search - Pseudocode}
+	%\begin{algorithmic}[1]
+		%\Statex INCREMENT($A$)
+%\State $0 \to i$
+%\While{$A[i]=1$}
+%\EndWhile
+
+	%\end{algorithmic}
+	%\end{algorithm}	
+\end{example}
+\begin{remark}
+	The reason why people use amortized instead of average, since average is reserved for the \vocab{average case analysis}, which is over random input sequences. While amortized analysis has no randomness.\\
+
+	This is also contrasted with \vocab{expected case analysis}, as it is the average running time with internal random numbers on the worst input.
+\end{remark}
+
+There are three methods for amortized analysis: 
+\begin{itemize}
+	\item\textbf{ Aggregate Analysis } 
+		\begin{itemize}
+			\item Total cost of $n$ operations divided by $n$.
+		\end{itemize}
+	\item\textbf{Accounting Method}
+		\begin{itemize}
+			\item Assign each type of operation with a (possibly different) amortized cost.
+			\item We should overcharge some operations and store overcharge as credit on specific objects. 
+			\item Then we will use the credit for compensation for some later operations.
+		\end{itemize}
+	\item \textbf{Potential Method}
+		\begin{itemize}
+			\item Same as the accounting method, but we don't associate the credit with specific objects.
+		\end{itemize}
+\end{itemize}
+\subsection{Accounting Method}
+Let's apply the accounting method to the binary counter:\\
+
+We will show that the amortized cost of each INCREMENT is \$2.
+\begin{itemize}
+	\item Let \$1 represent each unit of cost (i.e., the flip of one bit).
+	\item Whenever a bit flips from 0 to 1, we spend \$2: \$1 for the actual cost, and store another \$1 on the 1-bit as credit.
+	\item When a bit is set to 0, the stored \$1 pays the cost.
+	\item At most one bit flips from 0 to 1 in each INCREMENT operation, os the amortized cost of \$2 is enough to cover all the flips. 
+\end{itemize}
+\begin{remark}
+	The summary of the accounting method is:
+	\begin{itemize}
+		\item Come up with a conjecture of the amortized cost of each type of operation.
+		\item For some operations, the amortized cost will be greater than the actual cost.
+		\item In others, the amortized cost will be less than the actual cost.
+		\item If we have a surplus, we attached the surplus to some object in the data structure. This allows us to use the invariant argument.
+	\end{itemize}
+\end{remark}
+\begin{example}
+	Actual cost: 
+	\begin{itemize}
+		\item PUSH: 1
+		\item POP: 1
+		\item MULTIPOP: $k$
+	\end{itemize}
+	Let's assign the following amortized costs:
+	\begin{itemize}
+		\item PUSH: 2
+		\item POP: 0
+		\item MULTIPOP: 0
+	\end{itemize}
+	Suppose \$1 represent a unit of cost. When pushing a plate, we use \$1 to pay the actual cost and leave \$ on the plate as credit.\\
+
+	When POPing a plate the \$1 on the plate is used to pay the actual cost of the POP (note that al plates must have a dollar from when they are pushed).
+
+\end{example}
+\begin{remark}
+	The reason why we can assign 0 cost to some operation is because for amortized costs, we always consider \vocab{sequences of operations}.
+\end{remark}
+
+\subsection{Potential Method}
+There isn't a difference between accounting method and potential method, the only difference is that \vocab{we don't have to attach the surplus to an object}.\\
+
+Note that the accounting method argument still works if we have enough money, we don't have to associate the money with each plate. 
+\begin{remark}
+	The name \vocab{potential} comes from physics, where we inject energy and extract to do things.
+\end{remark}
+\begin{definition}
+	We have:
+	\begin{itemize}
+		\item Initial data structure $D_0$ and $n$ operations, resulting in $D_0,D_1,\ldots,D_n$ with costs $c_1,c_2,\ldots,c_n$.
+		\item A potential function $\phi: \{D_i\} \to \R$ ($\phi(D_i)$ is called the potential of $D_i$).
+		\item Amortized cost $c_i'$ of the $i$-th operation is: \[
+				c_i' = c_i + \phi(D_{i}) - \phi(D_{i-1}),\quad\text{(the actual cost + potential change)}
+		.\] 
+	\item $\phi(D_i)\ge 0$
+	\end{itemize}
+	In the end we need to show that: \[
+		\sum_{i} c_i'\ge \sum_{i} c_i
+	.\] In other words: \[
+	\sum_{i=1}^nc_i + \phi(D_n)-\phi(D_0)
+	.\] 
+	We can do this by showing that: \[
+		c_i' \ge c_i + \phi(D_i) - \phi(D_{i-1})
+	.\] 
+\end{definition}
+
+In general we start by defining the potential. This is the key to a potential proof, as we just need to show that the equality holds.
+
+\begin{example}
+	We define the potential for a stack to be the number of objects in the stack. So: \[
+		\phi(D_0)=0, \quad\text{ and  }\phi(D_i)\ge 0
+	.\] 
+\end{example}
+\begin{example}
+	For the binary counter, we define the potential of the counter to be the number of 1's.
+\end{example}
+\begin{remark}
+	In the potential method, we don't guess the amortized cost, instead we guess the potential.
+\end{remark}
+
+%\begin{remark}
+	%[Comparison between array and linked list]
+	%\begin{table}[htpb]
+		%\centering
+		%\begin{tabular}{|c|c|c|c|}
+		 %\hline
+		 %Size&Insert&Append&Lookup\\
+		 %\hline
+		 %$O(n)$& $O(n)$& $O(1)$ (?)& $O(1)$\\
+		 %$O(n)$& $O(1)$& $O(1)$& $O(n)$\\
+		%\end{tabular}
+	%\end{table}
+	%Note that inserting in an array is slow since you have to move everything, while append is faster. The (?) is because we need to rebuild the array. Note that lookups for linked list is slow. 
+%\end{remark}
+We will now see an example of amortized analysis with the following scenario:
+\begin{itemize}
+	\item A table (e.g. an array, not linked list)
+	\item We do not know how large in advance
+	\item Insertion at the end: $O(1)$ time if there is space
+	\item Deletion at the end: $O(1)$ time
+	\item Rebuilding the table takes time linear to the table size
+\end{itemize}
+Goal: 
+\begin{itemize}
+	\item $O(1)$ amortized cost
+	\item \vocab{Load factor}  $\alpha\ge $ constant fraction
+\end{itemize}
+\begin{definition}
+	The \vocab{Load factor} is the fraction of elements vs size of table
+\end{definition}
+One natural strategy is the doubling strategy: when the table becomes full, double its size and rebuild. This guarantees $\alpha\ge \frac{1}{2}$.\\
+
+With the aggregate analysis: 
+\begin{itemize}
+	\item Total cost of $n$ insertions: $O(n)$
+	\item Total cost of all rebuilds:  $1+2+4+8+\ldots+n=O(n)$
+\end{itemize}
+Thus is has the amortized cost of $O(1)$.\\
+
+However, this does not work when we want to support deletion. One natural strategy is as follows:
+\begin{itemize}
+	\item Double the size when inserting to a full table
+	\item Halve the size when less than half full
+	\item This guarantees that $\alpha\in [\frac{1}{2},1]$.
+\end{itemize}
+However consider where we:
+\begin{itemize}
+	\item Fill the table
+	\item insert (doubling the table)
+	\item 2 deletes (halving the table)
+	\item 2 inserts (doubling the table)
+	\item $\vdots$
+\end{itemize}
+This would give us a cost $\Theta(n^2)$. The problem is that we don't perform enough operations after expansion or contraction to pay for the next one. \\
+
+To fix this, we have a buffer, where we only halve when $\alpha\le \frac{1}{4}$. However aggregate analysis might run into problems, since we have to consider both insertion and deletion. As such, we must use the accounting or potential method.
+
+\subsubsection{Dynamic Table: Accounting Method}
+\begin{itemize}
+	\item Suppose the table size is $m$ after last expansion/contraction
+	\item Charge each insertion/deletion an amortized cost of 5 (4+1), which pays for the actual cost of the insertion/deletion, and stores 4 extra credits.
+	\item Table expands/contracts again after a least $\frac{1}{2}m$ operations, so we have $2m$ credits. This is because it takes at at least  $m$ insertions to double, and  $\frac{1}{2}m$ deletions to halve. 
+	\item These $2m$ credits will be enough to cover the next expansion/contraction ($2m$ to expand, $m$ to contract).
+\end{itemize}
+\begin{remark}
+	Note that there is still very little math needed. However, we need to find the constants. Usually, we just use asymptotic notation, e.g. 
+\begin{itemize}
+	\item Suppose the table size is $m$ after last expansion/contraction
+	\item Charge each insertion/deletion an amortized cost of $O(1)$ (sufficiently large), which pays for the actual cost of the insertion/deletion, and stores $O(1)$ (sufficiently large) extra credits.
+	\item Table expands/contracts again after a least $\Omega(m)$ (some given constant) operations, so we have $\Omega(m)$ (sufficiently large, its $O(1)\times \Omega(m)$) credits. 
+	\item These $\Omega(m)$ credits will be enough to cover the next expansion/contraction which costs $O(m)$.
+\end{itemize}
+\end{remark}
+\end{document}
+
+

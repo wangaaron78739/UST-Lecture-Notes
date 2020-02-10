@@ -41,8 +41,12 @@ However, this problem is NP-Complete, as it is equivelent to solving the \vocab{
 		\item Start with $L_1=\{\{A\} ,\{B\} ,\{C\} ,\{D\} ,\{E\} \} $, i.e. the large $1$-itemsets.
 		\item From $L_1$, generate candidates for large $2$-itemsets, $C_2$.
 		\item From $C_2$, check and keep the large $2$-itemsets, $L_2$.
-		\item Repeat
+		\item Repeat until the $C_n$ is empty, i.e. there are no large itemsets of size $n$.
+		\item The set of all large itemsets is $\bigcup\limits_{i<n}L_i $.
 	\end{itemize}
+	\begin{remark}
+		The reason why we want to do this is because reading the whole table frequently is slow, and this way, we can keep less things in memory.
+	\end{remark}
 	To generate candidates for ``large" $n$-itemsets from $L_{n-1}$, we can take note of the following properties:
 	\begin{theorem}\label{largesubsets}
 		If an itemset $S$ is large, then any proper subset of $S$ must be large.
@@ -57,9 +61,25 @@ However, this problem is NP-Complete, as it is equivelent to solving the \vocab{
 	Similarly, since the proper supersets are restricted versions of $S$, if $S$ is not large, then any proper supersets of $S$ must not be large, since it's even more restricted.
 \end{proof}
 \begin{example}
-	$\{B,C,E\} $ is large, thus $\{B,C\} ,\{C,E\} \{C\} $ are all large (not exahstive).
+	$\{B,C,E\} $ is large, thus $\{B,C\} ,\{C,E\} \{C\} $ are all large (not exhaustive).
 \end{example}
 	Using these properties, we can split the generation step into two steps: 
-	Suppose we know that the itemset $B,C$ and the itemset $B,E$ are large (i.e. in $L_2$)
+	
+\begin{description}
+	\item[Join]:
+		Suppose we know that the itemset $\{B,C\}$ and the itemset $\{B,E\}$ are large (i.e. in $L_2$), then $\{B,C,E\} $ is a potential candidate. In other words, from $L_{n-1}$, we join the $(n-1)$-itemsets to create the $n$-itemsets. Since our items can be ordered (as they are letters), we can check the \vocab{prefix} of the itemsets of all pairs of itemsets, and join together if they have the same prefix, where the prefix of the itemset is all items except the last.
+		\begin{remark}
+			The reason why we only need to check the prefix is because if we combine others, it will definitely be pruned.
+		\end{remark}
+\item[Prune]:
+	Since having all proper subsets of $S$ be large is a necessary condition for $S$ to be large, we can prune the candidates generated from the Join steps by checking all proper subsets of one size smaller.
+	\begin{remark}
+		The reason why we only have to check the subsets that are one smaller is because the others would've been check at an earlier step. If they aren't large, then delete the candidate.
+	\end{remark}
+	\begin{remark}
+		Note that this step can be done without reading the table, since we can just check if the subset $s$ is in $L_{k-1}$ and delete if not.
+	\end{remark}
+\end{description}
+After we've generated the candidate large sets ($C_i$), we will check the database for the support of them and delete the ones that aren't large, giving us $L_i$. (this is the \vocab{counting step}).
 \end{document}
 

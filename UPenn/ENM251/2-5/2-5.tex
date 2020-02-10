@@ -1,0 +1,36 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February  5th, 2020}
+\subsection{Applications}
+Given the family of curves $u(x,y) = c_1$, the family of curves orthogonal to these are the solution to: \[
+\frac{\partial u}{\partial x} dy = \frac{\partial u}{\partial y} dx
+.\] 
+\subsubsection{2nd-Order ODE}
+\begin{definition}
+	The general form of a 2nd order differential equation is: \[
+		y'' = F(x,y,y')
+	.\] Where $x$ is the independent variable and  $y$ is the dependent variable.
+\end{definition}
+We want to consider a few special cases. The first one is when the dependent variable is missing, $y''=f(x,y')$, for example  $y''=x-y'$. In this case, you can set  $v=y'$ $v'=y''$, giving us: \[
+	v'=f(x,v)
+\]  which is a first order equation. Thus we can solve the first order ODE and then integrate to get $y$.
+\begin{example}
+	Consider the earlier equation $y''=x-y'$, we have: \[
+	v' = x-v \implies \frac{dv}{dx}+v = x
+	\] \[
+	v = e^{-x}((x-1)e^{x}+c_1) = x-1+c_1e^{-x} = \frac{dy}{dx}
+	.\] \[
+	y = \frac{1}{2}x^2+x+c_2e^{-x}+c_3
+	.\] for some constants $c_2$ and $c_3$.
+\end{example}
+\begin{remark}
+	Note that for a first order ODE, there should be one arbitrary constant, but for second order, there should be 2.
+\end{remark}
+The second case is where the independent variable is missing, meaning: \[
+	\frac{d^2y}{dx^2} = F(y,\frac{dy}{dx}) \implies v \frac{dv}{dx} = F(y,v)
+.\] Where $v$ is once again $\frac{dy}{dx}$.
+\end{document}
+

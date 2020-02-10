@@ -1,0 +1,71 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=MATLAB,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\begin{document}
+
+\section{January 31st, 2020}
+\subsection{Problem 1}
+Find period of motion for the equation: \[
+	\dot{\theta}= \sqrt{\frac{g}{L}(3+2\cos\theta)}\quad 0\le \theta\le 2\pi
+.\] Since the RHS only has $\theta$, this is separable, thus:  \[
+\int	dt=\sqrt{\frac{L}{g}}\int \frac{d\theta}{\sqrt{3+2\cos(\theta)} }
+\] Note that the RHS gives us an elliptical equation. Since we want the period, we have: \[
+T = \sqrt{\frac{L}{g}} \int_0^{2\pi} \frac{d\theta}{3+2\cos\theta}+C
+.\] We can consider $C$ to be the start time, and just set it to 0. This is as far as you can go analytically, so plug it into a calculator. 
+\subsubsection{How to use in MATLAB}
+\begin{lstlisting}
+T = integral(@(theta)1./sqrCos(1,theta),2,2*pi)
+tspan = [0 2.5];
+y0 = 0;
+data = ode45(@sqrCos,tspan,y0);
+
+function res = sqrCos(t,theta)
+	L = 2,4;
+	g = 9,8;
+	res = sqrt(g/L*(3+2*cos(theta)));
+end(function)
+\end{lstlisting}
+\subsection{Problem 3}
+Consider the equation  \[
+v \frac{dv}{dx}+\frac{v^2}{x+\frac{m}{\rho}}=g
+.\] With the initial condition: $v_0=v(x_0)=v(0)=0$. To solve for $v(x)$, note that this is a Bernoulli equation: \[
+\frac{dv}{dx}+\frac{1}{x+\frac{m}{\rho}}v=g^{v-1}
+.\] with: \[
+p(x) = \frac{1}{x+\frac{m}{\rho}}\quad Q(x)=g \quad n=-1
+.\] Plugging into the formula, we have: \[
+V(x) = \left( \frac{1}{\mu(x)}\left( \int(1-n)\mu(x)Q(x)dx+C \right)  \right) ^{\frac{1}{1-n}}
+.\] Calculating the integrating factor, we have: \[
+\mu(x) = e^{\int (1-n) P(x) dx} = e^{2 \ln(x+\frac{m}{\rho})} = \left(x+\frac{m}{\rho}\right)^2
+.\] Thus we have: \[ 
+V(x) = \left( \frac{1}{\left(x+\frac{m}{\rho}\right)^2}\left( 2\int\left( x+\frac{m}{\rho} \right) ^{2}g~dx+C \right)  \right) ^{\frac{1}{2}}
+\]\[ 
+V(x) = \left( \frac{1}{\left(x+\frac{m}{\rho}\right)^2}\left( \frac{2}{3}\left( x+\frac{m}{\rho} \right) ^{3} +C \right)  \right) ^{\frac{1}{2}} = \frac{1}{x+\frac{m}{\rho}} \sqrt{\frac{2}{3}\left( x+\frac{m}{\rho} \right)^{3}g+C } 
+.\]  Plugging in the initial condition, we get: $C=-\frac{2}{3}\frac{m^{3}}{\rho^{3}}g$, giving us: \[
+v(x)=  \frac{1}{x+\frac{m}{\rho}}\sqrt{\frac{2}{3}\left( x+\frac{m}{\rho} \right) ^{3}g- \frac{2}{3}\left( \frac{m}{\rho} \right) ^{3}g} 
+.\] The acceleration is: \[
+g- \frac{v^2}{x+\frac{m}{\rho}}
+.\] 
+
+\end{document}
+

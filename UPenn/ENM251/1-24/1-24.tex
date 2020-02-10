@@ -1,0 +1,106 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{January 24th, 2020}
+\subsection{Recitation 1}
+\subsubsection{Homogeneous ODE}
+Recall that a homogeneous equation is \[
+	\frac{dy}{dx} = F(x,y),\quad\text{with }F(ax,ay)=a^{n}F(x,y)
+.\] What this typically means is that we won't have a constant.
+\begin{example}
+	$F(x,y)=xy$ is homogeneous, as  $F(ax,ay)=a^2xy$, while $F(x,y)=ax+5$ is not homogeneous, as $F(ax,ay)=a^2xy+5\neq a^nF(x,y)$.
+\end{example}
+For 1st order homogeneous ODE, we have $n=0$, with this we can introduce  $z=\frac{y}{x}$ and convert this ODE into a separable differential equation.
+\subsubsection{Problem 1}
+\begin{example}
+	Let's consider \[
+	F(x,y)=\frac{dy}{dx}=\frac{2y^2-x^2}{3xy}
+	.\] 
+\end{example}
+ \[
+		F(ax,ay)=\frac{2a^2y^2-a^2x^2}{3a^2xy}=F(x,y)
+	,\]  meaning that it is a first order homogeneous equation.
+
+	With this, we have: \[
+		\frac{d(zx)}{dx}=\frac{2(zx)^2-x^2}{3x(zx)}
+	\] \[
+	\implies z+x \frac{dz}{dx}= \frac{2x^2z^2-x^2}{3x^2z} = \frac{2z^2-1}{3z}
+	\]  \[
+	\implies x\frac{dz}{dx}= \frac{2z^2-1-3z^2}{3z}=-\frac{z^2+1}{3z}
+	.\] Now we can separate, giving us: \[
+	\frac{z}{z^2+1}dz=-\frac{1}{3x}dx \implies \int \frac{z}{z^2+1}dz = \int-\frac{1}{3x}dx
+	\] \[
+	\implies \frac{1}{2}\ln(z^2+1)=-\frac{1}{3}\ln(x)+C_1
+	\] Solving for $C_1$, we get:  \[
+	3\ln(z^2+1)=-2\ln(x)+6C \implies C=3\ln(z^2+1)+2\ln(x)=6C_1
+	\] \[
+	\implies \ln\left( x^2(z^2+1)^{3} \right) =6C_1 \implies x^2(z^2+1)^{3}=e^{6C_1}
+	.\] Remembering that $z=\frac{y}{x}$, we have: \[
+	x^2\left( \frac{y^2}{x^2}+1 \right) ^{3}=e^{6C_1} \implies \frac{(y^2+x^2)^{3}}{x^{4}}=e^{6C_1}\implies \frac{y^2+x^2}{x^{\frac{4}{3}}}=e^{2C_1} = C
+	.\] \[
+	y=\pm x^{\frac{2}{3}}\sqrt{C-x^{\frac{3}{2}}} 
+	.\] 
+
+	\subsubsection{Bernoulli Equation}
+	\begin{definition}
+		A \vocab{Bernoulli Equation} is an equation of the form:  \[
+			\frac{dy}{dx}+P(x)y=Q(x)y^{n}
+		.\] 
+	\end{definition}
+If $n=0$ or $n=1$, we separate this equation. If $n\neq 0,1$, defining $y=z^{\lambda}$, we have: \[
+	\frac{dy}{dx}=\frac{d(z^{\lambda})}{dx}=\frac{dz}{d\lambda} \frac{dz}{dx}= \lambda z^{\lambda-1} \frac{dz}{dx}
+\]  Substituting this back, we have: \[
+\lambda z^{\lambda-1}\frac{dz}{dx}+P(x)z^{\lambda}=Q(x)(z^{\lambda})^{n}
+.\] Dividing both sides by  $\lambda z^{\lambda-1}$, we have: \[
+\frac{dz}{dx}+\frac{1}{\lambda}P(x)z= \frac{1}{\lambda}Q(x)z^{\lambda n-\lambda+1}
+.\] Setting $\lambda$ such that $\lambda n-\lambda+1=0$, i.e.  $\lambda=\frac{1}{1-n}$, the equation becomes: \[
+\frac{dz}{dx}+(1-n)P(x)z=(1-n)Q(x)
+.\] Which is a linear equation, which we can solve: \[
+z(x) =\frac{1}{\mu_n}\left( \int \mu_n(1-n) Q(x)dx+C \right) ,\quad \mu_n = \text{exp}\left\{(1-n)P(x) dx\right\}
+.\] And substituting back into the original equation, we have: \[
+y=z^{\lambda}=z^{\frac{1}{1-n}} = \left( \frac{1}{\mu_n}\left( \int\mu_n(1-n)Q(x)dx+C \right)  \right) ^{\frac{1}{1-n}}
+.\] 
+
+\subsubsection{Problem 2}
+Consider \[vx \frac{dv}{dx}+v^2+xg=\frac{FL}{m}.\] Rearranging the equation, we get: \[
+	\frac{dv}{dx}+\frac{v}{x}+\frac{g}{v}= \frac{FL}{xvm} \implies  \frac{dv}{dx}+\left( \frac{1}{x} \right) v = \left( \frac{FL}{mx}-g \right) v^{-1}
+.\] which is the form of a Bernoulli equation. As such, we can just plug into the formula, and we get: \[
+\mu = \text{exp}\{\int(1-(-1))\frac{1}{x}dx\}= e^{\int \frac{2}{x}dx} = x^{2\ln(x)} = x^2
+.\] \[
+V(x) = \left( \frac{1}{\mu}\left( \int(1-(-1))\mu Q(x)dx +C\right)  \right) \frac{1}{(1-(-1))}
+\] \[
+=\left( \frac{1}{x^2}\left( \int 2 x^2\left( \frac{FL}{mx}-g \right) dx+C \right)  \right) ^{\frac{1}{2}}
+\] \[
+=\left( \frac{1}{x^2}\left( \frac{FLx^2}{m}-\frac{2}{3}gx^3 \right) +C \right) ^{\frac{1}{2}}=\left( \frac{FL}{m}-\frac{2}{3}gx+\frac{C}{x^2} \right) ^{\frac{1}{2}}
+.\] If we have an constraint where $V$ is finite with $x=0$, we need $C=0$, as otherwise $x=0$ will be infinite. Thus: \[
+V=\sqrt{\frac{FL}{m}-\frac{2}{3}gx} 
+.\] 
+
+\subsubsection{Problem 3 Hints from Homework 1}
+In the first homework, we have: \[
+	\frac{dx}{dt}=K\left( \alpha-mx \right) ^2\left( \beta-nx \right) 
+,\] for some positive constants $\alpha,\beta,m,n$. 
+Here we want to determine: \[
+	\lim\limits_{t \to \infty} x(t)
+.\] when  $
+	\frac{\alpha}{m}<\frac{\beta}{n},\ 
+	\frac{\alpha}{m}=\frac{\beta}{n},\ 
+	\frac{\alpha}{m}>\frac{\beta}{n}
+.$ 
+
+If we plug into the equation, we have: \[
+\frac{dx}{dt}=Km^2n\left( \frac{\alpha}{m}-x \right) ^2\left( \frac{\beta}{n}-x \right) 
+.\] Note that these are all positive except for the last factor. Thus, for the first case, we have: 
+\begin{enumerate}
+	\item For $x<\frac{\alpha}{m},\ \frac{dx}{dt}>0$
+	\item For $x=\frac{\alpha}{m},\ \frac{dx}{dt}=0$
+	\item For $x>\frac{\alpha}{m}$ and $x<\frac{\beta}{m},\ \frac{dx}{dt}>0$
+	\item For $x=\frac{\beta}{n},\ \frac{dx}{dt}=0$
+	\item For $x>\frac{\beta}{n},\ \frac{dx}{dt}<0$
+\end{enumerate}
+From 1 and 2, we have: if $x_0\le \frac{\alpha}{m},\ \lim\limits_{t \to \infty} x = \frac{\alpha}{m}$, while from 3,4,5, we have: if $x_0>\frac{\alpha}{m}\lim\limits_{t \to \infty} x = \frac{\beta}{n}$.
+
+\end{document}
+

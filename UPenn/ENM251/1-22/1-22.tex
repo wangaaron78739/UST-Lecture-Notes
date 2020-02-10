@@ -1,0 +1,105 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{January 22nd, 2020}
+There are 5 types: 
+\begin{itemize}
+	\item Separable Differential Equation
+	\item Homogeneous Differential Equation
+	\item Linear Differential Equations
+	\item Bernoulli Differential Equation
+	\item ???
+\end{itemize}
+\subsection{Separable Differential Equation}
+A general first-order ODE for a dependent variable $y$ in the independent variable  $x$ can be written as:  
+\begin{equation}
+	\frac{dy}{dx}=F(x,y)
+	\label{eq_1}
+\end{equation} where $F$ is some specified function of  $x$ and  $y$. When  $F$ has the form
+\begin{equation}
+	F(x,y)=f(x)g(y),
+\end{equation} then \ref{eq_1} is said to be \textit{separable} and such equation can always be solved by: \[
+	\frac{dy}{g(y)} f(x)dx \implies \int\frac{dy}{g(y)}+C_1=\int f(x)dx+C_2 \implies \int \frac{dx}{g(y)} = \int f(x)dx+C
+.\] as one form for the solution of \ref{eq_1}.
+\subsubsection{Ideal Fluid Flow}
+We are concerned with a container that has a fluid with cross sectional area $A$ with density  $\rho$ with a hole at the bottom of the container which causes it to flow out. We are concerned with the heigh  $x$ of the container. We also have a pipe that pumps in fluid with constant rate  $R$. 
+
+This leads to following equation: \[
+	\frac{dx}{dt} = \alpha-\beta\sqrt{x} 
+.\]  where \[
+\alpha = \frac{R}{A} \quad \beta = \sqrt{\frac{2ga^2}{A^2-a^2}} \quad g=9.81\text{m s}^{-2}
+.\] Note that this is a separable differential equation: \[
+\frac{dx}{\alpha-\beta\sqrt{x} } = dt
+.\] 
+
+If we have $\alpha$,  $\beta$, we can solve, e.g.  $\alpha=60$  $\beta=6$, we have:  \[
+	\frac{dx}{dt} = 60-6\sqrt{x} \implies \frac{dx}{10-\sqrt{x} } = 6 dt
+.\] Integrating on both sides, we have: \[
+\int \frac{dx}{10-\sqrt{x} } = \int 6 dt = 6t+C
+.\]  Solving this, we get: \[
+20 \tan^{-1}\left( \frac{\sqrt{x}}{10}\right) -10\ln(100-x)-2\sqrt{x}=6t+C
+.\] If we have initial conditions, e.g. at $t=0,x=0$, we would have:  \[
+0-10\ln(100)=C
+\] allowing us to solve for $C$. This would allow us to solve for a time $t$ for certain values of  $x$.
+
+\subsection{Homogeneous Differential Equation}
+Again remember that the general form a differential equation of one a dependent variable $y$ in the independent variable  $x$ is:  \[
+	\frac{dy}{dx} = F(x,y)
+.\] If $F(x,y)=f(x)g(x)$ then this is separable. Remember that the goal is that we want to find $G(x,y)=C$, in other words, we want to get rid of the derivative and find the relationship between the two.
+
+\begin{definition}
+	A function of form $F(x,y)$ is called \vocab{ homogeneous } of order  $N$ if $F(tx,ty)=t^{N}F(x,y)$ for any scalar $t$.
+\end{definition}
+\begin{example}
+	\[
+		F(x,y) = x^{3}+x^2y+4xy^{2} \implies F(tx,ty) = (tx)^{3}+(tx)^2(ty)+4(tx)(ty)^{2}
+	\] \[
+	=t^{3}\left( x^{3}+x^2y+4xy^2 \right) =t^{3}F(x,y)
+.\] Thus $F(x,y)$ is homogeneous to the order 3.
+\end{example}
+\begin{example}
+	$F(x,y)=x^{3}+xy$ is not homogeneous. 
+\end{example}
+\begin{example}
+	\[
+		F(x,y)=\frac{xy}{x^2+y^2}
+	\]\[
+	F(tx,ty)=\frac{t^2xy}{t^2x^2+t^2y^2}= t^2\left( \frac{xy}{x^2+y^2} \right) = t^{0}F(x,y)
+\] meaning that $F(x,y)$ is homogeneous to order 0.   
+\end{example}
+\begin{remark}
+	Typically if we say that a function is homogeneous but don't specify the order, it is assumed to be of order 0.
+\end{remark}
+If a function in homogeneous to order 0, then it only depends on the ratio of $\frac{y}{x}$. In other words, rewrite $F(x,y)=f(\frac{y}{x})$.
+\begin{theorem}
+	A function $F(x,y)$ is homogeneous of order 0 if and only if it can be expressed as $f(\frac{y}{x})$.
+\end{theorem}
+If we have a homogeneous function of order 0, we will be able to introduce a new variable $z=\frac{y}{x}\implies y=sz$, giving us: \[
+	\frac{d(xz)}{dx}=F(x,xz)=F(x(1),x(z))=F(1,z)
+.\] Using the product rule, we have: \[
+\frac{d(xz)}{dx}=\frac{dx}{dx}z+x \frac{dz}{dx}=F(1,z)
+.\] \[
+z+x \frac{dz}{dx}=F(1,z) \implies \frac{dz}{F(1,z)-z}=\frac{dx}{x}
+,\] which is a separable differential equation. 
+
+\begin{remark}
+	The point is whenever you have a homogeneous equation, then introducing $z=\frac{y}{x}$ will allow us to convert it to a separable equation. Note that this only works for order 0 homogeneous equations.
+\end{remark}
+
+\subsubsection{Building an Radar Antenna}
+TL;DR the equation is: \[
+	\left( \frac{dy}{dx} \right) ^2-2 \frac{y-F}{x} \left( \frac{dy}{dx} \right) -1 = 0
+.\]  If we use the quadratic formula, we get: \[
+\frac{dy}{dx} = \frac{y-F}{x}+\sqrt{\left( \frac{y-F}{x} \right) ^2+1} 
+.\] If we do the substitution, $z=\frac{y-F}{x}$, we get: \[
+\frac{d(xz+F)}{dx} = z+\sqrt{z^2+1} \implies x \frac{dz}{dx}+z = z + \sqrt{z^2+1}  \implies \frac{dz}{\sqrt{z^2+1} }=\frac{dx}{x}
+.\] \[
+\int \frac{dz}{\sqrt{z^2+1} }=\ln x+C \implies \ln\left( z+\sqrt{z^2+1}  \right) =\ln x +C
+.\] \[
+\implies A^2x^2-2Axz=1 \implies \frac{1}{2}Ax^2+\left( F-\frac{1}{2A} \right) 
+,\]  which is the equation of a parabola. Thus the optimal shape of a radar dish is a parabola.
+
+\end{document}
+

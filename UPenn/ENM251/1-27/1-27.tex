@@ -1,0 +1,146 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{January 27th, 2020}
+\subsection{Linear ODE}
+\begin{definition}
+	The basic form of first-order linear equation is: \[
+	a_1(x) \frac{dy}{dx}+a_0(x)y=b(x)
+,\] where $a_1(x)\neq 0$. The goal is given $a_1(x),a_0(x)$ and $b(x)$, solve for $y(x)$.
+\end{definition}
+
+\begin{example}
+	 \[
+		 x^2y'(x)+2y(x) = x
+	 \] is a first order linear ODE, where $a_1(x) = x^2,\ a_0(x)=2,\ b(x) =x$. 
+\end{example}
+
+To solve it, we first divide by $a_1(x)$, giving us: \[
+	\frac{dy}{dx}+ \frac{a_0(x)}{a_1(x)}y=\frac{b(x)}{a_1(x)}
+.\] which is of the standard form: \[
+\frac{dy}{dx}+P(x)y=Q(x)
+.\] 
+\begin{example}
+	From the previous example, we'd have: \[
+		y'(x)+\frac{2}{x^2}y(x)=\frac{1}{x}
+	,\] where $P(x)=\frac{2}{x^2}$ and $Q(x) = \frac{1}{x}$. 
+\end{example}
+To solve this, we then multiply by $e^{\int P(x)dx}$, giving us: \[
+	e^{\int P(x)dx} \frac{dy}{dx} + P(x) e^{\int P(x)dx} = Q(x) e^{\int P(x)dx}
+.\] Note that the second term is $\frac{d}{dx}\left( e^{\int P(x)dx} \right) $, thus by the product rule, this becomes: \[
+\frac{d}{dx}\left( e^{\int P(x) dx} \right) = Q(x) e^{\int P(x) dx} 
+.\] If we call $\mu(x)=e^{\int P(x) dx}$ the \vocab{integrating factor} for the ODE, we can express this as: \[
+\frac{d(\mu y)}{dx} = \mu Q \implies \mu y = \int \mu Q dx + C \implies y = \frac{1}{\mu}\left( \int \mu Q dx + C \right) 
+.\] 
+\subsubsection{Steps for Solving $a_1(x)\frac{dy}{dx}+a_0(x)y=b(x)$}
+\begin{enumerate}
+	\item Change to standard form: $P(x) = \frac{a_0(x)}{a_1(x)}$, $Q(x)=\frac{b(x)}{a_1(x)}$.
+	\item Compute the integrating factor: $\mu(x) = e^{\int P(x)dx}$.
+	\item Plug into formula: $y(x) = \frac{1}{\mu(x) }\left( \int \mu(x)Q(x)dx+C \right)$.
+\end{enumerate}
+\begin{example}
+	Returning to the previous example, considering $x^2 y'(x)+2y(x)=x$, we have:
+	\begin{itemize}
+		\item $P(x)= \frac{a_0(x)}{a_1(x)}=\frac{2}{x^2}$
+		\item $Q(x)= \frac{b(x)}{a_1(x)}=\frac{1}{x}$
+	\end{itemize}
+	We now calculate the integral factor:  \[
+		\mu(x) = e^{\int P(x) dx}=e^{\int \frac{2}{x^2}dx}=e^{-\frac{2}{x}}
+	.\] Plugging into the formula, we get: \[
+	y(x) = \frac{1}{e^{-\frac{2}{x}}}\left( \int e^{-\frac{2}{x}}\frac{1}{x}~dx + C_1 \right) 
+	.\] 
+
+\end{example}
+\begin{example}
+	Now consider $x^2y'(x)+2y(x)=1$, following the same steps, we get: \[
+	y(x) = \frac{1}{e^{-\frac{2}{x}}}\left( \int e^{-\frac{2}{x}} \frac{1}{x^2}~dx + C_1 \right) = 
+	\frac{1}{e^{-\frac{2}{x}}}\left( \frac{1}{2} e^{-\frac{2}{x}}+ C_1 \right) 
+	.\] 
+\end{example}
+\begin{example}
+	\[
+		\frac{dT}{dt}=-h(T-T_R) \implies \frac{dT}{dt}+hT=hT_R
+	,\]  which can solved with the linear method. $P(t) = h$,  $Q(t) = hT_R$, giving us:  \[
+	\mu(t) = e^{\int h dt} = e^{ht} \implies T(t) = \frac{1}{e^{ht}}\left( \int e^{ht}hT_R~ dt +C_1 \right) 
+	\]\[
+	T(t) = e^{-ht}\left( T_R e^{ht}+C_1 \right) = T_R + C_1 e^{-ht} 
+	.\]  
+
+\end{example}
+\begin{remark}
+	How to determine which method to use. Bring everything to one side: \[
+		\frac{dy}{dx}=F(x,y)
+	.\] 
+	\begin{itemize}
+		\item If $F(x,y) = f(x)g(y)$, we can use the separable method.
+		\item If  $F(tx,ty)=F(x,y)$, we can use the homogeneous method.
+		\item If  $F(x,y)=-P(x)y+Q(x)$, then we can use the linear method.
+		\item If  $F(x,y) = -P(x)y+Q(x)y^{m}$, we can use the Bernoulli method.
+	\end{itemize}
+\end{remark}
+\subsubsection{Bernoulli Equation}
+\begin{definition}
+	A Bernoulli Equation is an equation of the form: \[
+		\frac{dy}{dx}+P(x)y=Q(x) y^{m}
+	,\] for some number $m$. 
+\end{definition}
+\begin{example}
+	Giving initial condition $v(0)=0$, solve  $v$ where: \[
+	\frac{dv}{dx}+\frac{1}{x}v=gv^{-1}
+	,\] which is of the form of a Bernoulli Equation. 
+	
+\end{example}
+
+To solve the Bernoulli equation, we set $y=z^{\lambda}$ and choose $\lambda$ so that the ODE for $z$ is easier to solve than the ODE for $y$. This is because we'd get: \[
+	\frac{dy}{dx}+P(x)y=Q(x) y^{m}
+\] \[
+\implies\frac{dz^{\lambda}}{dx}+P(x) z^{\lambda}=Q(x) (z^{\lambda})^{m}
+\]\[
+\implies \lambda z^{\lambda-1} \frac{dz}{dx} + P(x) z^{\lambda} = Q(x) z^{m\lambda}
+.\] Dividing by $\lambda z^{\lambda}$: \[
+\implies \frac{dz}{dx}+\frac{1}{\lambda}P(x) z = \frac{1}{\lambda}Q(x) z^{m\lambda+1-\lambda}
+.\] Thus we want to choose $\lambda$ so that $m\lambda+1-\lambda=0 \implies \lambda = \frac{1}{1-m}$ where $m\neq 1$. 
+
+If  $m=1$, then it is a separable equation, meaning that we have:  \[
+	\frac{dy}{dx}=\left( Q(x)-P(x) \right) y
+.\] \[
+\frac{dy}{y } = \left( Q(x)-P(x) \right)dx \implies y(x) = Ae^{\int(Q(x)-P(x))~dx}
+.\] 
+\subsubsection{Summary for Solving Bernoulli Equation}
+Consider \[
+	a_1(x) \frac{dy}{dx}+a_0(x)y=b(x) y^{m}
+.\] 
+\begin{enumerate}
+	\item First change to standard form with: $P(x) = \frac{a_0(x)}{a_1(x)}$, $Q(x) =\frac{b(x)}{a_1(1)}$
+	\item If $m=1$, then, for some constant $A$, we have: \[
+			y(x) = Ae^{\int (Q(x)-P(x))dx}
+	.\] 
+\item Otherwise, compute the integrating factor: \[
+		\mu(x) = e^{\int(1-m)p(x)dx}
+.\] 
+\item Giving us the equation: \[
+		y(x) = \left( \frac{1}{\mu(x)}\left( \int (1-m) \mu(x) Q(x)~dx \right) +C \right) ^{\frac{1}{1-m}}
+.\] 
+\end{enumerate}
+\begin{remark}
+	Note that the linear case is when $m=0$, which gives us the equation what we have before.
+\end{remark}
+\begin{example}
+	Returning to our example earlier where we were considering $\frac{dv}{dx}=\frac{1}{x}v=gv^{-1}$, we have $P(x) = \frac{1}{x}$, $Q(x) = g$. Thus the integrating factor is:  \[
+		\mu(x) = e^{\int (1-(-1))\frac{1}{x}~dx} = e^{\int \frac{2}{x}dx} = e^{2\ln x} = x^2
+	.\] 
+	Thus we have: \[
+		v(x) = \left( \frac{1}{x^2}\left( \int(1-(-1))x^2 g~dx + C_1 \right)  \right) ^{\frac{1}{1-(-1)}}
+	\] \[
+	= \left( \frac{1}{x^2}\left( \frac{2}{3}gx^3+C_1 \right)  \right) ^{\frac{1}{2}}
+	\] \[
+	 = \sqrt{\frac{2gx}{3}+\frac{C_1}{x^2}} 
+ .\]  Since $v(x) = 0 \implies C_1 = 0$, thus: \[
+ v(x) = \sqrt{\frac{2gx}{3}} 
+ .\] 
+\end{example}
+
+\end{document}
+

@@ -1,0 +1,81 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February  3rd, 2020}
+\subsection{Exact Equations}
+Remember that an exact equation is one where: \[
+	M dx + N dy = 0
+.\] Where: \[
+\frac{\partial M}{\partial y} = \frac{\partial N}{\partial x} 
+.\] 
+Consider the exact equation: \[
+	(y^2-x^2)dx+2xydy=0
+.\] 
+To solve this exact ODE, we set: \[
+	\frac{\partial f}{\partial x} =M=y^2-x^2 \implies \int_x (y^2-x^2)dx+c_1(y)\implies f(x,y) = y^2x-\frac{x^{3}}{3}+c_1(y)
+.\] 
+Now if we take the partial with respect to $y$, we get: \[
+	\frac{\partial f}{\partial y} = 2yx+c_1'(y) = N = 2xy \implies c_1'(y) = 0 \implies c_1(y) = c_2
+.\] This tells: \[
+f(x,y) = y^2x-\frac{1}{3}x^3+c_2
+\] satisfies both equations meaning that the solution to our ODE is of the form: \[
+f(x,y) =xy^2-\frac{1}{3}x^{3}=C
+.\] If we have an initial condition, then this will give us a unique solution.
+\begin{example}
+	Consider the equation: $2xy^2dx+(2x^2y-y^{3})dy=0$. To solve this, we do the following: \[
+		\int_x 2xy^2~dx = x^2y^2+c_1(y) \implies 2x^2y+c_1'(y) = 2x^2y-y^{3} \implies c_1=-\frac{y^{4}}{4}
+	\] Thus we have: \[
+	f(x,y) = 2x^2y^2-\frac{1}{4}y^{4}+C
+	.\] 
+\end{example}
+\subsection{Inexact Equations}
+If $M dx + Ndy = 0$ is not exact, then we try to introduce an integrating factor $\mu(x,y)$ to turn make $\mu N dx+\mu N dy = 0$. Thus we want: \[
+ \frac{\partial \mu M}{\partial y}  = \frac{\partial \mu N}{\partial x} 
+.\] However this is usually as difficult to solve as the original equation. There are some special cases though: 
+\begin{itemize}
+	\item $\mu(x,y) = \mu(x)$. If this is the case, we have: \[
+	\frac{\partial \mu M}{\partial y}  = \frac{\partial \mu N}{\partial x} 
+	\implies \mu \frac{\partial M}{\partial y}  = \frac{d \mu}{d x} N + \mu \frac{\partial N}{\partial x} 
+	\] \[
+	\implies \mu\left( \frac{\partial M}{\partial y} -\frac{\partial N}{\partial x}  \right) =\mu'(x)N \implies \frac{\mu'(x)}{\mu(x)}= \frac{\frac{\partial M}{\partial y} -\frac{\partial N}{\partial x} }{N}
+	\] and if the RHS is a function of only x, we can integrate, giving us: \[
+	\mu(x) = \exp\left\{\int \frac{\left( \frac{\partial m}{\partial y} -\frac{\partial N}{\partial x}  \right) }{N}dx\right\}
+	.\] With this, we will be able to solve the differential equation with $\frac{\partial f}{\partial x} =\mu M$ and $\frac{\partial f}{\partial y} =\mu N$. This is true if: \[
+	\frac{\frac{\partial M}{\partial y} -\frac{\partial N}{\partial x} }{N} = k(x)
+	.\] i.e. it's a function of only $x$
+\item $\mu(x,y)=\mu(y)$. Same thing but with $y$ instead of  $x$. We check if: $\frac{\frac{\partial N}{\partial x} -\frac{\partial M}{\partial y} }{y}$ is a function of only $y$. We will have:  \[
+		\mu(y) = \exp\left\{\frac{\frac{\partial N}{\partial x} -\frac{\partial M}{\partial y} }{m}\right\}
+.\] 
+\end{itemize}
+\begin{example}
+	Consider the equation $2xydx+(2x^2-y^2)dy=0$. Note that this is not exact. As such, we check: \[
+		\frac{\frac{\partial M}{\partial y} -\frac{\partial N}{\partial x} }{N}=\frac{2x-4x}{2x^2-y^2}=\frac{2x}{2x^2-y^2}\neq \text{ a function of only $x$ }
+	.\] \[
+	\frac{\frac{\partial N}{\partial x} -\frac{\partial M}{\partial y} }{M}=\frac{4x-2x}{2xy}=\frac{1}{y}
+	.\] Thus we have: \[
+	\mu(y) = e^{\int \frac{1}{y}dy}=e^{\ln y}= y
+	.\] 
+\end{example}
+\begin{example}
+	Consider $\frac{dy}{dx}= \frac{2x^2-y^2}{3xy}$, rearranging gives us: \[
+		(x^2-2y^2)dx + 3xy dy = 0
+	.\] Note that $\frac{\partial M}{\partial y}  = -4y$ and $\frac{\partial N}{\partial x} =3y$, thus it is not exact. Now we try: \[
+	\frac{\frac{\partial M}{\partial y} -\frac{\partial N}{\partial x} }{N}=\frac{-4y-3y}{3xy}=\frac{-7}{3x} 
+	.\] Which is a function of only $x$. As such, we have: \[
+	\mu(x) = e^{\int-\frac{7}{3x} dx } = x^{-\frac{7}{3}} 
+	.\] Multiplying this in gives us: \[
+	(x^{-\frac{1}{3}}-2x^{-\frac{7}{3}}y^{2})dx + 3x^{-\frac{4}{3}}ydy=0
+	,\]  which is exact since: \[
+	\frac{\partial M}{\partial y} =-4x^{-\frac{7}{3}}y \quad \frac{\partial N}{\partial x} = -4 x^{-\frac{7}{3}}y
+	.\] Solving this gives us: \[
+	f(x,y) = \int_x x^{-\frac{1}{3}}-2x^{-\frac{7}{3}}y^2 dx = \frac{3}{2}x^{\frac{2}{3}}+\frac{3}{2}x^{-\frac{4}{3}}y+c_1(y)
+	.\] \[
+	\frac{3}{2}x^{-\frac{4}{3}}y+c_1'(y) = \frac{3}{2}x^{-\frac{4}{3}}y\implies c_1 = C
+	.\]Thus \[
+	f(x,y) = \frac{3}{2}x^{\frac{2}{3}}+\frac{3}{2}x^{-\frac{4}{3}}y^2=C
+	.\] 
+\end{example}
+\end{document}
+

@@ -1,0 +1,28 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{September  6th, 2019}
+\subsection{Language Models}
+\begin{definition}
+	A \vocab{statistical language model} is a model specifying probability distribution over word sequences. It can be regarded as a probabilistic mechanism for ``generating'' text, thus it's also called a ``generative'' model.
+\end{definition}
+\begin{remark}
+	In other words, if you have a language model, you can generate text.
+\end{remark}
+LM's are useful as they provide a principled way to quantify the uncertainties associated with natural language, helping us with \vocab{speech recognition}, \vocab{text categorization}, and \vocab{information retrieval}.\\
+
+We can also use conditional probability, e.g. given we've seen the word ``basketball'', it's likely we're talking about sports.\\
+
+\subsection{Review On Probability}
+
+\[
+	P(x|y)=\frac{P(x,y)}{P(y)}=\frac{P(y|x)P(x)}{P(y)}
+.\] 
+Thus,
+\[
+	\max_x P(x|y)=\max_x P(y|x)P(x)
+.\] 
+\end{document}
+
