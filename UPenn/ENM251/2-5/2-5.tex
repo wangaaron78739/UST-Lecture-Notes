@@ -30,7 +30,7 @@ We want to consider a few special cases. The first one is when the dependent var
 	Note that for a first order ODE, there should be one arbitrary constant, but for second order, there should be 2.
 \end{remark}
 The second case is where the independent variable is missing, meaning: \[
-	\frac{d^2y}{dx^2} = F(y,\frac{dy}{dx}) \implies v \frac{dv}{dx} = F(y,v)
-.\] Where $v$ is once again $\frac{dy}{dx}$.
+	\frac{d^2y}{dx^2} = F(y,\frac{dy}{dx}) \implies \frac{dv}{dx} = \frac{dv}{dy} \frac{dy}{dx} =  v \frac{dv}{dx} = F(y,v)
+.\] Where $v$ is once again $\frac{dy}{dx}$. Using this, we can solve for $v$ in terms of $y$ and then integrate twice.
 \end{document}
 
