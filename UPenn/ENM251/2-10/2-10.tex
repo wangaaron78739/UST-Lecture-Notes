@@ -24,7 +24,7 @@ y(x) = c_1y_1(x) + c_2y_2(x)
 	.\] 
 \end{example}
 \begin{remark}
-	Note that we only the Wronskian to not be the 0 function, and that it's ok for certain values of $x$ for the Wronkian to be 0.
+	Note that we only need the Wronskian to not be the 0 function, and that it's ok for certain values of $x$ for the Wronkian to be 0.
 \end{remark}
 \begin{example}
 	If we used $y_1(x)=e^{x}$ and $y_2(x)=2e^{x}$, then we'd get a Wronskian equal to 0, which would not work.
@@ -171,7 +171,9 @@ G(t,x) = \frac{y_1(t)y_2(x)-y_1(x)y_2(t)}{y_1(t)y_2'(y)-y_1'(t)y_2(t)}
 	When solving the integral, treat all $x$'s as constant, then afterwards, replace all $t$ 's with $x$ 's.
 \end{remark}
 \begin{example}
-	Consider the equation solved in \ref{nonhom1}. We have: \[
+	Consider the equation solved in \ref{nonhom1} but with $b(x)=(x-1)^2$, i.e.:\[
+	(1-x)y''+xy'-y=(x-1)^2
+	.\]We have: \[
 		y_1(x)=e^{x}\quad y_2(x) = x
 	.\] 	\[
 	y_1'(x) = e^{x} \quad y_2(x)= 1
