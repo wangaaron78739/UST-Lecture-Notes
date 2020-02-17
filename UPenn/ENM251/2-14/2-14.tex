@@ -1,0 +1,91 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 14th, 2020}
+\subsection{Problem 1 - Solution 1}
+Consider \[
+	u''(r) + \frac{1}{r}u'(r) = -H
+.\] With constraints: \[
+u(a) = T_e\quad |u(0)| < \infty
+.\] Let us take $v=u'(r)$, which gives us:  \[
+v'(r) + \frac{1}{r}v = -H
+.\]  which is a linear first order ODE, giving us: \[
+v(r) = \frac{1}{\mu(r)}\left( \int \mu(r) (-H) dr + C_1 \right), \quad\mu(r) = e^{\int \frac{1}{r}dr} = r
+.\] Thus: \[
+v(r) = \frac{1}{r}\left( \int-rH~dr +C_1 \right)  = \frac{1}{r}\left( -\frac{1}{2}r^2H+C_1 \right) 
+.\] \[
+v(r) =- \frac{1}{2}rH + \frac{1}{r}C_1 = u'(r)
+.\] \[
+\implies u(r) = \int -\frac{1}{2}rH+\frac{1}{r}C_1~dr = -\frac{1}{4}r^2H+\ln(r)C_1+C_2
+.\] To solve for constants, we apply initial conditions: \[
+|u(0)| = |-\frac{1}{4}(0)^2H+\ln(0)C_1+C_2|<\infty \implies C_1=0
+.\] \[
+\implies u(a) = -\frac{1}{4}Ha^2+C_2 = T_e \implies C_2 = T_e+\frac{1}{4}Ha^2
+.\] Thus we have: \[
+u(r) = T_e+\frac{1}{4}H(a^2-r^2)
+.\] 
+
+\subsection{Problem 1 - Solution 2}
+We once again consider $u''(r)+\frac{1}{r}u'(r)=-H$. First we will solve the homogeneous equation: \[
+	u_h''(r)+\frac{1}{r}u_h'(r)=0 \implies r^2 u_h''(r)+r u_h'(r) = 0
+.\] which is equidimensional. As such we just need to find the discriminant with $a=1, b=1, c=0$: \[
+D=(b-a)^2-4ac = (1-1)^2-0=0
+.\] Using the table, we have: \[
+u_1(r) = |r|^{\alpha}\ln(r)\quad u_2(r) = |r|^{\alpha}
+.\] with  \[
+\alpha=-\frac{b-a}{2a}=0
+.\] Thus: \[
+u_1(r) = \ln(r)\quad u_2(r) = 1
+.\] Thus the overall homogeneous solution is: \[
+u_h= C_1\ln(r) + C_2
+.\] Now we need to find the particular solution using Green's Function: \[
+G(t,r) = \frac{u_1(t)u_2(r)-u_1(r)u_2(t)}{u_1(t)u_2'(t)-u_1'(t)u_2(t)} = \frac{\ln(t)-\ln(r)}{-\frac{1}{t}}=t\ln(r)-t\ln(t)
+.\] Using this, we have: \[
+u_p(r) = \int^r G(t,r) g(t) dt = \int^r(t\ln(r)-t\ln(t))(-H)~dt
+.\] \[
+= -H\ln(r)\int^rt~dt + H\int^rt\ln(t)~dt = \frac{1}{2}r^2H\ln(r)
+.\] Integrating by parts, with: \[
+u=\ln(t) \quad dv=t~dt
+\] \[
+du=\frac{1}{t}~dt \quad v=\frac{1}{2}t^2
+.\] 
+we have: \[
+\int^r t\ln(t) ~dt = \frac{1}{2}t^2\ln(t)-\int \frac{1}{2}t~dt  = \frac{1}{2}t^2\ln(t) -\frac{1}{4}t^2\bigg\rvert_{t=r}
+.\] 
+Giving us $u_p(r) = -\frac{1}{4}r^2H$, thus giving us: \[
+	u_h+u_p = C_1\ln(r) + C_2-\frac{1}{4}r^2H
+.\] Which is the same as the other solution before plugging in the initial conditions.
+\subsection{Problem 2}
+Consider the equation: \[
+	\ddot{x}+\omega^2 x= \ddot{x}+\frac{g}{L}x= g
+.\] where $\omega=\sqrt{\frac{g}{L}} $ and initial conditions: \[
+x(0) = 0 \quad\dot{x}(0) = 0
+.\] This has constant coefficients, with $a=1, b=0, c=\omega^2$, thus the discriminant is: \[
+D= b^2-4ac = -4\omega^2<0
+.\] Thus we have: \[
+x_1=e^{\alpha t} \cos(\gamma t) \quad x_2 = e^{\alpha t}\sin(\gamma t) 
+.\] with: \[
+\gamma = \frac{\sqrt{-D} }{2a}=\omega \quad \alpha=-\frac{b}{2a}=0       
+.\] Thus: \[
+x_h = C_1\cos(\omega t) + C_2 \sin(\omega t)
+.\] Now we need a particular solution. Looking back at the original equation, we can guess $x_p = L$. Since: \[
+0+\frac{g}{L}L=g
+.\] Because of the existence-uniqueness theorem, this is the only solution that will work, meaning that overall solution before initial conditions is: \[
+x(t) = C_1\cos(\omega t) + C_2\sin(\omega t) + L
+.\] Applying initial conditions, we have: \[
+x(0) = C_1(1) + C_2(0) + L = 0 \implies C_1 = -L
+.\] \[
+\dot{x}(0) = -L\omega\sin(0) + C_2\omega\cos(0) = 0 \implies C_2 = 0
+.\] Thus we have: \[
+x(t) = -L\cos(\omega t) + L = L(1-\cos(\omega t))
+.\] 
+
+With this we can solve for some stuff, for example: \[
+	x(t_{\frac{1}{2}})=\frac{L}{2} \implies t_{\frac{1}{2}} = \frac{\pi}{3\omega}
+.\]  \[
+x(T) = L \implies T= \frac{\pi}{2\omega}
+.\] 
+\end{document}
+
