@@ -1,0 +1,219 @@
+\documentclass[../main/main.tex]{subfiles}
+
+%\usepackage{circuitikz}
+
+\begin{document}
+
+\section{February 19th, 2020}
+\subsection{Unit Step Function Continued}
+As a reminder, the unit step function is defined as: \[
+	u(t-a) = \begin{cases}
+		0,\quad t<a \\
+		1,\quad t>a
+	\end{cases}
+.\] Given a piecewise function, we can write it as a linear combination of step functions. 
+\begin{example} \label{2-19-1}
+	Consider: \[
+		f(t) = \begin{cases}
+			7,\quad 0 < t < 2 \\
+			6t,\quad 2 < t < 3\\
+			t^2, \quad 3 < t < 7 \\
+			0, \quad 7 < t
+		\end{cases} 
+	.\] We can rewrite this as: \[
+	f(t) = 7u(t) + (6t-7)u(t-2) + (t^2-6t) u(t-3) + (0-t^2)u(t-7)
+	.\] 
+\end{example}
+With this, we can take the Laplace transform of the function, but first, we need to consider the Laplace transform of $\La \{f(t) u(t-a)\} $. Looking at the definition, we have: \[
+	\La \{f(t) u(t-a)\} = \int^\infty_0 f(t) u(t-a) e^{-st}~dt
+.\] Assuming $a> 0$, we have: \[
+= \int^a_0 f(t) \underbrace{u(t-a)}_0 e^{-st}~dt + \int^\infty_a f(t) \underbrace{u(t-a)}_1 e^{-st}~dt = \int^\infty_a f(t) e^{-st}~dt
+.\] If we set $z=t-a \implies dz = dt$, \[
+= \int_0^\infty f(z+a) e^{-s(z+a)}~dz = e^{-as}\La \{f(t+a)\} 
+.\] 
+\begin{theorem}[Shifting Theorem]\index{shifting theorem}
+	As shown above: \[
+		\La \{f(t) u(t-a)\} =e^{-as}\La \{f(t+a)\} 
+	.\] 
+\end{theorem}
+\begin{example}
+	Considering $f(t)$ from Example \ref{2-19-1}, we have: \[
+		\La \{f(t)\} = \int^2_0 7 e^{-st}~dt + \int^3_2 6t e^{-st}~dt + \int^7_3 t^2e^{-st}~dt + \int^\infty_7 0 e^{-st}~dt
+	.\] However, we can calculate this another way. From the table, we have $\La \{t ^{m}\} = \frac{m!}{s^{m+1}}$, thus: \[
+	\La \{f(t)\} = \La \{7u(t) + (6t-7)u(t-2) + (t^2-6t)u(t-3) + (0-t^2)u(t-7)\} 
+	\] \[
+	=\La \{7u(t)\} + \La \{(6t-7)u(t-2)\} +\La \{(t ^2-6t)u(t-3)\} +\La \{-t^2u(t-7)\} 
+	\] \[
+	= e^{-0s}\La \{ 7\} + e^{-2s}\La \{6(t+2)-7\} + e^{-3s}\La \{(t+3)^2-6(t+3)\} -e^{-7s}\La \{(t+7)^2\}  
+	\] \[
+	= \frac{7}{s}+e^{-2s}\La \{6t-5\} +e^{-3s}\La \{t^2-9\} -e^{-7s}\La \{t^2+14t+49\} 
+	.\] Thus: \[
+	\La \{f(t)\} =\frac{7}{s}+e^{-2s}\left( \frac{6}{s^2}+\frac{5}{s} \right) + e^{-3s}\left( \frac{2}{s^{3}}-\frac{9}{s} \right) -e^{-7s}\left( \frac{2}{s^{3}}+\frac{14}{s^2}+\frac{49}{s} \right) ,\quad s>0
+	.\]  
+\end{example}
+\begin{remark}
+	In the example earlier, we are using the Shifting Theorem and replacing $t$ with $t+a$ in each of the functions that we are multiplying by the unit step function at  $a$.
+\end{remark}
+\subsection{Examples of Where Unit Step Functions Occur}
+\begin{example}
+	Consider the equation: \[
+		L \frac{dI}{dt}+RI= \epsilon_1u(t) + (\epsilon_2-\epsilon_1)u(t-t_1)
+	.\] Taking the Laplace transform of both sides, we get: \[
+	\La \left\{L\frac{dI}{dt}+RI\right\} = \La \{\epsilon_1u(t) + (\epsilon_2-\epsilon_1)u(t-t_1)\}  
+	.\] \[
+	\implies L \La\{I'(t)\} + R\La \{I(t)\} =e^{-0s}\La \{\epsilon_1\} + e^{-t_1s}\La \{\epsilon_2-\epsilon_1\}  
+	\]\[
+	\implies L\left( s\La \{I\} -I(0) \right) + R\La \{I\} = \frac{\epsilon_1}{s}+e^{-t_1s}\left( \frac{\epsilon_2-\epsilon_1}{a} \right) 
+	.\]  \[
+	\implies \La \{I\} = \frac{L I_0 + \frac{\epsilon_1}{s}+e^{-t_1s}\left( \frac{\epsilon_2-\epsilon_1}{s} \right) }{LS+R} 
+	.\] 
+\end{example}
+There are many applications/cases where using a step function to describe a piecewise function might be useful. For example, if we have a spring with dampener with an external force $F(t)$, we might have $F(t)$ ramp up with $t$, and then stay constant after a certain amount of time.
+
+Another example is consider a ball bouncing off the ground. The forces are: \[
+	F(t) = \begin{cases}
+		-mg,\quad 0<t<T_F\\
+		N(t)-mg,\quad T_F < t < T_F+T_C \\ 
+		-mg, T_F + T_C < t < T_F + T_C + T_R
+	\end{cases} 
+.\] Where $T_F$ is the time until hitting the ground, $T_C$ is the contact duration, and $T_R$ is the time to rebound back up, and $N(t)$ is the normal force. From this, we get figure out $N(t)$ and allow us to get the coefficient of restitution. 
+
+\subsection{Impulse Function}
+Consider a function: \[
+	I_a(t) = \begin{cases}
+		0,\quad t<-\frac{a}{2}\\
+		\frac{1}{a},\quad -\frac{a}{2}<t<\frac{a}{2}\\
+		0,\quad \frac{a}{2}<t\\
+	\end{cases}
+.\] This can be expressed in terms of unit step functions as: \[
+I_a(t) = \frac{1}{a}u(t+\frac{a}{2}) - \frac{1}{a}u(t-\frac{a}{2})
+.\] 
+\begin{remark} 
+Note that the area under the curve is $1$, as we choose the height to be inversely proportional to the width. This means that: \[
+	\int^\infty_{-\infty}I_a(t)~dt = 1
+.\]
+\end{remark}
+
+\begin{definition}[Impulse Function]
+	An \vocab{impulse function} \index{impulse function} is: \[
+		\lim\limits_{a \to 0} I_a(t) = I(t) = \begin{cases}
+			0,\quad t\neq 0\\
+			+\infty,\quad t=0
+		\end{cases}
+	\] with the property: \[
+	\int^\infty_{-\infty}I(t) ~dt = 1
+	.\] Or: \[
+	\int_R I(t)~dt = \begin{cases}
+		0,\quad 0\not\in R\\
+		1,\quad 0 \in R
+	\end{cases}
+	.\] 
+
+\end{definition}
+\begin{remark}
+	With Laplace transform, if $0$ is at the end of the domain, it is included, e.g.: \[
+		\int^7_0 I(t)~dt = 1
+	.\] 
+\end{remark}
+\begin{remark}
+	Similar to the step function, we can shift the impulse function, i.e.: \[
+		I(t-a) = \begin{cases}
+			0,\quad t\neq a\\
+			+\infty,\quad t=a
+		\end{cases}
+	,\] with: \[
+	\int_R I(t-a)~dt = \begin{cases}
+		0,\quad a\not\in R\\ 1,\quad a \in R
+	\end{cases}
+	.\]  
+\end{remark}
+\begin{example}[One Dimensional Crystal]
+	In a one dimensional crystal, we have atoms aligned in a line, and say they are separated by $a$. If we have an electron travelling along, the force it might see can be expressed as: \[
+		F(x) = a\sum_{k=-\infty}^{\infty} F_0 I(x-ka) = aF_0 \sum_{k=-\infty}^{\infty} I(x-ka) 
+	.\] Thus one way to model the force experienced by an electron is to use a bunch of impulse functions. This is called the \vocab{comb function}.
+\end{example}
+\begin{remark}
+	If we had a continuous function $f(t)$, we'd have: \[
+		\int_R f(t) I(t-a)~dt = \begin{cases}
+			0,\quad 0\not\in R \\ f(a),\quad a\in  R
+		\end{cases}
+	.\] 
+\end{remark}
+\begin{example}
+	If we have: \[
+		\int^7_{-1}\frac{t^2}{\sqrt{3t ^{3}+1} }e^{t}I(t-1)~dt = \frac{1^2}{\sqrt{3(1)^3+1} }e^{1} = \frac{1}{2}e
+	.\] 
+\end{example}
+\begin{theorem}
+	We have: \[
+		\La \{f(t) I(t-a)\} ,a>0 = \int^\infty_0 f(t) I(t-a) e^{-st}~dt = f(a)e^{-as}
+	.\] 
+\end{theorem}
+\begin{example}
+	$ \La \{t ^{3}I(t-4)\} = 4^{3}e^{-4s}=64 e^{-4s}$ 
+\end{example}
+\begin{example}
+	Consider $F(t) = aF \sum_{k=-\infty}^{\infty} I(t-ka)$. We have: \[
+		\La \{F(t)\}  = Fa \sum_{k=-\infty}^{\infty} e^{-kas}
+	.\] 
+\end{example}
+
+%\begin{figure}[h!]
+	%\centering
+	%\begin{tikzpicture}
+	%\begin{axis}[width=6cm,height=3cm,domain=0:1,samples=501,ymin=0,ymax=1,xmin=-1,xmax=1,axis lines=center,
+	%xtick=\empty,ytick=\empty,
+	%xlabel={$t$},xlabel style={anchor=west},
+	%ylabel={$f(t)$},ylabel style={anchor=south}]
+	%\addplot[ultra thick,blue,mark=*,mark options={fill=white},samples at={-1.1,0,5}] {0};
+	%\addplot[ultra thick,blue,mark=*,mark options={fill=white},samples at={0,0}] {1};
+	%\end{axis}
+%\end{tikzpicture}
+	%\caption{ Example of an Impulse Function Funciton}
+	%\label{fig:}
+%\end{figure}	
+
+
+%In this example, we have a circuit with equation: \[
+	%L \frac{di}{dt}+RI = \epsilon_1 u(t) + (\epsilon-\epsilon_1)u(t-t_1)
+%.\] Note that the RHS is: \[
+%\text{RHS}= \begin{cases}
+	%\epsilon_1,\quad 0<t < t_1\\
+	%\epsilon_2,\quad t_1<t
+%\end{cases}
+%.\] 
+
+
+
+
+%\begin{figure}[h!]
+  %\begin{center}
+    %\begin{circuitikz}
+      %\draw (0,0)
+      %to[C=$\epsilon_q$] (0,2) % The voltage source
+      %to[short] (2,2)
+      %to[R=$R_1$] (2,0) % The resistor
+      %to[short] (0,0);
+    %\end{circuitikz}
+    %\caption{My first circuit.}
+  %\end{center}
+%\end{figure}
+
+
+
+%\begin{figure}[h!]
+	%\centering
+	%\begin{tikzpicture}
+    %\begin{axis}[width=6cm,height=3cm,domain=0:1,samples=501,ymin=0,ymax=1,xmin=-1,xmax=2,axis lines=center,
+    %xtick=\empty,ytick=\empty,
+    %xlabel={$t$},xlabel style={anchor=west},
+    %ylabel={$f(t)$},ylabel style={anchor=south}]
+	%\addplot[ultra thick,blue,mark=*,mark options={fill=white},samples at={-1.1,1}] {0};
+%\addplot[ultra thick,blue,mark=*,samples at={1,2.1}] {0.5};
+    %\end{axis}
+%\end{tikzpicture}
+	%\caption{ Example of a Unit Step Funciton}
+	%\label{fig:}
+%\end{figure}	
+\end{document}
+
