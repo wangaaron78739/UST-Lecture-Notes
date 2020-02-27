@@ -1,0 +1,86 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 21st, 2020}
+\subsection{Midterm Notice}
+\begin{itemize}
+	\item Will be held on Wednesday, March 4th.
+	\item Closed book and notes
+	\item 1.86x11in page of notes and a calculator
+\end{itemize}
+\subsection{Problem 1}
+Consider  \[
+	xy''(x)-(1+2x)y'(x) + (1+x)y(x) = a_2(x)y''(x)+a_1(x)y'(x)+a_0(x)y(x) =  0
+.\] Note that $a_0(x)+a_1(x)+a_2(x) = x-1+2x+1+x=0$, thus, $y(x) = e^{x}$ is one solution. Using Abel's formula, we have: \[
+y_2(x) = y_1(x) \int \frac{1}{y_1(x)^2} e^{-\int (x)~dx}dx
+.\] Where: \[
+-P(x) = -\frac{a_1(x)}{a_2(x)} = \frac{1+2x}{x}= 2+\frac{1}{x}
+.\] Thus: \[
+y_2(x) = e^{x}\int \frac{x e^{2x}}{e^{2x}}~dx = \frac{1}{2}x^2e^{x}
+.\] Thus: \[
+y(x) = C_1 e^{x}+C_2 x^2e^{x}
+.\] 
+\subsection{Problem 2}
+For this problem, we have: \[
+	r^2 \phi''+2r\phi'-n(n+1)\phi = 0
+.\] Note that this is equidimensional. Here we can guess $\phi(r) = r^{\alpha}$. 
+\subsection{Problem 3}
+Consider: \[
+	y''-2xy'+(x^2-1)y = 0
+.\] Here we guess $y(x) = e^{ax^2}$ for some $a$ (should be given by the problem). Thus we have: \[
+y'(x) = 2ax e^{ax^2} \quad y''(x) = (2a+4a^2x^2) e^{ax^2}
+.\] Plug into the equation, we get: \[
+(2a+4a^2x^2)e^{ax^2}-2x(2ax)e^{ax^2}+(x^2-1)e^{ax^2}=0, \quad \forall x
+.\] \[
+\implies 2a+4a^2x^2-4ax^2+x^2-1 = 0\]\[ \implies (2a-1) + (2a-1)^2x^2 = 0 \implies a = \frac{1}{2}
+.\] Giving us $y_1(x) = e^{\frac{1}{2}x^2}$. Thus: \[
+P(x) = \frac{a_1(x)}{a_2(x)}=-2x \implies -\int P(x)~dx = \int 2x~dx = x^2
+.\] \[
+\implies y_2(x) = e^{\frac{1}{2}x^2}\int \frac{e^{x^2}}{e^{x^2}} \implies y_2(x) = x e^{\frac{1}{2}x^2}
+.\] Thus the complete solution is: \[
+y(x) = C_1 e^{\frac{1}{2}x^2}+C_2 xe^{\frac{1}{2}x^2}
+.\] 
+\subsection{Problem 4}
+Consider: \[
+	y''-2xy'+(x^2-1)y = x^2-1
+.\] Note that $y_h$ is the equation from before, so we need to find  $y_p$. Note that  $\frac{b(x)}{a_0(x)} = 1$ which is a constant, thus $y_p=1$a is a solution. Thus, the complete solution is:  \[
+y(x) = C_1 e^{\frac{1}{2}x^2}+C_2 xe^{\frac{1}{2}x^2} + 1
+.\] 
+\subsection{Problem 5}
+Consider the circuit with a battery, a resister and a coil. We have: \[
+	v(t) - RI(t) - L \frac{dI(t)}{dt}=0
+.\] Taking the Laplace of both sides, we get: \[
+\La \{L \frac{dI}{dt}+RI\} = \La \{V\}  \implies L \La \{\frac{dI}{dt}\} +R\La \{I\} =\La \{V\} 
+\]Since $\La \{y'(x)\} =s\La \{y(x)\} -y(0)$\[
+\implies Ls\La \{I\} -L I_0 + R\La \{I\} =\La \{V\}  
+\]  \[
+ \implies \La \{I\}  = \frac{LI_0+\La \{V\} }{SL+R}
+\] \[
+\implies I = \La^{-1}\left\{ \frac{LI_0+\La \{V\} }{SL+R}\right\} = I_0 \La^{-1}\left\{ \frac{1}{s+\frac{R}{L}} \right\} + V
+.\] Note that: $ \La \{e^{-at}\} = \frac{1}{s+a}$. Thus: \[
+I(t) = I_0 = e^{-\frac{R}{L}t} + V
+.\]  
+Let: \[
+	V(t) = \begin{cases}
+		V_0, \quad 0 < t < a\\
+		0, \quad a \le t
+	\end{cases},\quad V_0\in \R = V_0-V_0u(t-a_0
+.\] Thus: \[
+\La \{V(t)\} =\La \{V_0-V_0u(t-a\} = V_0\La \{1-u(t-a)\}  
+.\] \[
+= V_0\La \{1\} -V_0 \La \{u(t-a)\}  = \frac{V_0}{s}(1-e^{-as})
+.\] Thus we have: \[
+V(t) = \La ^{-1}\left\{ \frac{V_0(1-e^{-as})}{s(sL+R)} \right\} 
+.\] Using the fact that $\La ^{-1} \{F(s) e^{-as}\} =u(t-a) \La \{F(x)\} $, we have: \[
+= V_0 \La ^{-1} \left\{ \frac{V_0}{s(sL+R)}\right\} -u(t-a) \La \left\{ \frac{V_0}{s(sL+r)}\right\} \bigg\rvert_{t\to t-a}
+.\] Using partial fraction, we'd get: \[
+= V_0 \La ^{-1} \left\{ \frac{1}{RS}- \frac{L}{R(SL+R)}\right\} = \frac{V_0}{R}\La \left\{ \frac{1}{s} - \frac{1}{s+\frac{R}{L}}\right\} = \frac{V_0}{R}(1-e^{-\frac{R}{L}t})
+.\] 
+
+Thus in the end, we get: \[
+	I(t) = I_0 e^{-\frac{R}{L}t}+\frac{V_0}{R}\left( 1-e^{-\frac{R}{L}t}-u(t-a) \frac{V_0}{R}\left( 1-e^{-\frac{R}{L}(t-a)} \right)  \right) 
+.\] 
+\end{document}
+

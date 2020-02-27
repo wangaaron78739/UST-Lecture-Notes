@@ -1,0 +1,137 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 26th, 2020}
+\subsection{More Methods to Solve ODEs}
+We are dealing with linear, second order, non-homogeneous ODEs, which are the form: \[
+	a_2(x)y''(x) + a_1(x) y'(x)+a_0(x)y(x) = b(x), \quad \alpha < x < \beta
+.\] Remember, if $y_1(x)$ is any non-zero solution to $a_2(x)y''(x) + a_1(x)y'(x)+a_0(x)y(x)=0$, then a second non-zero solution $y_2(x)$ can be computed using Abel's equation: \[
+y_2(x) = Ay_1(x) \int \frac{e^{-\int \frac{a_1(x)}{a_2(x)}~dx}}{(y_1(x))^2}~dx
+,\] for any $a\neq 0$. Thus a general solution to the homogeneous equation is: \[
+y_h(x) = c_1 y_2(x) + c_2 y_2(x)
+,\] for arbitrary constants $c_1$ and $c_2$. Furthermore, if $y_p(x)$ is any solution to the non-homoegenous equation, then the general solution is: \[
+	y(x) = y_h(x) + y_p(x) = c_1y_1(x) + c_2y_2(x) + y_p(x)
+.\] If we can't easily guess $y_p(x)$ (is a constant if $\frac{b(x)}{a_0(x)}$, we can always use the Green's function expression: \[
+y_p(x) = \int^x G(t,x) \frac{b(t)}{a_2(t)}~dt
+.\] Where: \[
+G(t,x) = \frac{y_1(t)y_2(x)-y_1(x)y_2(t)}{y_1(t)y_2'(t)-y_1'(t)y_2(t)}
+.\] As such, everything comes down to finding $y_1(x)$, as if we can find it, we can find $y_2, y_p,$ and $y_h$. We've already seen for constant coefficients and equidimensional ODE's, we can get $y_1$ and $y_2$ from a table. We also know when $a_2+a_1+a_0=0$, we have a solution $y_1(x) = e^{x}$.\\
+
+Another method is to first divide by $a_2(x)$, giving us: \[
+	y''(x) + P(x) y'(x) + Q(x) y(x) = 0, P(x) = \frac{a_1(x)}{a_2(x)}\quad Q(x) = \frac{a_0(x)}{a_2(x)}
+.\] Which is putting it into the standard form. With this, we should compute the following: \[
+\gamma(x) = \frac{Q'(x) + 2P(x)Q(x)}{(Q(x))^{\frac{3}{2}}}
+.\] If $\gamma(x)$ is a constant, then the transformation: \[
+z=\int\sqrt{AQ(x)} ~dx, \quad A \neq 0
+\] will convert the original equation into one of constant coefficients: \[
+\Psi''(z)+ \frac{\gamma}{2\sqrt{A} }\Psi(z) + \frac{1}{A}\Psi(z) = 0
+.\] Then \[
+y(x)= \Psi\left( \int\sqrt{AQ(x)} ~dx \right) 
+.\] 
+\begin{example}[One of Chebyshev Equation]
+	Consider: \[
+		(1-x^2)y''(x) - xy'(x) + m^2y(x) = 0, \quad-1<x<1, \quad m \in  \Z
+	.\] Notice that in the normal form, we have: \[
+	P(x) = -\frac{x}{1-x^2},\quad Q(x) = \frac{m^2}{1-x^2}
+	.\] Thus: \[
+	\gamma(x) = \frac{Q'(x) + 2P(x) Q(x)}{ (Q(x))^{\frac{3}{2}}} = \frac{\frac{2xm^2}{(1-x^2)^2}+2\left( -\frac{x}{1-x^2} \right) \left( \frac{m^2}{1-x^2} \right) }{\left( \frac{m^2}{1-x^2} \right) ^{\frac{3}{2}}}=0
+	.\] Thus, the transformation: \[
+	z=\int \sqrt{\frac{Am^2}{1-x^2}} ~dx = m\sqrt{A} \int \frac{dx}{\sqrt{1-x^2} }=m\sqrt{A} \sin^{-1}(x)
+	\] will give us constant coefficient. Let $A=1$, we have: \[
+	\Psi(z) + \Psi(z) = 0 \implies \Psi(z) = c_1\cos(z) +c_2 \sin(z)
+	.\] Thus the solution to the original equation is: \[
+	y(x) = c_1 \cos(m\sin^{-1}(x))+c_2\sin(m\sin^{-1}(x))
+	.\] 
+	\end{example}
+	\begin{remark}
+		This test is fast, as we just have to compute $\gamma(x)$ to see if it will work.
+	\end{remark}
+Another method would be, starting with the standard form, set: \[
+	y(x) = u(x) e^{-\frac{1}{2}\int P(x)dx}
+.\] And the equation will become of the form: \[
+u''(x) + R(x) u(x) = 0, \quad R(x) = Q(x) -\frac{1}{2}P(x) - \frac{1}{4}(P(x))^2
+.\] If $R(x)$ is a constant, then solving for $u(x)$ is easy, as we would have constant coefficients, allowing us to use the table.
+\begin{example}[Another one of Chebyshev's Equations]
+	Consider: \[
+		y''(x) - 2\tan(x) y'(x) + m^2y(x) = 0
+	.\] This is already in standard form, with:  \[
+	P(x) = -2\tan (x) \quad Q(x) = m^2
+	.\] Thus, we have: \[
+	R(x) = m^2-\frac{1}{2}\left( -\sec^2(x) \right) -\frac{1}{4}(2\tan(x))^2= m^2+\sec^2(x)-\tan^2(x) = m^2+1
+	.\] Thus, we have: \[
+	u''(x) + (m^2+1) u(x) = 0 \implies u(x) = c_1\cos\left(x\sqrt{m^2+1} \right) + c_2\sin\left(x\sqrt{m^2+1} \right)
+	.\] Thus the solution to the original equation will be: \[
+	y(x) = \left( c_1 \cos\left( x\sqrt{m^2+1}  \right) +c_2\sin\left( x\sqrt{m^2+1}  \right)  \right) e^{-\frac{1}{2}\int-2\tan(x) dx}
+	.\] Note that: \[
+	e^{\int tan(x) dx} = e^{-\ln(\cos(x))} = \frac{1}{\cos(x)}
+.\] Thus we have: \[
+y(x) = \frac{c_1 \cos\left( x\sqrt{m^2+1}  \right) +c_2\sin\left( x\sqrt{m^2+1}  \right) }{\cos(x)}
+.\] 
+\end{example}
+\subsection{Taylor's Method}
+Starting with the equation in standard form: \[
+	y''(x) + P(x) y'(x) + Q(x) y(x) = 0, \quad \alpha < x < \beta
+.\] If \[
+\gamma(x) = \frac{Q'(x) + 2P(x)Q(x)}{\left( Q(x) \right) ^{\frac{3}{2}}}\neq \text{constant}
+\] and \[
+R(x) = Q(x) -\frac{1}{2}P'(x) -\frac{1}{4}\left( P(x) \right) ^2\neq \text{constant}
+.\] Then we can try Taylor's method. First let's define the two equations.
+\begin{definition}
+	\vocab{Legendre's Equation}\index{Legendre's ODE} is defined as \[(1-x^2)y''(x) -2xy'(x) + m(m+1) y(x) = 0,\quad -1<x<1, m\in \Z\]
+\end{definition}
+\begin{remark}
+	The Legendre's equation appears in many places whenever we're dealing with spherical symmetry.
+\end{remark}
+\begin{definition}
+\vocab{Bessel's Equation}\index{Bessel's ODE} is defined as \[x^2y''(x) + xy'(x) \pm (x^2-m^2)y(x)=0,\quad 0<x, m\in \Z\]
+\end{definition}
+\begin{remark}
+	Bessel's equation appears in many places as well, such as cylindrical symmetry.
+\end{remark}
+Taylor's method will help with Legendre's equation, and there's an extension to Taylor's method called to Frobenius's Method.
+\begin{definition}
+	A point $x=x_0$ for the ODE \[y''(x) + P(x) y'(x) + Q(x)y(x) = 0\] is called an \vocab{ordinary point}\index{ordinary point} for the ODE if:  \[
+		\lim\limits_{x \to x_0} P(x) \text{ and }\lim\limits_{x \to x_0} Q(x)
+	\]  both exist.
+\end{definition}
+\begin{remark}
+	For Legendre's ODE, we have: \[
+		P(x) = -\frac{x}{1-x^2},\quad Q(x) = \frac{m(m+1)}{1-x^2}
+	.\] $x=0$ is an ordinary point for this ODE, as: \[
+	\lim\limits_{x \to 0} P(x) = 0 \quad \lim\limits_{x \to 0} Q(x) = m(m+1)
+	.\] 
+\end{remark}
+\begin{definition}
+	A point that is not ordinary is called a \vocab{singular point}\index{singular point}.
+\end{definition}
+\begin{definition}
+	A singular point is called \vocab{regular}\index{regular singular point} if: \[
+		\lim\limits_{x \to x_0} (x-x_0)P(x) \text{ and }\lim\limits_{x \to x_0} (x-x_0)^2Q(x)
+	\] both exist. 
+\end{definition}
+\begin{definition}
+	If a singular point is not regular, it is called an \vocab{essential point}\index{essential singular point}.
+\end{definition}
+\begin{remark}
+	For Bessels' ODE, $x=0$ is a singular point, as: \[
+		\lim\limits_{x \to 0} P(x) = \lim\limits_{x \to 0} \frac{1}{x} = \text{DNE}
+	.\] Note that $x=0$ is regular, as: \[
+	\lim\limits_{x \to 0} xP(x) = 1,\quad \lim\limits_{x \to 0} x^2Q(x) = \pm(x^2-m^2)
+	.\] 
+\end{remark}
+\begin{theorem}[Taylor's Theorem for ODEs]
+	If $x=x_0$ is an ordinary point for $y''(x) + P(x) y'(x) + Q(x) y(x)=0, \quad \alpha<x,x_0<\beta$, then two linearly independent solutions can be constructed as: \[
+		y_1(x) = \sum_{nm=0}^{\infty} a_m(x-x_0)^{m}\ \text{  and  }\ y_2(x) = \sum_{m=0}^{\infty} b_m(x-x_0)^{m}
+	\] and these will converge absolutely for all $|x-x_0|<R$, where $R$ is the nearest distance between  $x_0$ and a singular point (if any).  
+\end{theorem}
+\begin{definition}
+	If a series $\sum_{n=1}^{\infty} a_n$ \vocab{converges absolutely}, then $\sum_{n=1}^{\infty} |a_n|$ converges. 
+\end{definition} 
+\begin{definition}
+	If a series $\sum_{n=1}^{\infty} a_n$ converges but $\sum_{n=1}^{\infty} |a_n|$ does not, then it \vocab{converges conditionally}.
+\end{definition}
+\begin{remark} Note that we should always pick $x_0$ to be in the middle of two singular points. For example, consider Legendre's ODE $(1-x^2)y''-2xy'+m(m+1)y=0,\ -1<x<1$. If we choose $x_0=\frac{1}{2}$ then our power series will only converge absolutely if $0<x<1$. If we pick $x_0 = 0$, then it will converge absolutely everywhere in $-1<x<1$.
+\end{remark}
+\end{document}

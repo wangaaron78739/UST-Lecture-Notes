@@ -1,0 +1,138 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 24th, 2020}
+\subsection{Computing Inverse Laplace Transform}
+Recall that: 
+\begin{enumerate}
+	\item $ \La \{\alpha f(t) + \beta g(t)\} =\alpha\La \{f(t)\} +\beta\La \{g(t)\} $
+	\item $\La \{e^{a t}f(t) \} = \La \{f(t)\}_{s\to s-a}$
+	\item $\La \{tf(t)\} = - \frac{d}{ds}\La \{f(t)\} $
+	\item $\La \{t^m f(t)\} = \left( -1 \right) ^{m} \frac{d^{m}}{ds^m}\La \{f(t)\} $
+	\item $\La \{u(t-a) f(t)\} = e^{-as}\La \{f(t+a)\} $
+	\item $\La \{I(t-a)f(t)\}= e^{-as}f(a)$
+\end{enumerate}
+Now let's consider how to do compute inverse Laplace Transforms. Consider (5) from the above list, if we replace $f(t)$ by $f(t-a)$, we get: \[
+	\La \{u(t-a)f(t-a)\} =e^{-as}\La \underbrace{\{f(t)\} }_{F(s)}
+.\] Taking the inverse on both sides, we get: 
+\begin{theorem}[First Shifting Theorem for Inverse Laplace Transforms] 
+\[
+\La ^{-1} \{e^{-as}F(s)\} = u(t-as) \La ^{-1} \{F(s)\} \big\rvert_{t\to t-a}
+.\] 
+\end{theorem}
+
+\begin{example}
+	Consider $\La ^{-1} \left\{e^{-2s}\frac{1}{s^2+1}\right\} $. Using the above, we have: \[
+		\La ^{-1}\left\{e^{-2s}\frac{1}{s^2+1}\right\} = u(t-a) \La^{-1} \left\{\frac{1}{s^2+1}\right\}_{t\to t-a} 
+	.\] \[
+= u(t-2) \sin t \big\rvert_{t\to t-2} = u(t-2)\sin(t-2)
+	.\] 
+\end{example}
+If we consider (2) from the above, and take the inverse of both sides, we would get:
+\begin{theorem}[Second Shifting Theorem for Inverse Laplace Transforms]
+	\[
+		\La ^{-1} \{F(s-a)\} = e^{at}\La ^{-1} \{F(s)\} 
+	.\] 	
+\end{theorem}
+\begin{example}
+	Suppose we want $\La ^{-1} \left\{ \frac{1}{2s^2+s+8}\right\}$. We have: \[
+		\La ^{-1} \left\{ \frac{1}{2s^2+s+8}\right\} = \La ^{-1} \left\{ \frac{1}{2(s^2+\frac{1}{2}s)+8}\right\} = \La^{-1}\left\{ \frac{1}{2\left( s^2+\frac{1}{2}s+\frac{1}{16}-\frac{1}{16} \right) +8}\right\}
+	\] \[
+	= \La^{-1} \left\{ \frac{1}{2(s+\frac{1}{4})^2+\frac{63}{8}}  \right\} 
+.\] Note that the above is of the form $\La^{-1}\{F(s+\frac{1}{4})\} $, thus we have: \[
+= e^{-\frac{1}{4}t}\La^{-1} \left\{\frac{1}{2a^2+\frac{63}{8}}\right\} = \frac{1}{2}e^{-\frac{1}{4}t}\La \left\{ \frac{1}{s^2+\frac{63}{16}}\right\}
+.\] Using the fact that $\La^{-1}\left\{ \frac{1}{s^2+a^2}\right\} = \frac{1}{a}\sin(at)$, we get: \[
+= \frac{1}{2}e^{-\frac{1}{4}t} \frac{1}{\sqrt{\frac{63}{16}} }\sin\left( t \sqrt{\frac{63}{16}}  \right) = \frac{2}{\sqrt{63} }e^{-\frac{1}{4}t}\sin\left( \frac{t}{4}\sqrt{63}  \right) 
+.\] 
+\end{example}
+\begin{remark}
+	Essentially above we are using the fact that: \[
+		as^2+bs+c = a\left( s+\frac{b}{2a} \right) ^2 + \left( c-\frac{b^2}{4a} \right) 
+	.\] 
+\end{remark}
+Instead of completing the square, this can also be useful in combination with partial fractions. 
+\begin{example}
+	From partial fractions, we know that: \[
+		\frac{s^2+1}{s^{3}(s-1)^2(s-2)}= \frac{A}{s}+ \frac{B}{s^2}+\frac{C}{s^{3}}+ \frac{D}{s-1}+\frac{E}{(s-1)^2}+F(s-2)
+	.\] 
+	In addition, we know that $\La ^{-1} \{\frac{1}{(s-a)^m}\} = \frac{1}{(m-1)!}t ^{m-1}e^{at}$, thus if we know the coefficients, we have:  \[
+		\frac{s^2+1}{s^{3}(s-1)^2(s-2)}= A+Bt+\frac{1}{2}Ct^2+De^{t}+Ete^{t}+Fe^{2t} 
+	.\] 
+\end{example}
+\begin{theorem}[Heavyside Expansion Theorem]
+	There is a special case, where all the powers in the denominators $Q(s)$ are to the first power, and numerator $P(s)$, we have:
+	\[
+		\La \left\{ \frac{P(s)}{(s-\alpha_1)(s-\alpha_2)\ldots(s-\alpha_n)} \right\} = \sum_{y=1}^{n} \left( \frac{P(\alpha_y)}{Q'(\alpha_y)} \right) e^{\alpha_y t}
+	.\] 
+\end{theorem}
+\begin{example}
+	Consider the following: \[
+		\La \left\{ \frac{s^2+1}{s(s-1)(s-2)} \right\} = \frac{P(0)}{Q'(0)}e^{0t} + \frac{P(1)}{Q'(1)} e^{1t} + \frac{P(2)}{Q'(2)}e^{2t}
+	.\] Where: \[
+	P(s) = s^2+1 \quad Q(s) = s^{3}-3s^2+2s \quad Q'(s) = 3s^2-6s+2
+	.\]  Thus: \[
+		\La \left\{ \frac{s^2+1}{s(s-1)(s-2)} \right\} = \frac{1}{2} -2 e^{t} + \frac{5}{2}e^{2t} 
+	.\] 
+\end{example}
+\subsection{Convolution Product}
+\begin{definition}
+	Given two functions $f(t)$ and $g(t)$, their \vocab{convolution product}\index{convolution product} is: \[
+		(f*g)(t) = \int^t_0 f(\beta) g(t-\beta)~d\beta
+	.\] 
+\end{definition}
+\begin{example}
+	Let us consider $f(t) = t^2$, $g(t) = t$, we have:  \[
+		(f*g)(t) = \int^t_0 \beta^2(t-\beta)~d\beta = \int^t_0 \left( \beta^2t-\beta^{3} \right) ~d\beta
+	\] \[
+= \frac{1}{3}\beta^{3}t - \frac{1}{4}\beta^{4}\bigg\rvert^{\beta=t}_{\beta=0} = \frac{1}{3}t ^{4}- \frac{1}{4}t ^{4} = \frac{1}{12} t ^{4}
+	.\] 
+\end{example}
+\begin{example}
+	If we have $f(t) = \sin(t)$ and $g(t) = \cos(t)$, we have: \[
+		(f*g)(t) = \int^t_b \sin \beta \cos(t-\beta)~d\beta 
+	.\] Using the trig identity: \[
+	\sin A \cos B = \frac{\sin(A+B)+\sin(A-B)}{2}
+	.\] Thus we have: \[
+(f*g)(t) = \int^t_0 \frac{\sin(t)+\sin(2\beta-t)}{2}~d\beta = \frac{1}{2}\beta\sin t - \frac{1}{4}\cos(2\beta-t)\bigg\rvert ^{\beta=t}_{\beta=0} = \frac{1}{2}t\sin t
+	.\] 
+\end{example}
+\begin{theorem}[Properties of Convultion Product]
+	The convolution product is: 
+	\begin{itemize}
+		\item Distributive $f*(g+h)=f*g+f*h$
+		\item Commutative $f*g = g*f$
+		\item Associative  $f*(g*h) = (r*g)\cdot h$
+	\end{itemize}
+\end{theorem}
+\begin{theorem}[Laplace Transform of Convolution Product]
+	\[
+	\La \{f*g\} = \La \{ f\} \La \{g\} 
+	.\] 
+\end{theorem}
+\begin{example}
+	We have: \[
+		\La \{ \sin t * \cos t\} = \La \{\sin t\}\La \{\cos t\}  = \frac{1}{s^2+1}\frac{s}{s^2+1} = \frac{s}{(s^2+1)^2}
+		.\] From the other example, we found it to be $(\sin t * \cos t) = \frac{1}{2}t\sin t$, here we can check as: \[
+		\La  \{\frac{1}{2}t\sin t\}= -\frac{1}{2}\frac{d}{ds}\La \{ \sin t\}  = -\frac{1}{2}\frac{d}{ds}\left( \frac{1}{s^2+1} \right)   = \frac{s}{(s^2+1)^2}
+	.\] 
+\end{example}
+We can use the convolution product to get inverse Laplace transform, as: 
+\begin{theorem}
+	 \[
+		 \La \{F(s)G(s)\} = \La^{-1} \{F(s)\} *\La ^{-1} \{G(s)\} 
+	.\] 
+\end{theorem}
+\begin{example}
+	Consider: \[
+		\La^{-1} \left\{ \frac{1}{(s^2+1)(s^2+4)}\right\} = \La^{-1} \left\{\frac{1}{s^2+1}\right\} * \La ^{-1} \left\{\frac{1}{s^2+1}\right\} 
+	.\] 
+\end{example}
+\begin{remark}
+	\[
+		\La \{\int^t_0 f(\beta)~d\beta\} = \La \{f*1\} = \frac{1}{s}\La \{f\}  
+	.\] 
+\end{remark}
+\end{document}
+
