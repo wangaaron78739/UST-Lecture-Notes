@@ -19,7 +19,7 @@ Now let's consider how to do compute inverse Laplace Transforms. Consider (5) fr
 .\] Taking the inverse on both sides, we get: 
 \begin{theorem}[First Shifting Theorem for Inverse Laplace Transforms] 
 \[
-\La ^{-1} \{e^{-as}F(s)\} = u(t-as) \La ^{-1} \{F(s)\} \big\rvert_{t\to t-a}
+\La ^{-1} \{e^{-as}F(s)\} = u(t-a) \La ^{-1} \{F(s)\} \big\rvert_{t\to t-a}
 .\] 
 \end{theorem}
 
@@ -42,7 +42,7 @@ If we consider (2) from the above, and take the inverse of both sides, we would 
 	\] \[
 	= \La^{-1} \left\{ \frac{1}{2(s+\frac{1}{4})^2+\frac{63}{8}}  \right\} 
 .\] Note that the above is of the form $\La^{-1}\{F(s+\frac{1}{4})\} $, thus we have: \[
-= e^{-\frac{1}{4}t}\La^{-1} \left\{\frac{1}{2a^2+\frac{63}{8}}\right\} = \frac{1}{2}e^{-\frac{1}{4}t}\La \left\{ \frac{1}{s^2+\frac{63}{16}}\right\}
+= e^{-\frac{1}{4}t}\La^{-1} \left\{\frac{1}{2s^2+\frac{63}{8}}\right\} = \frac{1}{2}e^{-\frac{1}{4}t}\La \left\{ \frac{1}{s^2+\frac{63}{16}}\right\}
 .\] Using the fact that $\La^{-1}\left\{ \frac{1}{s^2+a^2}\right\} = \frac{1}{a}\sin(at)$, we get: \[
 = \frac{1}{2}e^{-\frac{1}{4}t} \frac{1}{\sqrt{\frac{63}{16}} }\sin\left( t \sqrt{\frac{63}{16}}  \right) = \frac{2}{\sqrt{63} }e^{-\frac{1}{4}t}\sin\left( \frac{t}{4}\sqrt{63}  \right) 
 .\] 
@@ -55,7 +55,7 @@ If we consider (2) from the above, and take the inverse of both sides, we would 
 Instead of completing the square, this can also be useful in combination with partial fractions. 
 \begin{example}
 	From partial fractions, we know that: \[
-		\frac{s^2+1}{s^{3}(s-1)^2(s-2)}= \frac{A}{s}+ \frac{B}{s^2}+\frac{C}{s^{3}}+ \frac{D}{s-1}+\frac{E}{(s-1)^2}+F(s-2)
+		\frac{s^2+1}{s^{3}(s-1)^2(s-2)}= \frac{A}{s}+ \frac{B}{s^2}+\frac{C}{s^{3}}+ \frac{D}{s-1}+\frac{E}{(s-1)^2}+\frac{F}{s-2}
 	.\] 
 	In addition, we know that $\La ^{-1} \{\frac{1}{(s-a)^m}\} = \frac{1}{(m-1)!}t ^{m-1}e^{at}$, thus if we know the coefficients, we have:  \[
 		\frac{s^2+1}{s^{3}(s-1)^2(s-2)}= A+Bt+\frac{1}{2}Ct^2+De^{t}+Ete^{t}+Fe^{2t} 
@@ -103,7 +103,7 @@ Instead of completing the square, this can also be useful in combination with pa
 	\begin{itemize}
 		\item Distributive $f*(g+h)=f*g+f*h$
 		\item Commutative $f*g = g*f$
-		\item Associative  $f*(g*h) = (r*g)\cdot h$
+		\item Associative  $f*(g*h) = (f*g)* h$
 	\end{itemize}
 \end{theorem}
 \begin{theorem}[Laplace Transform of Convolution Product]
@@ -121,7 +121,7 @@ Instead of completing the square, this can also be useful in combination with pa
 We can use the convolution product to get inverse Laplace transform, as: 
 \begin{theorem}
 	 \[
-		 \La \{F(s)G(s)\} = \La^{-1} \{F(s)\} *\La ^{-1} \{G(s)\} 
+		 \La^{-1} \{F(s)G(s)\} = \La^{-1} \{F(s)\} *\La ^{-1} \{G(s)\} 
 	.\] 
 \end{theorem}
 \begin{example}

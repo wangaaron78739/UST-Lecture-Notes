@@ -41,12 +41,12 @@ If $M dx + Ndy = 0$ is not exact, then we try to introduce an integrating factor
 	\] \[
 	\implies \mu\left( \frac{\partial M}{\partial y} -\frac{\partial N}{\partial x}  \right) =\mu'(x)N \implies \frac{\mu'(x)}{\mu(x)}= \frac{\frac{\partial M}{\partial y} -\frac{\partial N}{\partial x} }{N}
 	\] and if the RHS is a function of only x, we can integrate, giving us: \[
-	\mu(x) = \exp\left\{\int \frac{\left( \frac{\partial m}{\partial y} -\frac{\partial N}{\partial x}  \right) }{N}dx\right\}
+	\mu(x) = \exp\left\{\int \frac{\left( \frac{\partial M}{\partial y} -\frac{\partial N}{\partial x}  \right) }{N}dx\right\}
 	.\] With this, we will be able to solve the differential equation with $\frac{\partial f}{\partial x} =\mu M$ and $\frac{\partial f}{\partial y} =\mu N$. This is true if: \[
 	\frac{\frac{\partial M}{\partial y} -\frac{\partial N}{\partial x} }{N} = k(x)
 	.\] i.e. it's a function of only $x$
-\item $\mu(x,y)=\mu(y)$. Same thing but with $y$ instead of  $x$. We check if: $\frac{\frac{\partial N}{\partial x} -\frac{\partial M}{\partial y} }{y}$ is a function of only $y$. We will have:  \[
-		\mu(y) = \exp\left\{\frac{\frac{\partial N}{\partial x} -\frac{\partial M}{\partial y} }{m}\right\}
+\item $\mu(x,y)=\mu(y)$. Same thing but with $y$ instead of  $x$. We check if: $\frac{\frac{\partial N}{\partial x} -\frac{\partial M}{\partial y} }{M}$ is a function of only $y$. We will have:  \[
+		\mu(y) = \exp\left\{\frac{\frac{\partial N}{\partial x} -\frac{\partial M}{\partial y} }{M}\right\}
 .\] 
 \end{itemize}
 \begin{example}

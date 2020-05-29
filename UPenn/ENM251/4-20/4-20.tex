@@ -1,0 +1,139 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 20th, 2020}
+\subsection{Heat Equation}
+If we have a one dimensional rod with ends $x=\alpha$ and $x=\beta$, with
+\begin{itemize}
+	\item mass density: $\rho(x)$
+	\item conductivity: $\kappa(x)$
+	\item specific heat per unit mass: $c(x)$
+	\item temperature at point $x$ at time $t$: $u(x,t)$
+	\item heat generation term within rod: $R(x,t)$ (for our purpose, assume  $R(x,t)=0$ )
+\end{itemize}
+Using conservation of energy, we get: \[
+	\frac{\partial }{\partial x} \left( \kappa(x) \frac{\partial u}{\partial x}  \right) = \rho(x) c(x) \frac{\partial u}{\partial t} 
+.\] This is known as the \vocab{one dimensional heat equation}. 
+\begin{remark}
+	If we compare this with the one dimensional wave equation from earlier: \[
+		\frac{\partial }{\partial x} \left( T(x) \frac{\partial u}{\partial x}  \right) = \rho(x) \frac{\partial ^2 u}{\partial t^2} 
+	.\] The only difference is that the wave equation has a second order partial derivative, while the heat has a first. 
+	
+	This makes a difference, as the second order derivatives means that the wave equation has oscillations, while the heat equation has exponential decay.
+\end{remark}
+Let us consider the special case where $\kappa(x) = \kappa_0$, $\rho(x) = \rho_0$, $c(x) = c_0$, which gives us: \[
+\kappa_0 \frac{\partial ^2 u}{\partial x^2}  = \rho_0c_0 \frac{\partial u}{\partial t} \implies \frac{\partial ^2 u}{\partial x^2} = \frac{1}{\gamma} \frac{\partial u}{\partial t} ,\quad \gamma= \frac{k_0}{\rho_0c_0} 
+.\] Note that since we can shift this equation to $x=0$ and $x=L$.
+\begin{remark}
+	$\gamma_0$ is often known as the diffusity constant.
+\end{remark}
+Now for the boundary conditions, let us fix $x=0$ to be a certain temperature $T_1$, while we expose $x=L$ to a room of temperature $T_2$. This gives us the boundary conditions: \[
+u(0,t) = T_1\]\[ h u(L,t) + \kappa_0 \frac{\partial u(x,t)}{\partial x} \bigg\rvert_{x=L} = hT_2
+.\] 
+\begin{remark}
+	Note that these boundary conditions are only examples, if we fixed the temperature at $x=L$, we would have $u(L,t) = T_2$.
+\end{remark}
+Now for the initial condition, note that since the order of the derivative is only one, we only need one initial condition: \[
+	u(x,0) = f(x), 0 < x < L
+.\] Thus the mathematical formulation of the problem is:
+
+Given the constants, $\rho_0, c_0, \kappa_0, h, T_1, T_2, \gamma= \frac{\kappa_0}{\rho_0c_0}$ and the function $f(x)$, solve for  $u(x,t)$ in the region $x\le x \le  L$,  $0\le t$, if: \[
+	\text{PDE}\begin{cases}
+		\frac{\partial ^2 u(x,t)}{\partial x^2}  = \frac{1}{\gamma} \frac{\partial u(x,t)}{\partial t} ,\quad 0 < x < L , \quad 0 < t 
+	\end{cases}.\] \[
+	\text{BCs}\begin{cases}
+		u(0,t) = T_1, \quad 0 < t\\
+hu(L,t) + \kappa_0 \frac{\partial u(x,t)}{\partial x} \bigg\rvert_{x=L} = hT_0, \quad 0 < t
+	\end{cases}
+.\]
+\[
+	\text{ICs}\begin{cases}
+		
+u(x,0) = f(x) , \quad 0 < x < L
+	\end{cases}
+.\] 
+
+Just like the wave equation, we ask the following questions: 
+\begin{enumerate}
+	\item Is the PDE and BCs Homogeneous by setting $u(x,t) = 0$
+		\begin{itemize}
+			\item PDE: yes
+			\item BC ($x=0$): no
+			\item BC ($x=L$): no
+		\end{itemize}
+	If at least one of these is no, we move to step 2, otherwise we can skip to step 5. 
+\item Define and construct the boundary value problem satisfied by some time independent solution $u_e(x)$: \[
+		\frac{\partial ^2 u_e(x)}{\partial x^2}  = \frac{1}{\gamma} \frac{\partial u_e(x)}{\partial t} 
+.\] \[
+\implies u_e''(x) = 0, \quad 0 < x < L
+.\] \[
+u_e(0) = T_1 \quad hu_e(L) + \kappa_0 u_e'(L) = hT_2
+.\] 
+\item Solve this BVP for $u_e$. For this case: \[
+		u_e(x) = Ax + B
+.\] \[
+u_e(0) = B = T_1 \implies u_e'(x) = A
+.\] \[
+h u_e(L) + \kappa_0 u_e'(x) = h T_2 \implies h(AL+T_1) + \kappa_0 A = hT_2
+.\] \[
+\implies A = \frac{h(T_2-T_1)}{hL+\kappa_0}
+.\] Thus the time independent solution is: \[
+u_e(x) = \frac{h(T_2-T_1)}{hL+\kappa_0}x + T_1, \quad 0 \le  x \le  L
+.\] 
+\item Define: \[
+		v(x,t) = u(x,t) - u_e(x)
+	.\] and the construct the BVIVP satisfied by $v(x,t)$: \[
+	\frac{\partial ^2(v(x,t)+u_e(x)}{\partial x^2} = \frac{1}{\gamma}\frac{\partial (v(x,t)+u_e(x)}{\partial t} 
+	.\] \[
+	\implies \frac{\partial ^2 v(x,t)}{\partial x^2} +\underbrace{u_e''(x)}_{=0} = \frac{1}{\gamma} \left( \frac{\partial v(x,t)}{\partial t} +0 \right) 
+	.\] \[
+	\implies \frac{\partial ^2 v(x,t)}{\partial x^2} = \frac{1}{\gamma}\frac{\partial v(x,t)}{\partial t} , \quad 0 < x < L, \quad 0 < t
+	.\]\[
+	v(0,t) + u_e(0) = T_1 \implies v(0,t) = 0, \quad 0 < t
+	.\] \[
+h u(L,t) + \kappa_0 \frac{\partial u(x,t)}{\partial x} \bigg\rvert_{x=L} = hT_2 \implies h v(L,t) + \kappa_0 \frac{\partial v(x,t)}{\partial x}  = 0, \quad 0 < t
+	.\] \[
+	v(x,0) = f(x) - u_e (x) , \quad 0 < x < L
+	.\] Note that the PDE and BCs for this BVIVP are homogeneous. 
+\item Construct a general solution to the PDE and BCs for $v(x,t) = u(x,t) - u_e(x)$ by constructing a basis set of solutions of the form:  \[
+		v(x,t) = \phi(x) \beta(t) \neq 0
+.\] Plugging in the PDE, we get: \[
+\frac{\partial ^2 \left( \phi(x)\beta(t) \right) }{\partial x^2} = \frac{1}{\gamma} \frac{\partial \left( \phi(x)\beta(t) \right) }{\partial t}  
+.\] \[
+\implies \phi''(x) \beta(t) = \frac{1}{\gamma}\phi(x) \beta'(t)
+.\] \[
+\implies \frac{\phi''(x)}{\phi(x) }= \frac{1}{\gamma} \frac{\beta'(t)}{\beta(t)} = \text{ a constant }C
+.\] This gives us: \[
+\phi''(x) - V \phi(x) = 0, \quad 0 < x < L
+.\]  \[
+\beta'(t) - \gamma c \beta(t) = 0 , \quad 0 < t
+.\]with boundary conditions \[
+v(0,t) = 0 \implies \phi(0) = 0
+.\] \[
+h \phi(L) + \kappa_0 \phi'(L) = 0
+.\] Note that this is a RSLP for $x$.
+
+Recall the this has solutions: \[
+\phi(x) = \begin{cases}
+	A \cosh (x \sqrt{C} ) + B \sinh(x\sqrt{C} ) , \quad C > 0\\
+	A+Bx, \quad C = 0 \\
+	A \cos (x\sqrt{-C} ) + B \sin(x \sqrt{-C} ) , \quad C< 0
+\end{cases}
+.\] As with before, note that for the cases $C>0$ and $C=0$, we would get $\phi(x) = 0$, with the only case $C<0$ : \[
+\phi(x) = A \cos(x\sqrt{-C} ) + B \sin(x \sqrt{-C} ) 
+.\] \[
+\phi(0) = A = 0 \implies \phi(x) = B \sin(x \sqrt{-C} ) \implies \phi'(x) = B \sqrt{-C} \cos(x \sqrt{-C} )
+.\] \[
+h \phi(L) + \kappa_0 \phi'(L) = 0 \implies B\left( h \sin (L\sqrt{C} ) + \kappa_0\sqrt{-C} \cos(L\sqrt{-C} ) \right) =0
+.\] \[
+\implies \tan \left( L \sqrt{-C}  \right) = - \frac{\kappa_0}{h}\sqrt{-C}  
+.\] Once again, this will give us $\lambda_1, \lambda_2, \ldots$ which are the eigenvalues for this problem. We will need to solve this numerically.
+
+Once we have these, we have: \[
+	\phi_n(x) = \sin(\lambda_n x ), \quad n = 1,2,3,\ldots
+.\] We will continue from this point next lecture.
+\end{enumerate}
+\end{document}
+

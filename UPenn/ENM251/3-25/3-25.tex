@@ -1,0 +1,93 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March 25th, 2020}
+\subsection{Important Result Involving ODEs}
+Let us consider the Legendre ODE: \[
+	(1-x^2)y''(x) -2xy'(x) + m(m+1) y(x) = 0, \quad -1 < x < 1
+.\] Recall that one solution is $y(x) = P_m(x)$. We can generalize this to a class of problems that look like:  \[
+a_2(x) y''_m(x) + a_1(x) y_m(x) + a_0(x) y_m(x) + \lambda_m^2b(x) y_m(x) = 0, \quad \alpha < x < \beta
+.\] With $\lambda_m$ being some parameter for different values of $m$.
+\begin{remark}
+	Note that for the Legendre ODE falls into this category with $a_2(x) = 1-x^2$, $a_1(x) = -2x$, $a_0(x) = 0$, $b(x) = 1$, $\lambda_m^2=m(m+1)$
+\end{remark}
+\begin{theorem}
+	If $y_M(x) $ is a solution to the above equation and if $y_N(x)$ is a solution to the same ODE with $M$ replaced by $M$, then after much algebra, we find that: \[
+	\left( \lambda_M^2-\lambda_N^2 \right) \int^\beta_\alpha y_M(x)y_N(x)w(x)~dx = \left( s(x)\left| \begin{bmatrix} y_M(x) & y_N(x) \\ y'_M(x) &y_N'(x) \end{bmatrix}\right|  \right) \bigg\rvert_\alpha^\beta
+	.\] 
+	Where: \[
+		s(x) = e^{\int \frac{a_1(x)}{a_2(x)}dx}
+	.\] \[
+	w(x) = \frac{b(x)}{a_2(x)}s(x)
+	.\] 
+\end{theorem}
+\begin{example}
+	Consider $y''_N(x) + N^2y_N(x) = 0, \quad 0<x<\pi$. One solution is $y_N(x) = \sin(Nx)$. Note that this is of the form with $a_2(x) = 1$, $a_1(x) = 0$, $a_0(x) = 0$, $b(x) = 1$, $\lambda_N^2=N^2$. We have \[
+		s(x) = e^{\int \frac{0}{1}dx}=1
+	.\] \[
+	w(x) = \frac{1}{1}(1)=1
+	.\] Plugging into the equation, we have: \[
+(M^2-N^2)\int^\pi_0 \sin(Mx) \sin(Nx) (1)~dx = \left( (1)\left| \begin{bmatrix} \sin(Mx)&\sin(Nx)\\M\cos(Mx)&N\cos(Nx) \end{bmatrix}  \right|  \right) \bigg\rvert^\pi_0 \]\[= \left| \begin{bmatrix} 0&0\\M(-1)^{M} &N(-1)^{N} \end{bmatrix}  \right| =0
+	.\] If $M\neq N$, then: \[
+	\int^\pi_0 \sin(Mx) \sin(Nx) ~dx = 0
+	.\] 
+\end{example}
+	For the Legendre ODE, we have: $a_2(x)=1-x^2$, $a_1(x) = -2x$, $a_0=0$, $\alpha_N^2=N(N+1)$, $ b(x)=1$. Then we have: \[
+		s(x) = e^{\int \frac{a_1(x)}{a2(x)}dx} = 1-x^2
+	.\] \[
+	w(x) = \frac{b(x)}{a_2(x)}s(x) = \frac{1}{1-x^2}(1-x^2) = 1
+	.\] Using the earlier general result, we have: \[
+\left( M(M+1)-N(N+1) \right) \int^-1_-1 P_M(x)P_N(x)(1) ~dx = \left( (1-x^2) \ldots \right)\bigg\rvert^1_{-1} = 0
+	.\]
+\begin{theorem}
+	Thus if $M\neq N$, we have: \[
+		\int^1_{-1} P_M(x)P_N(x)~dx = 0
+	.\] 
+\end{theorem}	
+\subsubsection{Legendre Series}
+Recall that the Taylor series is a power series expansion: \[
+	f(x) = \sum_{n=0}^{\infty} a_n (x-x_0)^{n}, \quad a_n = \frac{f^{(n)}(x_0)}{n!}
+.\] 
+For this, we are expanding a function in terms of polynomials, with the basis set being: \[
+	\{1,(x-x_0),(x-x_0)^2,\ldots\} 
+.\] 
+The \vocab{Legendre series} is similar, where the basis set being the Legendre polynomials: \[
+	\{P_0(x),P_1(x),P_2(x)\ldots\} 
+.\] Meaning that: \[
+f(x) = \sum_{n=1}^{\infty} a_n P_n(x), \quad -1<x<1
+.\] Note that this is an equation with an infinite number of equations and an infinite number of unknowns.
+To get the $a_n$, we will make use of the result that: \[
+	\int^1_{-1}P_M(x)P_N(x)~dx = 0,\quad M\neq N
+.\] Suppose $f(x) $ is given and all the $P_n(x)$ are known. Suppose you want to compute $a_3$. We multiply both sides by $P_3$, giving us: \[
+f(x) P_3(x) = \sum_{n=1}^{\infty} a_n P_n(x) P_3(x)
+.\] Integrating both sides, we have: \[
+\int^1_{-1}f(x) P_3(x) ~dx = \int^1_{-1}\sum_{n=0}^{\infty} a_n P_n(x) P_3(x)~dx
+.\] In this situation, we can swap the integral and sum (not always the case, but in this case it turns out to be true), thus we have: \[
+= \sum_{n=0}^{\infty} a_n \int^1_{-1}P_n(x) P_3(x)~dx = a_3 \int^1_{-1}P_3(x)P_3(x) ~dx
+.\]  
+Thus we have: \[
+	a_3 = \frac{\int^1_{-1}f(x)P_3(x)~dx}{\int^1_{-1}P_3(x)P_3(x)~dx}
+.\] Thus we have: \[
+f(x) = \sum_{n=0}^{\infty} a_nP(x)
+.\] \[
+a_n = \frac{\int^1_{-1}f(x) P_n(x) ~dx}{\int^1_{-1}P_n(x)P_n(x)~dx}
+.\] It can be shown that: \[
+\int^1_{-1}P_n(x)P_n(x) ~dx = \frac{2}{2n+1}, \quad n=0,1,2,\ldots
+.\] To make this easier to remember, remember that if:  \[
+A = A_1 i + A_2 j + A_3 k
+.\] We have: \[
+A_1 = \frac{A\cdot i}{i\cdot i},  A_2 = \frac{A\cdot j}{j\cdot j},  A_3 = \frac{A\cdot k}{k\cdot k}
+.\] If we think of $\int f(x)g(x)~dx$ as a "dot product" between equations, we can think of $a_n = \frac{f\cdot P_n}{P_n\cdot P_n}$. Note that this satisfies some special properties that are the same as the dot product between vectors, namely: 
+\begin{itemize}
+	\item $f\cdot g = g\cdot f$
+	\item $f\cdot (g+h) = f\cdot g + f\cdot  h$
+	\item $f\cdot\alpha g = \alpha(f\cdot g)$ 
+	\item $f\cdot f\ge 0$
+	\item $f\cdot f = 0 \iff f=0$
+\end{itemize}
+
+
+\end{document}
+

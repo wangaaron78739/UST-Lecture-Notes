@@ -1,0 +1,104 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 13th, 2020}
+\subsection{Partial Differential Equation}
+\begin{definition}[Wave Equation in 1-Dimension]
+	If we have $y(x,t)$ be the position of the point on the string at $x$ and at time $t$, we would have the boundary conditions: \[
+	\begin{cases}
+		y(\alpha,t) = h_1, \quad 0 \le t \\
+		y(\beta,t) = h_1, \quad 0 \le t 
+	\end{cases}
+	.\] along the left $(x = \alpha)$ and right $(x=\beta)$ boundaries. The equation of motion (which is derived from Newton's 2nd law) is: \[
+\begin{cases}
+	\frac{\partial }{\partial x} \left( \frac{T(x,t) \frac{\partial y}{\partial x} }{\sqrt{1+\left( \frac{\partial y}{\partial x}  \right) ^2} } \right) = \rho(x) \left( y+ \frac{\partial ^2 y}{\partial t^2}  \right) \sqrt{1+\left( \frac{\partial y}{\partial x}  \right) ^2} \\
+\frac{\partial }{\partial x} \left( \frac{T(x,t)}{\sqrt{1+\left( \frac{\partial y}{\partial x}  \right) ^2} } \right) =0
+\end{cases} 
+.\] Where $T(x,t)$ is the tension function. With initial conditions: \[
+y(t,x) \bigg\rvert_{t=0} = y(x,0) = y(x) \quad \text{(starting position)}
+.\] \[
+\frac{\partial y(x,t)}{\partial t} \bigg\rvert_{t=0}= v(x)\quad \text{(starting velocity)}
+.\] Some simplifying assumptions are: \[
+T(x,t) = T(x) \quad \text{ meaning that the tension only depends on $x$}
+.\]  \[
+\frac{\partial y}{\partial x}  \ll 1 \quad \text{ meaning that the tension is so high, it's hardly moving}
+.\] 
+Under these assumptions, we have $\sqrt{1+\left( \frac{\partial y}{\partial x}  \right) ^2}=1 $ , making the PDE: \[
+\begin{cases}
+	T_0 \frac{\partial ^2 y}{\partial x^2}  = \rho (x) \left( g + \frac{\partial ^2 y }{\partial t^2}  \right) \\
+	\frac{\partial }{\partial x} \left( T(x) \right)  = 0 \implies T(x) = T_0 \text{ which is a constant}
+\end{cases}
+.\] If we further assume that $\rho(x)= \text{constant}$, we would get: \[
+T_0 \frac{\partial ^2 y}{\partial x^2} = \rho_0 g + \rho_0 \frac{\partial ^2 y}{\partial t^2} 
+.\] 
+Thus this problem becomes given $T_0, \rho_0, h_1, h_2, y(x), v(x)$, solve for $y(x,t)$ if: \[
+T_0 \frac{\partial ^2 y}{\partial x^2}  = \rho_0 g + \rho_0 \frac{\partial ^2 x}{\partial t^2} , \quad \alpha < x < \beta, 0 < t
+.\] \[
+y(\alpha,t) = h_1 \quad y(\beta,t) = h_2, \quad 0 \le  t
+.\] \[
+y(x,0) = y(x) , \quad \alpha < x < \beta
+.\] \[
+\frac{\partial y(x,t)}{\partial t} \bigg\rvert_{t=0} = v(x) , \quad \alpha < x < \beta
+.\] This is called a boundary-value, initial-value problem (BCIVP). We can shift it by setting $\alpha = 0$ and $\beta = L$.
+\end{definition}
+\begin{remark}
+	BVIVP = PDE + BC + IC
+\end{remark}
+To solve we will do the following: 
+\begin{enumerate}
+	\item First ask the question are the PDE and boundary conditions Homogeneous? i.e. does $y(x,t) = 0$ satisfy the PDE and boundary conditions. If the answer is no, proceed to step 2, if yes proceed to step 6.
+	\item Construct the ODE and BCs satisfied by the time independent solution $y(x,t) = y_e(x)$ (equilibrium solution). To construct, in the PDE, replace $y(x,t)$ by $y_e(x)$. For the 1-D wave equation, we have: \[
+			T_0 \frac{\partial ^2 y_e(x)}{\partial x^2} = \rho_0 g + \rho_0 \underbrace{\frac{\partial ^2 y_e(x)}{\partial t^2} }_{=0} 
+	\implies T_0 y_e''(x) = \rho_0 g, \quad 0 < x < L
+	.\] For the BCs, we have: \[
+	\begin{cases}
+		y_e(0) = h_1 \\ 
+		y_e(L) = h_2
+	\end{cases}
+	.\] 
+\item Solve the ODE and BCs for $y_e(x)$. For the 1-D wave equation, we have: \[
+		y_e''(x) = \frac{\rho_0g}{T_0} \implies y_e'(x) = \frac{\rho_0g}{T_0}x + c_1 \implies y_e(x) = \frac{\rho_0 gx^2}{2T_0} + c_1 x + c_2
+.\]  \[
+y_e(0) = c_2 = h_1 \implies y_e(x) = \frac{\rho_0g x^2}{2T_0}+c_1 x + h_1
+.\] \[
+y_e (L) = \frac{\rho_0gL^2}{2T_0}+c_1L + h_1 = h_2 \implies c_1 = \frac{h_2-h_1}{L}- \frac{\rho_0gL}{2T_0}
+.\] Giving us: \[
+y_e(x) = \frac{\rho_0gx^2}{2T_0}+ \left( \frac{h_2-h_1}{L}-\frac{\rho_0gL}{2T_0} \right) x + h_1 , \quad 0 \le  x \le  L
+.\] This is known as the \vocab{time-independent (steady state, equilibrium) shape}.
+\item Define  \[
+		u(x,t) = y(x,t) -y_e(x)
+	.\] This can represent the shifting of the string from the equilibrium shape.
+\item Construct the BVIVP satisfied by $u(x,t)$. This can done by substituting: \[
+		y(x,t) = u(x,t) + y_e(x)
+		,\] into the BVIVP for $y(x,t)$. For the 1-D wave equation, we would get: \[
+		T_0 \frac{\partial^2 (u + y_e)}{\partial x^2} = \rho_0 g + \rho_0 \frac{\partial ^2\left( u+y_e \right) }{\partial t^2}  
+.\] \[
+\implies T_0 \frac{\partial ^2 u}{\partial x^2} + \underbrace{T_0 y_e''(x)}_{\rho_0 g} = \rho_0 g + \rho_0 \frac{\partial ^2 u}{\partial t^2} 
+.\] \[
+\implies T_0 \frac{\partial ^2 u}{\partial x^2}  = \rho_0 \frac{\partial ^2 u}{\partial t^2} , \quad 0 < x < L , x < t
+.\] For the BC, we have: \[
+y(0,t) = h_1 \implies u(0,t) + \underbrace{y_e(0)}_{=h_1} = h_1 \implies u(0,t) = 0
+.\] and \[
+y(L,t) = u(L,t) + \underbrace{y_e(L)}_{=h_2} = h_2 \implies u(L,t) = 0
+.\] For the IC, we have: \[
+y(x,0) = y(x) \implies u(x,0) = y(x) -y_e(x)
+.\]  \[
+\frac{\partial (u+y_e)}{\partial t}\bigg\rvert_{t=0} \implies \frac{\partial u}{\partial t} \bigg\rvert_{t=0} = v(x) 
+.\] Overall this means that: \[
+\text{PDE} \begin{cases}
+	T_0 \frac{\partial ^2 u(x,t)}{\partial x^2} = \rho_0 \frac{\partial ^2 u(x,t)}{\partial t^2} ,\quad 0 < x < L , 0 < t
+\end{cases}
+.\] \[
+\text{BCs} \begin{cases}
+	u(0,t) = 0 \\ u(L,t) = 0
+\end{cases}, \quad 0 < t
+.\] \[
+\text{ICs} \begin{cases}
+u(x,0) = y(x) - y_e(x) \\ \frac{\partial u(x,t)}{\partial t} \bigg\rvert_{t=0} = v(x)
+\end{cases}, \quad 0 < x < L
+.\] Note that now the PDE and BCs are now homogeneous. We will continue from here next lecture.
+\end{enumerate}
+\end{document}
+

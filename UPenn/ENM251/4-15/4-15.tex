@@ -1,0 +1,173 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 15th, 2020}
+\subsection{Solving Homogeneous BVIVP through Separation of Variables}
+Continuing from last time, we were able to transform a non-homogeneous BVIVP into one that is homogeneous. We have: \[
+\text{PDE} \begin{cases}
+	T_0 \frac{\partial ^2 u(x,t)}{\partial x^2} = \rho_0 \frac{\partial ^2 u(x,t)}{\partial t^2} ,\quad 0 < x < L , 0 < t
+\end{cases}
+.\] \[
+\text{BCs} \begin{cases}
+	u(0,t) = 0 \\ u(L,t) = 0
+\end{cases}, \quad 0 < t
+.\] \[
+\text{ICs} \begin{cases}
+u(x,0) = y(x) - y_e(x) \\ \frac{\partial u(x,t)}{\partial t} \bigg\rvert_{t=0} = v(x)
+\end{cases}, \quad 0 < x < L
+.\] Note that if our original BVIVP was homogeneous, we would be able to skip to this point. Moving on, we would like to construct a general solution to the PDE and BCs using the principle of linear-superpositions.
+
+Suppose $u_1(x,t)$ and $u_2(x,t)$ are solutions to the PDE and BCs. Then $c_1 u_1 + c_2 u_2$ would also be solutions for any constants $c_1$ and $c_2$. This can be generalized for more  $u_n$. Note that this is possible because the PDE and BCs are homogeneous. As such, we will use  \[
+	\{u_1(x,t), u_2(x,t),\ldots\} 
+.\] as the basis set to generate the general solution. 
+\begin{remark}
+	Note that for 2nd order linear ODE, the solution space is 2-dimensional, however for PDE the solution space is infinite dimensional.
+\end{remark}
+In constructing the basis set of solutions, we should try solutions of form: \[
+	u(x,t) = \phi(x) \gamma(t)\neq 0
+.\] 
+To do this, we will replace this into the PDE and BCs, giving us: 
+\[
+	T_0 \frac{\partial ^2 \phi(x)\gamma(t)}{\partial x^2} = \rho_0 \frac{\partial ^2 \phi(x)\gamma(t)}{\partial t^2} \implies T_0 \gamma(t) \frac{d^2\phi(x)}{dx^2} = \rho_0 \phi(x) \frac{d^2\gamma(t)}{dt^2}
+.\] \[
+\implies \underbrace{\frac{\phi''(x)}{\phi(x)}}_{\text{function of only }x} = \underbrace{\frac{\rho_0}{T_0} \frac{\gamma''(t)}{\gamma(t)}}_{\text{function of only }t}, \quad 0 < x < L ,~ 0 < t
+.\] Since $x$ and $t$ are independent, we can set them to be any thing we want, setting $t=1$ and leaving $x$ alone, we get: \[
+\frac{\phi''(x)}{\phi(x)} = \underbrace{\frac{\rho_0}{T_0} \frac{\gamma''(1)}{\gamma(1)} }_{\text{constant}}, \quad 0 < x < L
+.\] In a similar way, if we set $x = \frac{L}{2}$ and leaving $t$ alone, we would get: \[
+\underbrace{\frac{\phi''(\frac{L}{2})}{\phi(\frac{L}{2})}}_{\text{constant}} = \frac{\rho_0}{T_0} \frac{\gamma''(t)}{\gamma(t)}, \quad 0 < t
+.\] Note that because of this, the constants must both be the same, meaning that we have separated the PDE into two ODE: \[
+\frac{\phi''(x)}{\phi(x)} = C, \quad 0 < x < L
+.\] \[
+\frac{\rho_0}{T_0} \frac{\gamma''(t) }{\gamma(t)} = C, \quad 0 < t
+.\] 
+\begin{remark}
+	Note that we can skip the working out, since whenever we come across a function of one variable equal a function of another variable, and both variables are independent, then both functions must be constants and equal the same constant.
+\end{remark}
+Rearranging the two equations before, we have: \[
+	\phi''(x) - C\phi(x) = 0 , \quad 0 < x < L
+.\] \[
+\gamma''(t) - \frac{fT_0}{\rho_0}\gamma(t) = 0, \quad 0 < t
+.\] Also note that: \[
+u(0,t) = 0 \implies \phi(0) \gamma(t) = 0, 0 < t 
+.\] \[
+\implies \phi(x) = 0
+.\] 
+\begin{remark}
+	Note that we cannot have $\gamma(t) = 0$, then $u(x,t) = \phi(x)\gamma(t) = 0$
+\end{remark}
+Similarly for the other boundary condition, we would have: \[
+	u(L,t) = 0 \implies \phi(L)\gamma(t) = 0 \implies \phi(L) = 0
+.\] Collecting the $\phi$, we would get: \[
+\phi''(x) - C\phi(x) = 0, \quad 0 < x <L
+.\] \[
+\phi(0) = 0
+.\] \[
+\phi(L)= 0
+.\] which is a regular Sturm-Liouville Problem. As you recall this has the solution: \[
+\phi(x) = \begin{cases}
+	A \cosh (x\sqrt{C} ) + B \sinh(x \sqrt{C} ) , \quad C > 0\\
+	A+Bx, \quad C = 0\\
+	A \cos(x\sqrt{-C} ) + B\sin(x\sqrt{-C} ) , \quad C < 0
+\end{cases}
+.\] Similarly to before, if we consider $C>0$, we have: \[
+\phi(x) = A \cosh ( x \sqrt{C} ) + B \sinh (x \sqrt{C} )
+.\] \[
+\phi(0) = A = 0 \implies \phi(x) = B \sinh (x \sqrt{ C} )
+.\] \[
+\phi(L) = B \sinh(L \sqrt{C} ) = 0 \implies B = 0 
+.\] Meaning that $\phi(x) = 0$, which will not give us anything. (if on exam, they will tell us to find non-zero or tell us which cases to consider).
+
+For $C=0$, we would get the same conclusion $\phi(x) = 0$, since the BC force $A$ and $B$ to both be 0.
+
+For $C<0$, we have: \[
+	\phi(x) = A \cos(x\sqrt{-C} ) + B \sin (x \sqrt{ -C} ) 
+.\] \[
+\phi(0) = A = 0 \implies \phi(x) = B \sin(x \sqrt{-C} )
+.\] \[
+\phi(L) = B \sin(L\sqrt{-C} ) = 0 \implies L\sqrt{-C}  = n\pi \implies C = -\left( \frac{n\pi}{L} \right) ^2 = C_n
+.\] Note that there are an infinite possible solutions: \[
+\phi_n(x) = B_n \sin(x \sqrt{-C_n} ) = B_n \sin \left( \frac{n\pi x}{L} \right) 
+.\] 
+Also note that: \[
+	C_{-n} = -\left( - \frac{n\pi}{L} \right) ^2 = - \left( \frac{n\pi}{L} \right) ^2 = C_n
+.\] and \[
+\phi_{-n}(x) = B_{-n}\sin\left( - \frac{n\pi}{L} x \right) = -B_{-n}\sin \left( \frac{n\pi}{L}x \right) = \left( -B_{-n} \right) \sin\left( \frac{n\pi}{L}x \right)  = \phi_{n}(x)
+.\] In addition, note that we can throw away $n=0$, since that would give us $C_0 = 0$ but we need $C<0$. As such we can throw away all the negative  $n$'s, giving us: \[
+C_n = -\left( \frac{n\pi}{L} \right) ^2,\quad n = 1,2,3,\ldots
+.\] \[
+\phi_n(x) = B_n \sin\left(\frac{n\pi}{L}x\right), \quad n = 1,2,3,\ldots
+.\] Note that $B_n$ is an arbitrary constant we cannot do anything about, so we usually take $B_n=1$, giving us: \[
+\phi_n(x) = \sin\left(\frac{n\pi}{L}x\right), \quad n = 1,2,3,\ldots
+.\]
+\begin{remark}
+	Note that this is the solution to the RSLP in which: \[
+		\lambda_n = - \left( \frac{n\pi}{L} \right) ^2, \quad n=1,2,3,..
+	.\] \[
+	\phi_n(x) = \sin\left( \frac{n\pi}{L}x \right) , \quad n=1,2,3,\ldots
+	.\] 
+\end{remark}
+Moving to $\gamma$, we have:  \[
+	\gamma''(t) - C \frac{T_0}{\rho_0}\gamma(t) \implies \gamma_n''(t) + \underbrace{\frac{T_0}{\rho_0}\left( \frac{n\pi}{L} \right) ^2}_{\omega_n^2} \gamma_n(t) = 0, \quad 0 < t
+.\] As such, we have: \[
+\gamma_n''(t) + \omega_n^2\gamma_n(t) = 0
+.\] Which, as we know has solution: \[
+\gamma_n(t) = D_n \cos(\omega_n t) + E_n \sin(\omega_n t) , \quad n = 1 , 2, 3, \ldots
+.\] This means that our basis set of solutions would now be: \[
+U_n(x,t) = \left( D_n \cos(\omega_n t) + E_n \sin(\omega_n t) \right) \sin\left( \frac{n\pi}{L}x \right) 
+.\] \[
+\omega_n = \frac{n\pi}{L}\sqrt{ \frac{T_0}{\rho_0}} 
+.\] 
+\begin{remark}
+	Note that if we carried the constants $B_n$, they could be absorbed into $D_n$ and $E_n$.
+\end{remark}
+
+Now finally, the principle of superposition means that the general solution is: \[
+	u(x,t) = \sum_{n=1}^{\infty} \left( D_n \cos(\omega_nt) + E_n \sin(\omega_nt) \right) \phi_n(x)
+.\] \[
+\phi_n(x) = \sin\left( \frac{n\pi}{L} x \right) ,\quad 0 \le  x \le  L, \quad 0 \le t
+.\] Which is the general solution to the PDE and the BCs.
+
+Now we consider the initial conditions: \[
+	u(x,0) = y(0) - y_e(x) \implies \sum_{n=1}^{\infty} D_n \phi_n(x) = y(x) - y_e(x), \quad 0 < x < L
+.\] 
+
+Note that since this is a Sturm-Liouville problem, there is an associated dot product: \[
+	\phi_p \cdot  \phi_q = \int^L_0 \phi_p(x) \phi_q(x) ~dx = \begin{cases}
+		0, \quad p\neq q \\ \frac{L}{2},\quad p = q
+	\end{cases}
+.\] Meaning that: \[
+D_m = \frac{\phi_n \cdot  (y-y_e)}{\phi_n \cdot  \phi_n} = \frac{2}{L}\int^L_0 \phi_n(x) \left( y(x) - y(e) \right) ~dx
+.\] 
+\begin{remark}
+	Note that the weight function is equal to 1, since our equation is given by: \[
+	\phi'' + \lambda \phi = 0
+	.\] 
+\end{remark}
+
+If we go back to the function, and compute the partial derivative with respect to time, we have: \[
+	\frac{\partial u}{\partial t} = \sum_{n=1}^{\infty} \left( -\omega_n D_n \sin(\omega_nt) + \omega_n E_n \cos(\omega_n t)  \right) \phi_n(x)
+.\] Evaluating at  $t=0$, we have: \[
+	\frac{\partial u}{\partial t}\bigg\rvert_{t=0} = \sum_{n=1}^{\infty} \omega_n E_n \phi_n (x) = v(x) , \quad 0 < x < L 
+.\]  Meaning that: \[
+w_n E_n = \frac{\phi_n \cdot  v}{\phi_n \cdot  \phi_n}
+.\] \[
+\implies E_n = \frac{1}{\omega_n} \frac{2}{L} \int^L_0 \phi_n(x) v(x) ~dx
+.\] 
+
+In summary the complete solution to the BVIBP satisfied by $y(x,t)$, is given by: \[
+	y(x,t) = y_e(x) + u(x,t)
+.\] Where: \[
+y_e(x) = \frac{\rho_0g}{2T_0} x^2 + \left( \frac{H_2-H_1}{L}- \frac{\rho_0gL}{2T_0} \right) x + H_1
+.\] and \[
+u(x,t) = \sum_{n=1}^{\infty} \left( D_n \cos(\omega_nt) + E_n \sin(\omega_nt) \right) \phi_n(x)
+.\] where: \[
+\omega_n = \frac{n\pi}{L}\sqrt{\frac{T_0}{\rho_0}} \quad \phi_n(x) = \sin\left( \frac{n\pi}{L}x \right) 
+.\] \[
+D_n = \frac{2}{L} \int^L_0 \phi_n(x) (y(x) - y_e(x) )~dx
+.\] \[
+E_n = \frac{2}{L \omega_n} \int^L_0 \phi_n(x) v(x) ~dx
+.\] 
+\end{document}
+

@@ -1,0 +1,150 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March  2nd, 2020}
+\subsection{Taylor's Method}
+Recall that Taylor's method is where we assume the solution: \[
+	y(x) = \sum_{m=0}^{\infty} a_m(x-x_0)^{m}
+.\] Where $x_0 $ is an ordinary point for the ODE. Note that this is a power series expansion about $x_0$ with $a_m$ being constants.
+
+	Consider \[y''(x) + \omega^2 y(x) = 0, \quad -\infty < x < +\infty.\] We know already that the solution involves $\sin(x)$ and $\cos(x)$. Note that for this ODE, all points are ordinary points. We will use $x_0=0$, since this will simplify things a lot. Thus we have: \[
+		y(x) = \sum_{m=0}^{\infty} a_mx^{m}
+	.\] Which converges absolutely everywhere.  Differentiating this W.R.T. $x$, we get: \[
+		y'(x) = \sum_{m=0}^{\infty} ma_mx^{m-1}\text{ and } y''(x) = \sum_{m=0}^{\infty} m(m-1)a_mx^{m-2}
+	.\] Plugging this into the original equation, we have: \[
+	\sum_{m=0}^{\infty} m(m-1)a_mx^{m-2} + \omega^2 \sum_{m=0}^{\infty} a_mx^{m}=0
+.\] Note that when $m=0$ and $m=1$, the first power series term would be 0. Now using the fact that: \[
+\sum_{m=a}^{b} f(m) = \sum_{m=a\pm c}^{b\pm c} f(m \mp c)
+.\] we get: \[
+\sum_{m=2-2}^{\infty} (m+2)((m+2)-1)a_{m+2}x^{(m+2)-2}+\omega^2 \sum_{m=0}^{\infty} a_m x^{m}=0
+.\] \[
+\implies \sum_{m=0}^{\infty} (m+2)(m+1) a_{m+2}x^{m}+\omega^2 \sum_{m=0}^{\infty} a_mx^{m}=0
+.\] Collecting the terms, we get: \[
+\sum_{m=0}^{\infty} \left( (m+2)(m+1) a_{m+2}+\omega^2 a_m \right) x^{m}=0
+.\] 
+The only way we can get the LHS to equal zero for all values of $x$ is if the coefficient equals zero, thus we have: \[
+	(m+2) (m+1) a_{m+2}+\omega^2 a_m = 0, \quad m=0,1,2,\ldots 
+.\] \[
+a_{m+2}=- \frac{\omega^2a_m}{(m+2)(m+1)},\quad m=0,1,2,\ldots
+.\] 
+From this, we get: 
+\begin{itemize}
+	\item for $m=0$, $a_2=-\frac{\omega^2}{2}a_0$
+	\item for $m=1$, $a_3=-\frac{\omega^2}{(3)(2)}a_1$
+	\item for $m=2$, $a_4=-\frac{\omega^2}{(4)(3)}a_2=\frac{(-1)^2\omega^{4}}{4!}a_0$
+	\item for $m=3$, $a_5=-\frac{\omega^2}{(5)(4)}a_2=\frac{(-1)^2\omega^{4}}{5!}a_1$
+\end{itemize}
+As we keep going, we would have: \[
+	a_{2k}= \frac{(-1)^{k}\omega^{2k}}{(2k)!}a_0,\quad a_{2k+1} = \frac{(-1)^{k}\omega^{2k}}{(2k+1)!} a_1,\quad k=0,1,2,3,\ldots
+.\] 
+Thus for this particular example, we can solve for all $a_m$ from $a_0$  and $a_1$.
+
+Since for this series, they break pretty naturally into even and odd powers, we can split it into: \[
+	y(x) = \sum_{m=0}^{\infty} a_mx^{m}= \sum_{k=0}^{\infty} a_{2k}x^{2k}+\sum_{k=0}^{\infty} a_{2k+1}x^{2k+1}
+\] \[
+= \sum_{k=0}^{\infty} \frac{(-1)^{k}\omega^{2k}}{(2k)!}q_0 x^{2k}+ \sum_{k=0}^{\infty} \frac{(-1)^{k}\omega^{2k}}{(2k+1)!}a_1x^{2k+1}
+\] \[
+= \alpha \sum_{k=0}^{\infty} \frac{(-1)^{k}(\omega x)^{2k}}{(2k)!}+ \frac{a_1}{\omega} \frac{(-1)^{k}(\omega x)^{2k+1}}{(2k+1)!}
+\] \[
+= a_0 \cos(\omega x) + \frac{a_1}{\omega}\sin(\omega x)
+\] Note that $a_0$ and $a_1$ are arbitrary constants, thus giving us the solution we had previously.
+\begin{remark}
+	As a reminder, for the ODE $y''(x)+P(x)y'(x) + Q(x)y(x)=0$,  $x_0$ is an ordinary point of the ODE if \[
+		\lim\limits_{x \to x_0} P(x) \text{ and }\lim\limits_{x \to x_0} Q(x)
+	\] both exist. Otherwise, it is called a singular point.
+\end{remark}
+\begin{remark}
+	Usually, if you can pick $x_0=0$, you should pick it, as then you can take advantage of even and odd properties.
+\end{remark}
+\subsection{Some Power Series Expansions}
+  \[
+	  e^{z}= \sum_{m=0}^{\infty} \frac{z^{m}}{m!},\quad |z|<\infty
+  \]
+ \[
+		  e^{-z}= \sum_{m=0}^{\infty} \frac{(-1)^{m}z^{m}}{m!},\quad |z| < \infty
+	  \]
+ \[
+		  \cos(z) = \sum_{m=0}^{\infty} \frac{(-1)^{m}z^{2m}}{(2m)!},\quad |z|< \infty
+	  \]
+ \[
+		  \cosh(z) = \sum_{m=1}^{\infty} \frac{z^{2m}}{(2m)!},\quad |z|<\infty
+	  \]
+ \[
+		  \sin(z) = \sum_{m=0}^{\infty} \frac{(-1)^{m}z^{2m+1}}{(2m+1)!},\quad |z| < \infty
+	  \]
+ \[
+		  \sinh(z) = \sum_{m=0}^{\infty} \frac{z^{2m+1}}{(2m+1)!},\quad |z| < \infty
+	  \]
+ \[
+	  \frac{1}{1-z}= \sum_{m=0}^{\infty} z^{m}, \quad |z|<1
+  \]
+	Consider the ODE: \[
+		(1-x^2)y''(x) + 8xy'(x) -20y(x) = 0, \quad -1<x<+1
+	.\] Using $x_0=0$, which is an ordinary point, since: \[
+	\lim\limits_{x \to x_0} P(x)= \lim\limits_{x \to x_0} \frac{x_0}{1-x^2} \text{ and }\lim\limits_{x \to x_0} Q(x) = \lim\limits_{x \to x_0} \frac{-20}{1-x^2}
+	.\] both exists, we have: \[
+	(1-x^2) \sum_{m=0}^{\infty} m(m-1)a_mx^{m-2}+8x \sum_{m=0}^{\infty} ma_mx^{m-1}-20 \sum_{m=0}^{\infty} a_mx^{m}=0
+	.\] \[
+	\implies \sum_{m=0}^{\infty} a_m m(m-1) x^{m-2}- \sum_{m=0}^{\infty} a_m m(m-1) x^{m}+ 8 \sum_{m=0}^{\infty} a_m mx^{m} -20 \sum_{m=0}^{\infty} a_mx^{m}=0
+	.\] \[
+	\implies \sum_{m=2}^{\infty} m(m-1)a_mx^{m-2}-\sum_{m=0}^{\infty} \underbrace{\left( m(m-1)-8m+20 \right)}_{(m-4)(m-5)} a_mx^{m}=0
+	.\]\[
+	\implies \sum_{m=0}^{\infty} (m+2)(m+1) a_{m+2}x^{m}-\sum_{m=0}^{\infty} (m-4)(m-5)a_{m}x^{m}=0
+	.\]  \[
+	\implies \sum_{m=0}^{\infty} \underbrace{\left( (m+2)(m+1)a_{m+2}-(m-4)(m-5)a_{m} \right)}_{=0} x^{m}=0
+	.\] Thus we get the relation: \[
+	a_{m+2} = \frac{(m-4)(m-5)}{(m+2)(m+1)}a_m, \quad m=0,1,2,\ldots
+	.\] 
+	Plugging in values for $m$, we have: 
+	\begin{itemize}
+		\item $m=0,$ $a_2 = \frac{20}{2}a_0=10a_0$
+		\item $m=1,$ $a_3 = \frac{(-3)(-4)}{(3)(2)}a_1=2a_1$
+		\item $m=2,$ $a_4 = \frac{(-2)(-3)}{(4)(3)}a_2=5 a_0$
+		\item $m=3,$ $a_5 = \frac{2}{(5)(4)}a_3=\frac{1}{5}a_1$
+	\end{itemize}
+	When we get to $m=4$ and $m=5$, we would get $a_6$ and  $a_7$ both equaling 0, thus all coefficients after that would be zero as well. Thus, we would have: \[
+		y(x) = a_0+a_1x + a_2x^2+a_3x^{3}+a_4x^{4}+a_5x^{5}
+	\] \[
+	y(x) = a_0+a_1x+10a_0x^2+2a_1x^{3}+5a_0x^{4}+\frac{1}{5}a_1x^{5}
+	\] \[
+	y(x) = a_0\large\left( 1+10x^2+5x^{4} \large\right) +a_1\left( x+2x^{3}+\frac{1}{5}x^{5} \right) 
+	.\] 
+\begin{remark}
+	As long as $P(-x)=-P(x)$ and $Q(-x)=Q(x)$, and $x_0=0$, we will always be able to break the sum into an even and an odd part. In other words, $P$ is an odd function and  $Q$ is an even function.
+\end{remark}
+Let us try one which doesn't separate into even and odd terms. Consider: \[
+	(1-x^2) y''(x) + 2y'(x) + xy(x) = 0, \quad -1<x<+1
+.\] Notice this time that  \[
+P(x) = \frac{2}{1-x^2}\text{ is not an odd function}
+\] and \[
+Q(x) = \frac{x}{1-x^2}\text{ is not an even function}
+.\] Also note that $x_0=0$ is an ordinary point, meaning that we have: \[
+y(x) = \sum_{m=0}^{\infty} a_m x^{m}
+.\] \[
+y'(x) = \sum_{m=0}^{\infty} ma_m x^{m-1}
+.\]\[
+y''(x) = \sum_{m=0}^{\infty} m(m-1)a_{m} x^{m-2}
+.\]  Plugging into the ODE, we have: \[
+(1-x^2)\sum_{m=0}^{\infty} a_{m}m(m-1)x^{m-2}+2 \sum_{m=0}^{\infty} a_m m x^{m-1}+ x \sum_{m=0}^{\infty} a_m x^{m}=0
+\] \[
+\implies 
+\sum_{m=0}^{\infty} a_{m}m(m-1)x^{m-2}+\sum_{m=0}^{\infty} a_{m}m(m-1)x^{m}+2 \sum_{m=0}^{\infty} a_m m x^{m-1}+  \sum_{m=0}^{\infty} a_m x^{m+1}=0
+.\] Note that the leading power of $x$ for each of the power series are 0, 2, 1, and 1. Shifting the bounds, we would get: \[ 
+\sum_{m=0}^{\infty} a_{m+2}(m+2)(m+1)x^{m}+\sum_{m=0}^{\infty} a_{m}m(m-1)x^{m}+2 \sum_{m=0}^{\infty} a_{m+1} (m+1) x^{m}+  \sum_{m=0}^{\infty} a_m x^{m+1}=0
+.\] \[
+\implies \sum_{m=0}^{\infty} \left( (m+1)(m+2) a_{m+2}-m(m-1)a_m+2(m+1)a_{m+1} \right) x^{m}+\sum_{m=0}^{\infty} a_mx^{m+1}=0
+.\] Note that the first power sum has an extra term ($m=0$), that the first one does not have, thus we can separate it and get: \[
+(2a_2+2a_1)+\sum_{m=1}^{\infty} \left( (m+1)(m+2) a_{m+2}-m(m-1)a_m+2(m+1)a_{m+1} \right) x^{m}+\sum_{m=1}^{\infty} a_{m-1}x^{m}=0
+.\] Thus we have: \[
+2(a_2+a_1)+\sum_{m=1}^{\infty} \left( (m+1)(m+2) a_{m+2}-m(m-1)a_m+2(m+1)a_{m+1}+a_{m-1} \right) x^{m}=0 
+.\] Thus meaning that: \[
+a_2 + a_1 = 0
+.\] and \[
+(m+1)(m+2) a_{m+2}-m(m-1)a_m+2(m+1)a_{m+1}+a_{m-1} =0 
+.\] Giving us: \[
+a_2 = -a_1\quad a_{m+2} = \frac{-2(m+1)a_{m+1}+m(m-1)a_m-a_{m-1}}{(m+2)(m+1)},\quad m=1,2,3,\ldots
+.\] 
+\end{document}
+

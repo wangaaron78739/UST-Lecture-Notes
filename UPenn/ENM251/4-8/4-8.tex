@@ -1,0 +1,89 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 8th, 2020}
+\subsection{Examples of RSLP}
+Let us try to determine all $\lambda $'s that lead to non-zero solutions $\phi(x)$ if: \[
+	x\phi''(x) -\phi'(x) + \lambda x^{3}\phi(x) = 0, \quad 0 < x < 1
+.\] \[
+\phi(0) = 0 \quad \phi(1) = 0
+.\] Note that the standard form would be: \[
+\phi''(x) -\frac{1}{x}\phi'(x) + \lambda x^{2}\phi(x) = 0 \implies \phi''(x) + P(x)\phi'(x) + Q(x) = 0
+.\] From HW6, can solve this, with: \[
+\gamma =  \frac{Q'(x) + 2P(x) Q(x)}{\left( Q(x) \right) ^{\frac{3}{2}}} = \frac{2\lambda x + 2 (-1 / x) (\lambda x^2)}{(\lambda x^2)^{\frac{3}{2}}} = 0 = \text{ a constant}
+.\] Meaning we can use the transformation: \[
+z = \int \sqrt{\alpha Q(x)}  ~dx = \int \sqrt{ \alpha \lambda x^2} ~dx = \int x~dx = \frac{1}{2}x^2
+.\] By picking $\alpha=\frac{1}{\lambda}$. Thus we have: \[
+\Psi''(z) + \frac{\gamma}{2\sqrt{\alpha} }\Psi'(z) + \frac{1}{\alpha}\Psi(z) = 0
+.\] which reduces to: \[
+\Psi''(z) + \lambda \Psi(z) = 0
+.\] From the example from last lecture, we would have: \[
+\Psi(z) = \begin{cases}
+	A \cosh(z\sqrt{-\lambda} ) + B \sinh(z\sqrt{-\lambda} ),\quad \lambda < 0\\
+	A+Bz , \quad\lambda = 0\\
+	A \cos(z \sqrt{\lambda} ) + B \sin(z \sqrt{ \lambda} ),\quad \lambda >0
+\end{cases}
+.\] Giving us:  \[
+\phi(x) = \begin{cases}
+	A \cosh(\frac{1}{2}x^2\sqrt{-\lambda} ) + B \sinh(\frac{1}{2}x^2\sqrt{-\lambda} ),\quad \lambda < 0\\
+	A+B \frac{1}{2}x^2,\quad \lambda = 0\\
+	A \cos(\frac{1}{2}x^2\sqrt{\lambda} ) + B \sin(\frac{1}{2}x^2 \sqrt{ \lambda} ),\quad \lambda >0
+\end{cases} 
+.\] 
+Putting in the boundary conditions, consider $\lambda<0$ we would have:
+\[
+	\phi(0) = A = 0\quad \text{ since $\sinh(0) = 0$ $\cosh(0) = 1$}
+.\] Thus: \[
+\phi(1) = B \sinh(\frac{1}{2}\sqrt{-\lambda} ) = 0 \implies B = 0
+.\] This tells us that there are no negative eigenvalues for this problem. As shown in the last lecture, we can test $\lambda=0$ and see that there are no zero eigenvalues either. For $\lambda>0$, we would have: \[
+\lambda_n = (2n\pi)^2 \quad \phi_n(x) = B_n \sin(n\pi x^2)
+.\] Picking $B_n=1$, we would have $\phi_n(x) = \sin(n\pi x^2)$.
+
+With this, we can define the dot product: \[
+	f\cdot g = \int^1_0 f(x) g(x) w(x) ~dx
+.\] \[
+w(x) = \frac{b(x)}{a_2(x)}e^{\int \frac{a_1(x)}{a_2(x)}dx} = \frac{x^{3}}{x}e^{\int- \frac{1}{x}~dx} = x^2 \frac{1}{x} = x
+.\] This also means that: \[
+\phi_m \cdot  \phi_n = \int^1_0 \phi_m(x) \phi_nx) x ~dx = 0, \quad m\neq n
+.\] and \[ 
+\phi_n \cdot  \phi_n = \int^1_0 \phi_n(x) \phi_nx) x ~dx = \int^1_0 \sin(n \pi z) \sin (n \pi z) \frac{1}{2} ~dz = \frac{1}{4} >0
+.\] 
+With this, if a piecewise continuous function $f(x)$ is expressed as: \[
+	f(x) = \sum_{n=1}^{\infty} a_n \phi_n(x) , 0 < x < 1
+.\] Then: \[
+a_n = \frac{\phi_n \cdot  f}{\phi_n\cdot \phi_n}  = 4(\phi_n \cdot  f)
+.\] 
+\begin{example}
+	Consider $f(x) = 1$, we have:  \[
+		a_n = \frac{\int^0_1 \phi_n(x) x ~dx}{\frac{1}{4}} = 4\int^1_0 \sin(n \pi x^2) x ~dx 
+	.\] Using the substitution $z = x^2$, we get: \[
+	a_n = 4 \int^1_0 \sin(n\pi z) \frac{1}{2} ~dz = 2 \frac{1-\cos(n\pi)}{n\pi} = \frac{2(1-(-1)^{n})}{n\pi} 
+	.\] Thus we have: \[
+	1 = \sum_{n=1}^{\infty} \frac{2(1-(-1)^n)}{n\pi}\sin(n\pi x^2)
+	.\] 
+\end{example}
+\begin{remark}
+	Unlike Taylor series which tend to converge monotonically, Sturm-Liouville series tend to converge alternatively.
+\end{remark}
+Sometimes we might not get clean values for the eigenvalues. To see this, we can try:  \[
+	\phi''(x) + \lambda \phi(x) = 0 , 0 < x < 1
+.\] but with the boundary conditions: \[
+\phi(0) = 0\quad \phi(1) + \phi'(1) = 0
+.\] For $\lambda<0$, we would find:  \[
+\phi(1) + \phi'(1) = B \left( \sinh (\sqrt{-\lambda} )+\sqrt{-\lambda} \cosh(\sqrt{-\lambda}     ) \right) 
+.\] Which would mean that  $B=0$  since $\left( \sinh (\sqrt{-\lambda} )+\sqrt{-\lambda} \cosh(\sqrt{-\lambda}     ) \right)=0 \iff \lambda = 0$.
+
+For the case of $\lambda=0$, we would have: $\phi(1) + \phi'(1) = 2B = 0 \implies B = 0$ meaning that there is only the trivial condition.
+
+For the case of $\lambda>0$, we would have " \[
+	\phi(1) + \phi'(1) = B \sin(\sqrt{\lambda} ) +  B \sqrt{\lambda} \cos(\sqrt{\lambda} ) = 0
+.\] To avoid $B=0$, we would need: \[
+\sin(z)+ z\cos(z)= 0
+.\] which has a lot of solutions. However, these solutions are not easy to solve for and thus are calculated numerically. Note that there are infinite solutions, as this is equivalent to $tan(z) = -z$.
+\begin{remark}
+	Note that it is possible to have negative or zero eigenvalues, for example if it was instead $\phi(1) - \phi'(1) = 0$.
+\end{remark}
+\end{document}
+

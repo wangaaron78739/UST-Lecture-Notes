@@ -1,0 +1,52 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 22th, 2020}
+\subsection{Continuation of the Heat Equation}
+From last time, we had: \[
+	\tan (L \sqrt{-V}) = -\frac{k_0}{h}\sqrt{-C} = -\frac{\kappa_0}{hL}(L\sqrt{-C} ) 
+.\] Thus if we let $L \sqrt{-C}  = z \implies C = - \left( \frac{z}{L} \right) ^2$, then we want to find the solutions to the equation: \[
+\tan z = - \frac{\kappa_0}{hL}z
+.\] With this, we would get: \[
+\phi_n(x) = \sin(z_n \frac{x}{L})
+.\] Since this is in the RSLP form, it has an associated dot product: \[
+\phi_n\cdot \phi_m = \int^L_0 \phi_n(x) \phi_m(x) ~dx =  \begin{cases}
+	0 , \quad p \neq q \\
+	\frac{L}{2}\left( 1+\frac{\sin(2z_n)}{2z_n} \right) 
+\end{cases}
+.\] Note that the weight function $w(x) = 1$ (verify by comparing coefficients).
+
+Going to the time equation: \[
+	\beta_n'(t) - \gamma C_n \beta_n(t) = 0
+.\] \[
+\implies \beta_n'(t) + \gamma \left( \frac{z_n}{L} \right) ^2 \beta_n (t) = 0
+.\] \[
+\implies \beta_n(t) = e^{-\gamma\left( \frac{z_n}{L} \right) ^2 t}
+.\] 
+
+This gives us: \[
+	v_n(x,t) = \phi_n(x) \beta_n(t) = e^{-\gamma\left( \frac{z_n}{L} \right) ^2 t} \sin \left( \frac{z_n}{L}x \right) 
+.\] Meaning that the general solution is: \[
+v(x,t) = \sum_{n=1}^{\infty} a_n e^{-\gamma\left( \frac{z)n}{L} \right) ^2t}\sin\left( \frac{z_n}{L}x \right) 
+.\] For the initial condition, we have: \[
+v(x,0) = \sum_{n=1}^{\infty} a_n \phi_n(x) = f(x) - u_e(x)
+.\] \[
+\implies a_n = \frac{ \phi_n\left( f-u_e \right) }{\phi_n\cdot \phi_n} =  \frac{1}{\frac{L}{2}\left( 1+ \frac{\sin(2z_n)}{2z_n} \right) }\int^L_0 (f(x) - u_e(x) ) \phi_n(x) ~dx, \quad n=1,2,3,..
+.\] Thus the final solution is: \[
+u(x,t) = u_e(x) + \sum_{n=1}^{\infty} a_n e^{-\gamma\left( \frac{z_n}{L} \right) ^2t}\phi_n(x)
+.\] Note that the only difference between this solution and the wave equation is that the eigenvalues are different.
+
+\begin{remark}
+	Note that since $e^{-(\text{constant})t}$ approaches $0$ as $t$ increases, we have: \[
+		\lim\limits_{t \to \infty} u(x,t) = u_e(x)
+	.\] Note that this is not the case for the wave equation (unless there is a dampening term).
+\end{remark}
+\begin{remark}
+	The wave equation with damping has the form: \[
+	\frac{\partial ^2 u}{\partial x^2} = \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} + b \frac{\partial u}{\partial t}  
+.\] This will have a limiting solution equal to the time independent solution $u_e(x)$.
+\end{remark}
+\end{document}
+

@@ -1,0 +1,71 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April  1st, 2020}
+\subsection{Dot Products}
+Recall that we defined the generic dot product between functions to be: \[
+	f\cdot g = \int^\beta_\alpha f(x)g(x) w(x) ~dx
+.\] With $w(x) $ being a weight function. Recall that: \[
+\vec{A}\cdot \vec{B} = |\vec{A}||\vec{B}| \cos \theta ,\quad \cos\theta = \frac{\vec{A}\cdot \vec{B}}{\sqrt{\vec{A}\cdot \vec{A}} \sqrt{\vec{B}\cdot \vec{B}}  } 
+.\] 
+For \[
+	f\cdot g = \int^\beta_\alpha f(x)g(x) w(x) ~dx 
+.\] we have: \[
+|f| = \sqrt{f\cdot f} 
+.\] \[
+\cos \theta = \frac{f\cdot g}{\sqrt{f\cdot f} \sqrt{g\cdot g} }= \frac{f\cdot g}{|f| |g|}
+.\] 
+Note that $f$ is perpendicular to $g$ is  $f\cdot g = 0$.
+\subsection{Recall Bessel's Equation}
+ Consider \[
+	 x^2y''(x)+(a+2b^{R})xy'(x) + (c+dx^{2s}-b(1-a-R)x^{R}+b^2x^{2R})y(x) =0
+.\] 
+\begin{example}[Example where Bessel's equation does not work]
+	\[
+		y''(x) + y'(x) + x^{3}y(x) = 0
+	.\] Multiplying by $x^2$, we have: \[
+	x^2y''(x) + y'(x) + x^{5}(x) =0
+	.\] This means that $a+2bx^{R}=x$, meaning that: \[
+	a=0, b=\frac{1}{2}, R=1
+	.\] \[
+	c+dx^{2s}-b(1-a-R)x^{R}+b^2x^{2R}=x^{5}
+	.\] \[
+	c+dx^{2s}+\frac{1}{4}x^2=x^{5}
+	.\] \[
+	c+dx^{2s}=x^{5-\frac{1}{4} x^{2}}
+	.\] Which does not work because $c$ and $d$ are constants.
+\end{example}
+\begin{example}
+	\[
+		y''(x) + x^{5}y(x) = 0
+	.\] Multiplying by $x^2$, we have: \[
+	x^2y''(x) + x^{5}y(x) = 0
+	.\] \[
+	\implies a+2bx^{R}=0 \implies a=0, b=0
+	.\] \[
+	c+dx^{2s}-b(1-a-R)x^{R}+b^2x^{2R}=x^{5}\implies c=0, d=1>0, s = \frac{5}{2}
+	.\] \[
+	p = \left| \frac{1}{s} \sqrt{\left( \frac{1-a}{2} \right) ^2-c}  \right|  = \frac{1}{5}\neq  \text{ integer}
+	.\] \[
+	y(x) = x^{\frac{1-a}{2}} e^{-b\frac{x^{R}}{12}}\left( c_1J_p\left( \frac{\sqrt{d} }{s}x^{s} \right)+c_2 J_p\left( \frac{\sqrt{d} }{s}x^{5} \right)   \right) 
+	.\] 
+	\[
+		y(x) = x^{1/2}\left( c_1 J_{\frac{1}{5}} )_\frac{2}{5}x^{\frac{5}{2}}+c_2 J_{\frac{1}{5}} \left( \frac{2}{5}x^{\frac{5}{2}} \right) \right) 
+	.\] For small $x$, $J_\mu(x) \approx \frac{1}{\nu!}x^{\nu}\to  x^{\nu}$. Thus for small $x$ \[
+	y(x) = c_1 x+c_2
+.\] Thus if: \[
+y(x) = 0 \implies c_2 = 0
+.\] Giving us: \[
+y(x) = x^{1/2} c_1J_{1/5}\left( \frac{2}{5}x^{5/2} \right) 
+.\] 
+\end{example}
+Ging back to vectors: \[
+	\vec{A} = a\vec{i} + b\vec{j} + c\vec{k}
+.\] $\{\vec{i},\vec{j},\vec{j}\} $ is called an orthogonal basis set. Similarly you can have an infinite dimensional basis set: \[
+\{ \phi_1(x),\phi_2(x),\phi_3(x),\ldots\}  
+.\] if $\phi_m\cdot \phi_n=0$ for $m\neq n$ with respect to some inner product
+
+\end{document}
+

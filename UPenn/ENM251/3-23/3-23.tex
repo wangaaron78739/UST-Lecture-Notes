@@ -1,0 +1,57 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March  23rd, 2020}
+\subsection{Legendre ODE and Legendre Polynomials}
+Consider the equation: \[
+	(1-x^2)y''(x)-2xy'(x)+m(m+1)y(x) = 0, \quad -1 < x < 1
+.\] 
+Where $m$ is a parameter taking on non-negative integer values. Note that $x_0=0$ is an ordinary point. Converting this to standard form, we get: \[
+	y''(x) -\frac{2x}{1-x^2}y'(x) + \frac{m(m+1)}{1-x^2}y(x)=0
+.\] This is called the \vocab{Legendre Equation}. This will come up with spherical symmetry.
+
+Using Taylor's method, we have $y(x) = \sum_{k=0}^{\infty} a_kx^{k}$. Taking the derivative, we have: \[
+	y'(x) = \sum_{k=0}^{\infty}k a_k x^{k-1}
+.\] \[ 
+y''(x) = \sum_{k=0}^{\infty}k(k-1) a_k x^{k-2}
+.\] Plugging this in and collecting the common terms, we get: \[
+\sum_{k=0}^{\infty} \left( (k+2)(k+1)a_{k+2}-(k-m)(k+m+1)a_k \right) x^{k}=0
+.\] This means that: \[
+a_{k+2} = \frac{(k-m)(k+m+1)a_k}{(k+2)(k+1)}, \quad k=0,1,2,\ldots
+.\] Suppose $m=4$, we have: \[
+a_{k+2} = \frac{(k-4)(k+5)}{(k+2)(K+1)}a_k
+.\] After plugging it in, note that the even coefficients go to zero after $k=4$, while the odd coefficients is still an infinite sum. This tells us that one solution is: \[
+y(x) = a_0(1-10x^2+\frac{35}{3}x^{4})
+.\] 
+
+Note that because of the $(k-m)$ factor, for any  $m$, there will always be one solution to the Legendre ODE that is a polynomial. That polynomial is called  $P_m(x)$ and is known as a \vocab{Legendre Polynomial}. This polynomial has the following properties: 
+\begin{itemize}
+	\item $P_m(x)$ will have degree $m$
+	\item $P_m(x)$ will only contain powers of the same parity of $m$.
+	\item Note that can change the factor of $a_0$ or $a_1$. As such, we usually normalizes it as $P_m(\pm 1) = (\pm 1)^{m}$. 
+	\item $P_m(x)$ will have exactly $m$ distinct roots between $x=-1$ and $x=+1$ if normalized.
+\end{itemize}
+\begin{remark}
+	Doing this normalization will put force all $P_m(x)$ to lie in the square centered at the origin with width = 2.
+\end{remark}
+With this, we could put $P_m(x)$ in a table. These polynomials have a very nice property, in that: \[
+	P_{m+1}(x) = \frac{(2m+1) P_m(x) -mP_{m-1}(x)}{m+1}
+.\] 
+This allows us to generate the higher order Legendre polynomials, and is how computers calculate them.
+
+For the other equation, we can use Abel's equation, giving us: \[
+	Q_m(x) = P_m(x) \left[ \int \frac{e^{-\int \frac{2x}{1-x^2}dx}}{(P_m(x))^2}dx + A \right] 
+.\] \[
+= P_m(x) \left[ \int \frac{dx}{(1-x^2)P^2_m(x)}+A \right] 
+.\] For $Q_0$, we have:  \[
+1\left[ \int \frac{dx}{(1-x^2)}+A \right] = \frac{1}{2}\ln\left( \frac{1+x}{1-x} \right) +A
+.\] This can be generalized, with: \[
+Q_m(x) = \text{polynomial}\ln\left( \frac{1+x}{1-x} \right) + \text{ polynomial}
+.\] This means that it is not finite at $x=\pm 1$. Thus the general solution is: \[
+y(x) = AP_m(x) +BQ_m(x)
+.\] And if we require that the solution must be finite at $x=\pm 1$, then $B=0$ and $y(x)=AP_m(x)$.
+
+\end{document}
+

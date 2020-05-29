@@ -1,0 +1,58 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March  6th, 2020}
+\subsection{Problem 1}
+Recall that if $x=x_0$ is an ordinary point, we have: \[
+	y(x) = \sum_{m=0}^{\infty} a_n (x-x_0)^{n}
+.\] Consider the equation: \[
+(1-x^2)y''(x) + 4xy'(x) + 14y(x)= 0
+.\] \[
+\implies y'' + \frac{4x}{1-x^2}y' + \frac{14}{1-x^2}y = 0
+.\] We know that an ordinary point is one where this equation doesn't blow up, i.e. any point where $x^2\neq 1$. Let's choose $x_0=0$, meaning that the solution would be in the form: \[
+y = \sum_{nk=0}^{\infty} a_k x^{k}
+.\] Now what's left to do is to solve for $a_k$. Plugging into the original equation, we have: \[
+(1-x^2) \left[\sum_{k=0}^{\infty} k(k-1)a_kx^{k-2}\right]+4x\left[\sum_{k=0}^{\infty} ka_k x^{k-1}\right] + 14 \left[\sum_{k=0}^{\infty} a_k x^{k}\right] = 0
+.\] Now let's collect the terms: \[
+\implies\sum_{k=0}^{\infty} k(k-1)a_kx^{k-2}-\sum_{k=0}^{\infty} k(k-1)a_kx^{k}+4\sum_{k=0}^{\infty} ka_k x^{k} + 14 \sum_{k=0}^{\infty} a_k x^{k}= 0 
+.\]\[ 
+\implies\sum_{k=0}^{\infty} (k+2)(k+1)a_{k+2}x^{k}-\sum_{k=0}^{\infty} k(k-1)a_kx^{k}+4\sum_{k=0}^{\infty} ka_k x^{k} + 14 \sum_{k=0}^{\infty} a_k x^{k}= 0 
+.\]  \[ 
+\implies\sum_{k=0}^{\infty}\left[ (k+2)(k+1)a_{k+2}+\underbrace{\left( -k(k-1)+4k+14 \right)}_{-(k-7)(k+2)}a_{k}   \right] x^{k}=0
+.\]Thus: \[
+a_{k+2} = \frac{k-7}{k+1}a_{k}
+.\] Note that the odd series truncate when $k=7$, the numerator of the right hand side equals, thus meaning $a_9=a_{11}=\ldots=0$, meaning that we only need to consider $a_3$, $a_5$, $a_7$ for the series of the odd terms. We have: \[
+a_{3} = \frac{1-7}{1+1}a_1 = -3a_1
+.\] \[
+a_5 = \frac{3-7}{3+1}a_3 = -a_3 = 3a_1
+.\] \[
+a_7 = \frac{5-7}{5+1}a_5 = -a_1
+.\] Thus the first solution is: \[
+y_1(x) = a_1x + a_3 x^{3}+a_5 x^{5}+a_7x^{7}=a_1\left( x-3x^{3}+3x^{5}-x^{7} \right) 
+.\] With this, we would find $a_1$ from some initial condition, and then we can use Abel's equation to solve for $y_2$.
+\subsection{Problem 2}
+Now consider the equation: \[
+y'' - \alpha xy' + \beta y= 0,\quad \alpha, \beta \in  \R>0
+.\] To apply Taylor's method, we first want to find an ordinary point to expand on. Note that the equation is defined for all $x$, thus we can choose any point to expand on. For simplicity, we should choose $x_0=0$, meaning that we have: \[
+\sum_{k=0}^{\infty} k(k-1)a_k k^{k-2}-\alpha x \sum_{k=0}^{\infty} ka_kx^{k-1}+\beta \sum_{k=0}^{\infty} a_k x^{k}=0
+.\] Now we play with the indicies again to get: \[
+\sum_{k=2}^{\infty} k(k-1)a_kx^{k-2}-\alpha \sum_{k=0}^{\infty} ka_k x^{k} + \beta \sum_{k=0}^{\infty} a_k x^{k}
+=0\] \[
+\implies \sum_{k=0}^{\infty} (k+2)(k+1)a_{k+2}x^{k}-\alpha \sum_{k=0}^{\infty} ka_{k}x^{k} + \beta \sum_{k=0}^{\infty} a_kx^{k}=0
+\]\[\implies\sum_{k=0}^{\infty} \LARGE\left[(k+2)(k+1)a_{k+2}-(\alpha k-\beta)a_k\right]x^{k}=0.\] \[
+\implies a_{k+2}= \frac{\alpha k - \beta}{(k+2)(k+1)}a_{k}
+.\] Note that this is polynomial if $\alpha k = \beta$ for some: \[
+k=\frac{\beta}{\alpha}=\Z^{+}
+.\] For example: \[
+y'' -5xy' +25y = 0,\quad a_{k+2}= \frac{5(k-5)}{(k+2)(k+1)}a_k
+.\] meaning that $a_7 = a_9 = \ldots =0$, giving us: \[
+a_3 = \frac{5(1-5)}{3\cdot 2} a_1 = -\frac{10}{3}a_1
+.\] \[
+a_5 = \frac{5(3-5)}{5\cdot 4}a_3 = -\frac{1}{2}a_3 = \frac{5}{3}a_1
+.\] Thus, we have: \[
+y_1(x) = a_1 x + a_3 x^{3} + a_5 x^{5} = a_1 \left( x - \frac{10}{3}x^{3}+\frac{5}{3}x^{5} \right) 
+.\] And we can use Abel's equation to solve for $y_2$.
+\end{document}
+

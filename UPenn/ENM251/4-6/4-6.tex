@@ -1,0 +1,120 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{April 6th, 2020}
+\subsection{Sturm-Liouville}
+\begin{definition}
+	An ODE of the form: \[
+		\frac{d}{dx}\left( s(x) \phi'(x) \right) +q(x) \phi(x) + \lambda w(x) \phi(x) = 0, \alpha < x < \beta
+	.\] along with the boundary conditions: \[
+	c_1\phi(\alpha) + c_2 \phi'( \alpha)  = 0
+	.\] \[
+	d_1 \phi(\beta) + d_2 \phi'(\beta) = 0
+.\] is called a \vocab{regular Sturm Liouville Problem} (denoted RSLP) if the following conditions hold.
+\begin{enumerate}
+	\item $s(x), s'(x), q(x),w(x)$ are all continuous functions in the open interval $\alpha < x < \beta$
+	\item   $s(x) >0$ and $w(x) > 0$ for all $\alpha < x < \beta$
+	\item  $c_1^2+c_2^2>0$ and $d_1^2+d_2^2>0$, i.e. can't have both $c_1$ and $c_2$ equal zero, same for $d_1, d_2$ 
+	\item The $\lambda$ occurs only in the ODE as indicated by $\lambda w(x) \phi(x)$.
+\end{enumerate}
+\end{definition}
+Recall that any linear 2nd order homogeneous ODE of the form: \[
+	a_2(x) \phi''(x) + a_1(x) \phi'(x) + a_0(x) \phi(x) + \lambda b(x) \phi(x) = 0
+.\] can be placed in the form: \[ \frac{d}{dx}\left( s(x) \phi'(x) \right) +q(x) \phi(x) + \lambda w(x) \phi(x) = 0, \alpha < x < \beta 
+.\] by setting  \[
+s(x) = e^{\int \frac{a_1(x)}{a_2(x)}~dx}
+.\] \[
+q(x) = \frac{a_0(x) s(x)}{a_2(x)}
+.\] \[
+w(x) = \frac{b(x) s(x) }{a_2(x)}
+.\] 
+\begin{example}
+	Consider: \[
+		x\phi''(x) + 2x\phi(x) + \phi(x) +_ \lambda x^2\phi(x) = 0, \quad 0 < x < 1
+	.\] we have: \[
+	s(x) = e^{\int \frac{2x}{x}~dx}= e^{2x}
+	.\] \[
+	q(x) = \frac{1}{x}e^{2x}
+	.\] \[
+	w(x) = \frac{x^2}{x}e^{2x} = xe^{2x}
+	.\] Meaning that the equation can be written in the form of: \[
+	\frac{d}{dx}\left( e^{2x}\phi'(x) \right) +\frac{1}{x}e^{2x}\phi(x) + \lambda xe^{2x}\phi(x) = 0, 0 < x < 1
+	.\] 
+\end{example}
+\begin{remark}
+	The form above is called the \vocab{self-adjoint form}.
+\end{remark}
+\subsection{Properties of Regular Sturm-Liouville Problems}
+\begin{itemize}
+	\item There exist an infinite number of $\lambda$ 's that lead to non-zero solutions $\phi(x)$ to the ODE and boundary conditions. These $\lambda$ 's which can be ordered from smallest to largest are called the \vocab{eigenvalues} of the RSLP. Moreover \[
+	\lim\limits_{n \to \infty} \lambda_n = +\infty
+	.\] 
+This means if you solve a RLSP and found that $\lambda_n = \frac{n}{n+1}$ then there is a problem, since $\lim\limits_{n \to \infty} \frac{n}{n+1}=1\neq +\infty$.
+\item If these $\lambda$ 's are ordered and if the non-zero functions $\phi_n(x)$ satisfy: \[
+		\frac{d}{dx}\left( s(x) \phi_n'(x) \right) + q(x) \phi_n(x) + \lambda_n \omega(x) \phi_n(x) = 0 
+	.\] and it satisfies the boundary conditions, then $\phi_n(x)$ is called the eigenfunction associated with the eigenvalue $\lambda_n$ and $\phi_n(x)$ goes through zero exactly $n-1$ times in the open interval $\alpha<x<\beta$. As such  $\phi_1(x)$ does not go though zero, $\phi_2(x)$ goes through zero once, and so on.
+\item \[
+		\phi_m\cdot \phi_n = \begin{cases}
+			0 , n\neq m \\ >0, n=m
+		\end{cases}
+.\] where \[
+f\cdot g = \int^\beta_\alpha f(x) g(x) w(x) ~dx
+.\] In other words there is a dot product that can be defined on the functions $\phi_n$.
+\item The set of eigenfunctions  \[
+		\{\phi_1(x),\phi_2(x),\ldots\} 
+	.\] is called a complete set of basic functions so that if $f(x) $ is any piecewise continuous function in the interval $\alpha<x<\beta$, then we may expand  $f(x) $ as: \[
+	f(x) = \sum_{n=1}^{\infty} a_n \phi_n(x)
+	.\] with \[
+	a_n = \frac{\phi_n \cdot f}{\phi_n \cdot  \phi_n}
+	.\] moreover, the sum converges to: \[
+	\frac{f(x^{+})+f(x^{-})}{2}
+	.\] Where: \[
+	f(a^{+)}) = \lim\limits_{x \to a^+} f(x) \quad f(a^{-}) = \lim\limits_{x \to a^-} f(x)
+.\] Note that piecewise continuous means that there can only be a finite number of hole or jump discontinuities but not essential discontinuities.
+\end{itemize}
+\begin{remark}
+	This means that the regular Sturm Liouville series will fill in all of the hole discontinuities and where there is a jump discontinuity, it will converge to the midpoint of the jump.
+\end{remark}
+\begin{definition}
+	A function $f(x)$ is called piecewise continuous in a finite interval $\alpha < x <  \beta$ is it has at most a finite number of hole or jumps in $\alpha < x <\beta$.
+\end{definition}
+\begin{example}
+	Consider: \[
+		\phi''(x) + \lambda \phi(x) = 0 , 0 < x < 1
+	.\] \[
+	\phi(0) = 1 \quad \phi(1) = 0
+	.\] Thus we have: \[
+	s(x) =e^{\int \frac{0}{1}dx} = 1
+	.\] \[
+	q(x) = \frac{(0) (1)}{1}=0 
+	.\] \[
+	w(x) = \frac{(1)(1)}{1}=1
+	.\] Note that this is a RSLP. To solve this problem, notice that this is a problem with constant coefficients, giving us: \[
+	\phi(x) = \begin{cases}
+		A \cosh(x\sqrt{-\lambda} ) + B  \sinh (x\sqrt{-\lambda} ), \lambda<0 \\
+		A+Bx , \lambda = 0\\
+		A \cos(x\sqrt{\lambda} ) + B\sin(x\sqrt{\lambda} ), \lambda > 0
+	\end{cases}
+.\] If we  consider $\lambda < 0 $, because of the boundary conditions, we get $A=0$, and $B=0$, meaning that $\lambda<0$ gives us $\phi(x) = 0$, meaning that there are no negative eigenvalues. 
+
+For $\lambda=0$, we have: \[
+	\phi(x) = A = 0 \implies \phi(x) = Bx
+.\] \[
+\phi(1) = B = 0 \implies \phi(x) = 0
+.\] meaning that zero is not an eigenvalue. 
+
+For $\lambda > 0$, we have: \[
+	\phi(0) = A = 0 \implies \phi(x) = B\sin(x\sqrt{\lambda} )
+.\] \[
+\phi(1) = B\sin(x\sqrt{\lambda} ) \implies \sqrt{\lambda} =n\pi \implies \lambda = (n\pi)^2 = \lambda_n
+.\] Note that we will always get a multiplicative constant when we try to calculate $\phi_n$ , thus we can set $B_n= 1$ giving us: \[
+\phi_n(x) = \sin(n\pi x)
+.\] 
+\end{example}
+\begin{remark}
+	Note that for the above example, $\phi_1(x) = \sin(\pi x)$  does not go through zero on the open interval between 0 and 1. Similarly $\phi_2(x) = \sin(2\pi x)$ goes through zero once at $x=\frac{1}{2}$, etc.
+\end{remark}
+\end{document}
+
