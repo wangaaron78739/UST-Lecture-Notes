@@ -1,0 +1,173 @@
+\documentclass[../main/main.tex]{subfiles}
+
+\begin{document}
+
+\section{September  8th, 2020}
+\subsection{Course Logistics}
+\subsubsection{Grading}
+\begin{itemize}
+    \item Assignments: 20\%
+    \item Midterm (Early November): 30\%
+    \item Final: 50\%
+\end{itemize}
+\subsubsection{Content} 
+There will be 4 chapters in this course: 
+\begin{enumerate}
+    \item Point Set Topology
+    \item Functions in Several Variables
+    \item Sequences of Functions
+    \item Lebesgue Integral
+\end{enumerate}
+\subsection{Point Set Topology}
+
+To motivate this chapter, consider the following question:
+
+\begin{quote} 
+    ``Given a function $f: \Z \to  \R$, could it be continuous or differentiable? What about other domains, e.g. $\Q, \R^{n}, \{(x,y) \in  \R^2: x^2+y^2\le 1\} $?''
+\end{quote}
+
+Clearly for different domains, the notion of continuity and/or differentiability are different, thus we want to formulate the geometric properties of these sets, which leads to the idea of \vocab{Point Set Topology}.
+
+\begin{remark}
+    For the purpose of this course, we are only considering point set topology in $ \R^{n}$, not in general.
+\end{remark}
+
+\subsection{Reviews/Definitions}
+\begin{definition}
+   $\R^{n}$ consists of $n$-tuples of real numbers, with the following operations defined: 
+   \begin{itemize}
+       \item Addition:  $(x_1,\ldots,x_{n})+(y_{1},\ldots,y_{n}) = (x_1+y_1,\ldots,x_{n}+y_{n})$
+       \item Scalar Multiplication: $k(x_1,\ldots,x_{n}) = (kx_1,\ldots,kx_{n})$
+   \end{itemize}
+   for all $k,x_1,\ldots,x_{n},y_1,\ldots,y_{n}\in \R$
+\end{definition}
+
+\begin{lemma}
+    $ \R^{n}$ with the operations above form a real vector space.
+\end{lemma}
+
+\begin{definition}
+    An \vocab{inner product} in $ \R^{n}$ is a function $\left<x,y\right>: \R^{n}\times \R^{n} \to  \R$, such that: 
+    \begin{enumerate}
+        \item $\left<\ ,\ \right>$ is bilinear, i.e.  $\left<x+y,z\right> = \left<x,z\right>+\left<y,z\right>$
+        \item $\left<\ ,\ \right>$ is symmetric, i.e.  $\left<x,y\right> = \left<y,x\right>$
+        \item  $\left<x,x\right> \ge 0, \forall x\in \R^{n}$ and $\left<x,x\right> = 0$ iff  $x=0$ 
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+    The \vocab{standard inner product/dot product} is: \[
+       \left<(x_1,\ldots,x_{n}),(y_1,\ldots,y_{n})\right> = x_1y_1+x_2y_2+\ldots+x_{n}y_{n}
+   .\]  
+\end{definition}
+
+\begin{definition}
+   If $x\in \R^{n}$, its norm $ \|x\| = \sqrt{\left<x,x\right>} $ 
+\end{definition}
+\begin{theorem}
+   For every $x,y,z \in  \R^{n}$ , we have: 
+   \begin{enumerate}
+       \item $ \|x-y\| = \|y-x\|$
+       \item $ \|x-y\| \ge 0$  
+       \item $ \|x-y\| = 0$ only when $x=y$ 
+       \item $\|x-z\|\le \|x-y\|+\|y-z\|$ (\vocab{triangular inequality}), proof below
+   \end{enumerate}
+\end{theorem}
+\begin{theorem}{\vocab{Cauchy-Schwarz inequality}}
+   For every $x,y \in  \R^{n}$, we have: \[
+   |\left<x,y\right>| \le \|x\|\|y\|
+   .\]  
+\end{theorem}
+\begin{proof}
+    We have: \[
+    0 \le  \left<x - \frac{\left<x,y\right>}{\|y\|^2}y,x - \frac{\left<x,y\right>}{\|y\|^2}y\right>
+    \]\[
+    \implies x \le  \left<x,x\right> + \left<\frac{\left<x,y\right>}{\|y\|^2}y, \frac{\left<x,y\right>}{\|y\|^2}y\right>- 2 \left<x, \frac{\left<x,y\right>}{\|y\|^2}y\right>
+    \]\[ \implies x \le 
+    \left<x,x\right> + \frac{\left<x,y\right>^2}{\|y\|^{\cancel{4}2}}\cancel{\left<y,y\right>}-2 \frac{\left<x,y\right>}{\|y\|^2}\left<x,y\right>
+    \]\[
+    \implies 0 \le  \|x\|^2 - \frac{\left<x,y\right>^2}{\|y\|^2} \implies \left<x,y\right>^2 \le  \|x\|^2 \|y\|^2 
+    \]
+\end{proof}
+Returning to the proof of the triangle inequality, we have: 
+\begin{proof}
+    \begin{align*} 
+        \|x-z\|^2 = \|x-y+y-z\|^2 &= \left<x-y+y-z, x-y+y-z\right>\\
+                                  &= \left<(x-y)+(y-z),(x-y)+(y-z)\right>\\
+                                  &= \left<x-y,x-y\right>+\left<y-z,y-z\right>+2\left<x-y,y-z\right>\\
+                                  &= \|x-y\|^2 + \|y-z\|^2+2\left<x-y,y-z\right> \\
+                                  &\le \|x-y\|^2 + \|y-z\|^2+2\|x-y\|\|y-z\| = \left( \|x-y\|+\|y-z\| \right) ^2
+    \end{align*}
+Taking square roots on both sides, we have: \[
+\|x-z\| \le  \|x-y\| + \|y-z\|
+.\] 
+    
+\end{proof}
+
+\begin{definition}
+    A function $T: \R^{m}\to  \R^{n}$ is a \vocab{linear transformation} if: \[
+       T(ax+by) = aT(x) + bT(y),\quad  \forall x,y,\in \R^{m}, \quad a,b \in \R
+   .\] 
+\end{definition}
+
+\begin{definition}
+    A \vocab{basis} of $ \R^{n}$ is a linearly independent set whose span is $ \R^{n}$, i.e. every vector in $ \R^{n}$ is a unique linear combination of the vectors in the basis.
+\end{definition}
+
+\begin{definition}
+    Let $T: \R^{m} \to \R^{n}$ be a linear transformation and let $A = (a_1,\ldots,a_m)$ and $B = (b_1,\ldots,b_n)$ be basis of $\R^{m}$ and $ \R^{n}$ Then write \[
+        T(a_1) = t_{11}b_1 + t_{12}b_2 + \ldots + t_{1n}b_n
+    \] \[ 
+        T(a_2) = t_{12}b_1 + t_{13}b_2 + \ldots + t_{2n}b_n
+    \] \[
+    \ldots
+    \] \[ 
+        T(a_m) = t_{m1}b_1 + t_{m2}b_2 + \ldots + t_{mn}b_n
+    \], we call: \[
+    \begin{bmatrix} t_{11} &t_{12}&\ldots &t_{1n}\\
+    & &\ldots & \\
+        t_{m_1} &t_{m_2} &\ldots &t_{mn}
+    \end{bmatrix}^{T} 
+    \] the matrix of $T$ relative to the basis $A$ and $B$.
+\end{definition}
+
+\begin{example}
+   Let vectors in $ \R^{n}$ be presented as column vectors and: \[
+       A = \begin{bmatrix} 1&2&3\\4&5&6 \end{bmatrix}
+   .\] A map $T: \R^{3} \to  \R^2$ is defined by $T(x) = Ax$ for all  $x\in \R^{3}$. The matrix of $T$ relative to the basis:  \[
+   \left\{
+   \begin{bmatrix} 1\\0\\0 \end{bmatrix} ,
+   \begin{bmatrix} 0\\1\\0 \end{bmatrix} ,
+   \begin{bmatrix} 0\\0\\1 \end{bmatrix} 
+   \right\}  \text{ and }
+   \left \{
+       \begin{bmatrix} 1\\0 \end{bmatrix},
+       \begin{bmatrix} 0\\1 \end{bmatrix} 
+   \right\} 
+   \text{ is }
+    \begin{bmatrix} 1&2&3\\4&5&6 \end{bmatrix}
+   \] 
+   The matrix of $T$ relative to the basis:
+   \[
+   \left\{
+   \begin{bmatrix} 1\\0\\0 \end{bmatrix} ,
+   \begin{bmatrix} 0\\0\\1 \end{bmatrix} ,
+   \begin{bmatrix} -1\\2\\-1 \end{bmatrix} 
+   \right\}  \text{ and }
+   \left \{
+       \begin{bmatrix} 1\\4 \end{bmatrix},
+       \begin{bmatrix} 3\\6 \end{bmatrix} 
+   \right\} 
+   \text{ is }
+    \begin{bmatrix} 1&0&0\\0&1&0 \end{bmatrix}
+   \] This is because: \[
+   T\left( \begin{bmatrix} 1\\0\\0 \end{bmatrix}  \right) =\begin{bmatrix} 1\\0 \end{bmatrix} 
+   \]\[ 
+   T\left( \begin{bmatrix} 0\\0\\1 \end{bmatrix}  \right) =\begin{bmatrix} 0\\1 \end{bmatrix} 
+   \] \[
+   T\left( \begin{bmatrix} -1\\2\\1 \end{bmatrix}  \right) =\begin{bmatrix} 0\\0 \end{bmatrix} 
+   .\] 
+
+\end{example}
+\end{document}
+

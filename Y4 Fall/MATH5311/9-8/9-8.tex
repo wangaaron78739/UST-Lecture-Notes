@@ -1,0 +1,89 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{September  8th, 2020}
+\subsection{Introduction}
+\subsubsection{Numerical Differentiation}
+Recall that the derivative is defined as: \[
+    u(x_0) = \lim\limits_{h \to 0}  \frac{u(x_0+h)-u(x_0)}{h}
+.\] 
+Thus we can approximate the difference 
+\begin{definition}{Central Difference} 
+    \[
+        u_{x}(x_i) = \frac{u_{i+1}-u_{i-1}}{2h}
+    .\] 
+\end{definition}
+\begin{theorem}
+   The central difference method is second order accurate. 
+\end{theorem}
+\begin{proof}
+   Using Taylor Expansion, we have: \[
+       u_{i+1} = u_i + u_x h + \frac{1}{2}u_{xx}
+   .\]  
+\end{proof}
+\begin{remark}
+    Note that if the derivative is 
+\end{remark}
+\subsubsection{Numerical Integration}
+Numerical Integration can be approximation by the \vocab{Riemann Sum}
+\[
+    \int^b_a f(x) ~dx \approx \sum_{i=1}^{N} f(x_i) \Delta x_i
+.\] 
+We can also use the \vocab{Trapezoidal Rule}, as: \[
+    \int^{x_{i+1}}_{x_i} \approx \frac{h}{2}\left[f(x_i) + f(x_{i+1})\right]
+.\] 
+\begin{remark}
+    The above equation is approximating the curve in interval $[x_i,x_{i+1}]$ with a straight line
+\end{remark}
+Thus if we add up over all intevals $x_{i}$, we'd get:
+ \[
+     \int^b_a f(x)~dx \approx \sum_{i=0}^{N-1} \frac{h}{2}\left[f(x_{i})+f(x_{i+1})\right]
+ .\] 
+ This is \vocab{second order accurate}.
+ \subsubsection{Simpson's Rule}
+
+ \subsection{Solution of ODE's}
+ Say we have an ODE: \[
+ \begin{cases}
+     \dot{x}=f(x,y)\\
+     x(0) = x_0
+ \end{cases}
+ .\] 
+ One simple approximation is the \vocab{Euler method}: \[
+     \dot{x} \approx = \frac{x^{n+1}-x^{n}}{\Delta t} = f(x^{n},t_n)
+ .\] 
+ with time step $\Delta t$ and:  \[
+     x^{n+1} = x^{n} + \Delta t f(x^{n}, t_n)
+ .\] 
+ This is a first order accurate scheme.
+ \begin{remark}
+    There are some disadvantages to this method, as $\Delta t$ must be chosen carefully to be stable. 
+ \end{remark}
+ The Euler method can be modified to make higher order methods, such as the \vocab{Modified Euler}
+ \[
+ \begin{cases}
+     x^{*} = x^{n} + \Delta t f(x^{n},t_n)\\
+     x^{n+1} = x^{n} + \frac{\Delta t}{2}\left( f(x^{n},t_n) \right) +f(x^{*},t_{n+1})
+ \end{cases}
+ .\] 
+ Essentially, $x^{*}$ is a predictor of the 
+ This is second order accurate.
+ \begin{remark} 
+     There is also a \vocab{Runge-Katta Method}, which is a 4th order method.
+ \end{remark}
+ 
+ 
+ \subsubsection{Solving Linear System}
+We have a linear system: \[
+Ax=b
+.\] 
+We can solve this with a variety of methods, such as 
+\begin{itemize}
+    \item Guassian Eliminations
+    \item LU factorization
+    \item Iterative methods
+\end{itemize}
+\end{document}
+

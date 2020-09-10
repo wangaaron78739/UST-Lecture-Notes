@@ -1,0 +1,121 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{September 10th, 2020}
+\subsection{Outline of the Course}
+\begin{enumerate}
+    \item Parabolic equations, 1D, 2D
+    \item Hyperbolic equation (1D) 
+    \item Elliptical equation (2D)
+    \item Iterative methods for linear systems 
+\end{enumerate}
+\subsection{Parabolic Equations in 1D}
+The model problem is the \vocab{heat equation} that describes heat conduction.
+
+\begin{definition}
+    The \vocab{heat equation} in 1D is: \[
+    u_t = k u_{xx}, \quad t> 0, 0<x<t
+    \] with boundary conditions \[
+    u(0,t) = a, \quad u(1,t) = b
+    \] \[
+    u(x,0) = u_0(x)
+    .\] 
+    For simplicity, let's first consider $k=1$, i.e. $u_t = u_{x x}$, and boundary conditions $u(0,t) = u(1,t) = 0$ the method will be the same.
+\end{definition}
+ This can be interrelated as considering a rod with unit length with some initial temperature distribution, and then observing the temperature over time. 
+
+ \begin{definition}
+     The above heat equation has \vocab{Dirichlet boundary conditions}, meaning that they are fixed at the boundaries, i.e. specifying the temperature. 
+ \end{definition}
+
+ \begin{definition}
+     \vocab{Neumann boundary conditions} would be specifying the derivative at the boundaries, i.e. \[
+         u_x(0) = a, \quad u_x(1) = b
+     .\] Here $a$ and $b$ would be the heat flux at the boundaries.
+ \end{definition}
+
+ \subsubsection{Explicit Scheme}
+
+Like before let's discretized it by considering the uniform grid in space in time, with: \[
+x_j = j \Delta x, \quad t_n = n \Delta t
+,\] for $j=0,1,\ldots,J, \quad n = 0,1,,\ldots$ and $\Delta x = \frac{1}{J}$. Thus we seek to approximate: \[
+U_j^{n} \approx u(x_j, t_n)
+.\] 
+
+The first approximation would be using an explicit method, with: \[
+    \frac{U_j^{n+1}-U_j^n}{\Delta t} \approx u_t(x_j,t_n)
+.\] meaning we use the forward difference for the time derivative. For space derivative, we have: \[
+\frac{U_{j+1}^{n}+U_{j-1}^{n}-2U_{j}^{n}}{(\Delta x)^2} \approx u_{x x } (x_j,t_n)
+.\] which is derived from the central difference.
+\begin{remark}
+   Remembering Taylor expansion, this is because: \[
+       u_{i+1} + u_{i-1} = 2u_i + u_{x x} h^2 + \frac{2}{4!} u^{(4)}h^{4} + \ldots
+   .\]  \[
+   \implies \frac{u_{i+1}-2u_i+u_{i-1}}{h^2} = u_{x x } + O(h^2)
+   .\] 
+\end{remark}
+
+Using this, we can discretize the PDE with: \[
+    \frac{U_j^{n+1}-U_j^{n}}{\Delta t} = \frac{U_{j+1}^{n}-2U_j^{n}+U_{j-1}^{n}}{(\Delta x)^2}
+.\] 
+
+Now that we have a discrete finite difference formula, we can solve it for $U_j^n$: \[
+    U_j^{n+1} = U_j^n + \frac{\Delta t}{(\Delta x)^2} \left( U_{j+1}^{n}-2U_j^n + U^n_{j-1} \right) 
+    .\] Using the notation $\gamma = \frac{\Delta t}{\left( \Delta x\right) ^2}$, we have: \begin{equation}
+    \label{9_10_Ujn}
+U^{n+1}_j = (1-2\gamma)U_j^n + \gamma \left( U_{j+1}^n + U_{j-1} ^n\right) 
+\end{equation} This is an \vocab{explicit scheme}, as each value at time level $t_{n+1}$ can be independently calculated from the values at time $t_n$. As such, we can start with  $n=0$ and calculate for each next value of  $n$ step by step.
+\subsubsection{Error Analysis for Explicit Scheme}
+Since we are using $U_j^n$ to approximate $u(x_j,t_n)$, if we replace $U_j^n$ by the exact solution, the truncation error would be: \begin{equation}
+    \label{9_10_truncation}
+    T^n_j = \frac{u(x_j, t_{n+1})- u(x_j,t_n)}{\Delta t} - \frac{u(x_{j+1},t_n) - 2u(x_j,t_n) + u(x_{j-1},t_n)}{\left( \Delta x \right) ^2}
+    \end{equation} Since this is smooth, we can use the taylor expansion, giving us: \[
+\approx \frac{u_t(x_j,t_n)\Ccancel[red]{\Delta t} + \frac{1}{2}U_{tt}(x_j,t_n)(\Delta t)^{\Ccancel[red]{2}}}{\Ccancel[red]{\Delta t}} - \frac{u_{x x} \Ccancel[red]{\left( \Delta x \right)^2} + \frac{2}{4!}u_{x x x x} (\Delta x)^{\Ccancel[red]{4}2}}{\Ccancel[red]{\left( \Delta x \right)^2}}
+\] \[
+= u_t + \frac{1}{2} u_{ t t}(\Delta t) - u_{x x} - \frac{2}{4!} u_{x x x x} (\Delta x)^2 + \ldots
+\] \[
+= \underbrace{\Ccancel[red]{u_t - u_{x x}}}_{=0} + \frac{1}{2}u_{t t} \Delta t - \frac{2}{4!} u_{x x x x}(\Delta x)^2 + \ldots
+\] \[ 
+= \frac{1}{2}u_{t t} \Delta t - \frac{2}{4!} u_{x x x x}(\Delta x)^2 + \ldots
+.\] 
+Note that: \[
+    T^n \to  0, \quad\text{ as }\Delta t \to  0, \quad (\Delta x) \to  0
+.\] Since the truncation error goes to zero, this scheme is consistent. Note that this scheme is first order accurate in time and second order accurate in space. Although this scheme is consistent, this is only a necessary condition for convergence.
+
+\begin{definition}
+    The scheme is \vocab{convergent} if as $\Delta t \to  0, \quad \Delta x \to  0$,
+
+    $\forall (x^{*},t ^{*})$: $x_j \to  x^*$ and $t_n \to  t^*$ implies $U_j^t \to  u(x^*, t^*)$
+\end{definition}
+
+Let $e_j^n = U_j^n - u(x_j,t_n)$, meaning that convergence is equivelent to $e_j^{n} \to  0 $ as $\Delta t \to  0$ and $\Delta x \to  0$. Rearranging \ref{9_10_Ujn} and \ref{9_10_truncation}.
+We have: \[
+    e_j^{n+1} = e_j^n + \gamma \left( e_{j+1}^n - 2 e_j^n + e_{j-1}^n \right) + T_j^n \Delta t 
+\] \[
+\implies e_j^{n+1} = (1-2\gamma)e_j^n + \gamma e_{j+1}^n + \gamma e_{j-1}^n + T_j^n \Delta t
+\] \[
+\implies |e_j^{n+1}| \le  |1-2\gamma| |e_j^n| + |\gamma| |e_{j+1}^{n}| + |\gamma | | e_{j-1}^n| + |T^n_j| \Delta t 
+\] 
+\[
+    \implies |e_j^{n+1}| \le 
+|1-2\gamma| E^n + |\gamma| E^n + |\gamma | E^n + |T^n_j| \Delta t 
+\] 
+where $ E^n = \max_j \{|e_j^n|\} .$ If $\gamma\le \frac{1}{2}$, we have: \[
+    \max_j \{|e^{n+1}_j\} \le  |1-2\gamma| E^{n} + 2|\gamma| E^{n} + \tilde{T} \Delta t = E^{n} + \tilde{T} \Delta t
+.\] where $\tilde{T} = \max _{j, n} \{|T_j^n|\} $. Now we have:
+\begin{align*}
+    E^{n+1} &\le  E^n + \tilde{T} \Delta t \le  (E^{n-1} + \tilde{T} \Delta t) + \tilde{T} \Delta t   \\
+            &\le  E^{n-1} + 2 \tilde{T} \Delta t \\
+            &\le \ldots\\
+            &\le  \underbrace{\Ccancel[red]{E^0}}_{=0} + n \tilde{T} \Delta t\\
+            &= t_F\tilde{T} 
+\end{align*}
+where $t_f=n \Delta t$ which is a constant.
+Since $\tilde{T} \to  0$ as $\Delta x\to  0$ and $\Delta t \to  0$ because it is consistent, we have that $E^{n}$ goes to zero.  Note that this means that we have the condition that: \[
+    \gamma = \frac{\Delta t}{(\Delta x)^2} \le  \frac{1}{2} \implies 2\Delta t \le (\Delta x)^2
+,\] meaning that our scheme is convergent provided that $\gamma \le  \frac{1}{2}$. Next class we will consider $\gamma > \frac{1}{2}$ and show that it will not converge.
+\end{document}
+
+
