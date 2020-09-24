@@ -1,0 +1,101 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{September 17th, 2020}
+\subsection{Implicit Scheme for $u_t = u_{xx}$}
+Recall that the implicit scheme is: \[
+    \frac{U_j^{n+1}-U^n_j}{\Delta t} = \frac{U^{n+1}_{j+1}-2U^{n+1}_j + U^{n+1}_{j-1}}{(\Delta x)^2}
+.\] Note that when compared to the explicit scheme, the implicit scheme involves 3 unknown values of $U$ on the new level  $n+1$. This is in contrast to the explicit scheme, for which the values of  $U^{n+1}_j$ only depend on $U^{n}$. Thus there are $N-1$ unknowns:  $U^{n+1}_1, U^{n+1}_2,\ldots,U^{n+1}_{N-1}$, and $N-1$ equations:  \[
+    (1+2\gamma) U_j^{n+1} - \gamma U^{n+1}_{j-1} - \gamma U^{n+1}_{j-1} = U^{n}_j
+.\] This can be expressed as a linear system $AU=b$, with  $A$ being tridiagonal. 
+
+
+The simplest way to solve this linear system is Gaussian elimination, which for a tridiagonal matrix is similar to Thomas algorithm which solves the equation:  \[
+-a_j U_{j-1} + b_j U_{j} - c_jU_{j+1} = d_j, \quad j = 1,\ldots,N-1
+.\] While assuming diagonally dominance: \[
+a_j >  0, b_j >  0, c_j > 0, \quad b_j > a_j + c_j
+.\]
+\begin{remark}
+    This diagonal dominance is to ensure there is a solution (not singular).
+\end{remark}
+
+\subsection{Stability Analysis for Implicit Scheme }
+Recall we are considering the equation: \[
+\begin{cases}
+    u_t = u_{x x} \\
+    u(0,t) = u(1,t) = 0 \\
+    u(x,0) = u_0(x)
+\end{cases}
+.\] Assuming we can do separation of variables, we have: \[
+u(x,t) = Z(x) \cdot  T(t)
+.\] Taking the Fourier series of the original equation, we have\[
+u(x,t) = \sum_{k=1}^{\infty} a_k(t) \sin k\pi x
+\] \[
+\implies \sum_{k=1}^{\infty} a_k(t) \sin k\pi x = -\sum_{k=1}^{\infty} a_k(t)(k\pi)^2 \sin k\pi x
+.\] Since $\sin k\pi x$ forms a basis, the coefficients must match, giving us: \[
+a_k'(t) = -(k\pi)^2a_k(t)
+\] \[
+\implies a_k(t) = a_0 e^{-(k\pi)^2t}
+.\] 
+Note that the evolution of $a_k$ is independent of other values of  $k$. Thus in order to study how amplitude evolves with time, we don't need to look at the whole series, only how the amplitude decays with $k$. Thus for an exact solution of $u_t = u_{x x}$, we know that the amplitude decays exponentially fast. 
+
+For the discretized case, we want to see how the numeric scheme propagates the Fourier mode. Thus we let: \[
+    U^n_j = \lambda^n e^{ik(j\Delta x)}
+.\] Plugging into the numerical implicit scheme, we have: \[
+(1+2\nu)\lambda^{n+1}e^{ik(j\Delta x)} - \nu \lambda^{n+1} e^{ik(k+1)\Delta x} - \nu \lambda^{n+1}e^{ik(j-1)\Delta x} = \lambda^{n} e^{ikj\Delta x}
+.\] \[
+\implies \lambda \left[(1+2\nu) -\nu e^{ik\Delta x} - \nu e^{-ik\Delta x}\right] = 1
+.\] \[
+\implies \lambda \left( 1+2\nu -2\nu \cos k\Delta x \right)  = 1
+.\] \[
+\implies \lambda \left( 1+4\nu \sin^2 \frac{k\Delta x}{2} \right)  = 1
+.\] \[
+ \implies \lambda = \frac{1}{1+4\nu \sin^2 \frac{k\Delta x}{2}}<1
+.\] Thus this implicit scheme unconditionally stable, meaning there is no condition on $\nu$. Remember that for the explicit scheme, we needed the condition $\nu \le  \frac{1}{2}$.
+
+\subsection{The $\theta$-Method}
+Recall we have learned two schemes: 
+\begin{itemize}
+    \item Explicit Scheme: \[ 
+        \frac{U^{n+1}_j-U^n_j}{\Delta t} =  \frac{U^{n}_{j+1}-2U^n_j+U^n_{j-1}}{(\Delta x)^2} 
+    .\] 
+\item Implicit Scheme: \[ 
+        \frac{U^{n+1}_j-U^n_j}{\Delta t} = \frac{U^{n+1}_{j+1} - 2U^{n+1}_j + U^{n+1}_{j-1}}{(\Delta x)^2}
+.\] 
+\end{itemize}
+Both schemes have first order error in time $t$ and second order in space. This can be seen the truncation error $T^n_j$ using taylor expansion.
+
+\begin{definition}
+    The \vocab{$\theta$-method} is a weighted average of explicit and implicit scheme. For the heat equation this is: \[
+        \frac{U^{n+1}_j-U^n_j}{\Delta t} = (1-\theta) \frac{U^{n}_{j+1}-2U^n_j+U^n_{j-1}}{(\Delta x)^2} + \theta \frac{U^{n+1}_{j+1} - 2U^{n+1}_j + U^{n+1}_{j-1}}{(\Delta x)^2}, \quad 0 \le  \theta \le  1
+    .\]  
+\end{definition}
+\begin{remark}
+   If $\theta = 0$, we have a explicit scheme, and if $\theta = 1$ we have the implicit scheme, both with 1st order in time and 2nd order in space.
+\end{remark}
+However, if use $\theta = \frac{1}{2}$, we have 2nd order in time and space. This is because there is some cancellation when $\theta = \frac{1}{2}$. For any other values of $\theta$, this will not be true. To calculate the truncation error for the $\theta$ method, we expand terms  at  $(x_j, t_{n+\frac{1}{2}})$: 
+\begin{align*}
+    u(x_j,t_n) &= u(x_j,t_{n+\frac{1}{2}}) - u_t(\frac{1}{2}\Delta t) + \frac{1}{2}u_{tt}\left( -\frac{1}{2}\Delta t \right) ^2 \\ 
+    u(x_j,t_n) &= u(x_j,t_{n+\frac{1}{2}}) - u_t(\frac{1}{2}\Delta t) + \frac{1}{2}u_{tt}\left( -\frac{1}{2}\Delta t \right) ^2 \\ 
+\end{align*}
+%\[ 
+    %u(x_j,t_n) &= u(x_j,t_{n+\frac{1}{2}}) - u_t(\frac{1}{2}\Delta t) + \frac{1}{2}u_{tt}\left( -\frac{1}{2}\Delta t \right) ^2 \\ 
+%.\] 
+
+This gives truncation error: 
+\begin{align*} 
+    T_j^{n+\frac{1}{2}} = \underbrace{\left( u_t - u_{x x} \right)}_{=0} + \left[(\frac{1}{2}-\theta) \Delta t u_{xx t} - \frac{1}{12} \left( \Delta x \right) ^2 u_{x x x x}\right] &+ \frac{1}{4!}\left( \frac{1}{2}-\theta \right) \Delta t u_{x x x x t}(\Delta x)^2 \\
+    &+ O(\Delta t)^2 + O((\Delta x)^2) \\
+\end{align*}
+Note that when $\theta=\frac{1}{2}$, the truncation error is second order in both time and space. This is called the Czzrank-Nicolson scheme.
+Now the natural question is what is the stability of the this $\theta$-method.
+We have: 
+\begin{itemize}
+    \item $0\le \theta \le  \frac{1}{2}$: stable $ \iff \nu < \frac{1}{2}(1-2\theta)^{-1}$
+    \item $\frac{1}{2} \le  \theta \le  1$ : stable for all $\nu$
+\end{itemize}
+Thus the Crank-Nicolson scheme is unconditionally stable.
+\end{document}
+

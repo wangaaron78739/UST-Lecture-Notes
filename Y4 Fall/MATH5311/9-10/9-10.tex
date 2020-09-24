@@ -63,9 +63,9 @@ Using this, we can discretize the PDE with: \[
 
 Now that we have a discrete finite difference formula, we can solve it for $U_j^n$: \[
     U_j^{n+1} = U_j^n + \frac{\Delta t}{(\Delta x)^2} \left( U_{j+1}^{n}-2U_j^n + U^n_{j-1} \right) 
-    .\] Using the notation $\gamma = \frac{\Delta t}{\left( \Delta x\right) ^2}$, we have: \begin{equation}
+    .\] Using the notation $\nu = \frac{\Delta t}{\left( \Delta x\right) ^2}$, we have: \begin{equation}
     \label{9_10_Ujn}
-U^{n+1}_j = (1-2\gamma)U_j^n + \gamma \left( U_{j+1}^n + U_{j-1} ^n\right) 
+U^{n+1}_j = (1-2\nu)U_j^n + \nu \left( U_{j+1}^n + U_{j-1} ^n\right) 
 \end{equation} This is an \vocab{explicit scheme}, as each value at time level $t_{n+1}$ can be independently calculated from the values at time $t_n$. As such, we can start with  $n=0$ and calculate for each next value of  $n$ step by step.
 \subsubsection{Error Analysis for Explicit Scheme}
 Since we are using $U_j^n$ to approximate $u(x_j,t_n)$, if we replace $U_j^n$ by the exact solution, the truncation error would be: \begin{equation}
@@ -92,18 +92,18 @@ Note that: \[
 
 Let $e_j^n = U_j^n - u(x_j,t_n)$, meaning that convergence is equivelent to $e_j^{n} \to  0 $ as $\Delta t \to  0$ and $\Delta x \to  0$. Rearranging \ref{9_10_Ujn} and \ref{9_10_truncation}.
 We have: \[
-    e_j^{n+1} = e_j^n + \gamma \left( e_{j+1}^n - 2 e_j^n + e_{j-1}^n \right) + T_j^n \Delta t 
+    e_j^{n+1} = e_j^n + \nu \left( e_{j+1}^n - 2 e_j^n + e_{j-1}^n \right) + T_j^n \Delta t 
 \] \[
-\implies e_j^{n+1} = (1-2\gamma)e_j^n + \gamma e_{j+1}^n + \gamma e_{j-1}^n + T_j^n \Delta t
+\implies e_j^{n+1} = (1-2\nu)e_j^n + \nu e_{j+1}^n + \nu e_{j-1}^n + T_j^n \Delta t
 \] \[
-\implies |e_j^{n+1}| \le  |1-2\gamma| |e_j^n| + |\gamma| |e_{j+1}^{n}| + |\gamma | | e_{j-1}^n| + |T^n_j| \Delta t 
+\implies |e_j^{n+1}| \le  |1-2\nu| |e_j^n| + |\nu| |e_{j+1}^{n}| + |\nu | | e_{j-1}^n| + |T^n_j| \Delta t 
 \] 
 \[
     \implies |e_j^{n+1}| \le 
-|1-2\gamma| E^n + |\gamma| E^n + |\gamma | E^n + |T^n_j| \Delta t 
+|1-2\nu| E^n + |\nu| E^n + |\nu | E^n + |T^n_j| \Delta t 
 \] 
-where $ E^n = \max_j \{|e_j^n|\} .$ If $\gamma\le \frac{1}{2}$, we have: \[
-    \max_j \{|e^{n+1}_j\} \le  |1-2\gamma| E^{n} + 2|\gamma| E^{n} + \tilde{T} \Delta t = E^{n} + \tilde{T} \Delta t
+where $ E^n = \max_j \{|e_j^n|\} .$ If $\nu\le \frac{1}{2}$, we have: \[
+    \max_j \{|e^{n+1}_j\} \le  |1-2\nu| E^{n} + 2|\nu| E^{n} + \tilde{T} \Delta t = E^{n} + \tilde{T} \Delta t
 .\] where $\tilde{T} = \max _{j, n} \{|T_j^n|\} $. Now we have:
 \begin{align*}
     E^{n+1} &\le  E^n + \tilde{T} \Delta t \le  (E^{n-1} + \tilde{T} \Delta t) + \tilde{T} \Delta t   \\
@@ -112,10 +112,10 @@ where $ E^n = \max_j \{|e_j^n|\} .$ If $\gamma\le \frac{1}{2}$, we have: \[
             &\le  \underbrace{\Ccancel[red]{E^0}}_{=0} + n \tilde{T} \Delta t\\
             &= t_F\tilde{T} 
 \end{align*}
-where $t_f=n \Delta t$ which is a constant.
+where $t_F=n \Delta t$ which is a constant.
 Since $\tilde{T} \to  0$ as $\Delta x\to  0$ and $\Delta t \to  0$ because it is consistent, we have that $E^{n}$ goes to zero.  Note that this means that we have the condition that: \[
-    \gamma = \frac{\Delta t}{(\Delta x)^2} \le  \frac{1}{2} \implies 2\Delta t \le (\Delta x)^2
-,\] meaning that our scheme is convergent provided that $\gamma \le  \frac{1}{2}$. Next class we will consider $\gamma > \frac{1}{2}$ and show that it will not converge.
+    \nu = \frac{\Delta t}{(\Delta x)^2} \le  \frac{1}{2} \implies 2\Delta t \le (\Delta x)^2
+,\] meaning that our scheme is convergent provided that $\nu \le  \frac{1}{2}$. Next class we will consider $\nu > \frac{1}{2}$ and show that it will not converge.
 \end{document}
 
 

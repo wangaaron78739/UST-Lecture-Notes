@@ -1,0 +1,110 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{September 24th, 2020}
+\subsection{Parabolic Equation in Two and Three Dimensions}
+Now let's consider the heat equation in 2 dimensions: \[
+\begin{cases}
+    u_t = \sigma(u_{x x } + u_{yy}) = \sigma \Delta u \\
+    u\rvert_{\partial \Omega} = f_0 & \text{(boundary condition)} \\ 
+    u(x, 0 ) = u_0(x) & \text{ (initial temperature distribution)}
+\end{cases}
+.\] 
+\begin{remark}
+   $\Delta u$ is the Laplacian of  $u$, and is $u_{x x} + u_{y y}$
+\end{remark}
+To solve it numerically, we once again discretize it: \[
+x_i = i \Delta x, \quad y_j = j\Delta y
+\]  for $0\le  i \le  J_x$ and $0\le j\le J_y$, with the step sizes $\Delta x$ and  $\Delta y$ being the size of the corresponding domain divided by the number of grid points  $J_x$ and  $J_y$.  We once again have finite difference:  \[
+    \frac{U_{i,j}^{n+1}-U_{i,j}^n}{\Delta t}\approx u_t(x_i,u_j,t_n)
+.\] \[
+\frac{U_{i+1,j}^n + U_{i-1,j}- 2U_{i,j}^n}{(\Delta x)^2}\approx u_{x x } (x_i,y_j, t_n)
+.\] \[ 
+\frac{U_{i,j+1}^n + U_{i,j-1}- 2U_{i,j}^n}{(\Delta y)^2}\approx u_{y y } (x_i,y_j, t_n)
+.\] Plugging into the heat equation, we have explicit scheme: \[
+    \frac{U_{i,j}^{n+1}-U_{i,j}^n}{\Delta t} = \sigma
+    \left(
+\frac{U_{i+1,j}^n + U_{i-1,j}- 2U_{i,j}^n}{(\Delta x)^2} + 
+\frac{U_{i,j+1}^n + U_{i,j-1}- 2U_{i,j}^n}{(\Delta y)^2}\right)
+.\] \[
+\implies U_{i,j}^{n+1} = \sigma \frac{\Delta t}{(\Delta x)^2} \left( U_{i+1,j}^n + U_{i-1,j}^n - 2U_{i,j}^n \right) +\sigma \frac{\Delta t}{(\Delta y)^2} \left( U_{i,j+1}^n + U_{i,j-1}^n - 2U_{i,j}^n \right)  + U_{i,j}^n 
+.\] 
+Since this is explicit, we expect some condition on \[
+    \nu_x = \frac{\Delta t}{(\Delta x)^2}, \text{ and } \nu_y = \frac{\Delta t}{(\Delta y)^2}
+.\] 
+Note that this is also a consistent scheme.
+
+Now calculating the Truncation error by Taylor expansion, we have: \[
+    T(x,t) = \frac{1}{2}\Delta t u_{x x } - \frac{1}{12}\sigma \left[ (\Delta x)^2 u_{x x x x} + (\Delta y)^2 u_{y y y y}\right] + \ldots
+.\] Note that $T_{ij}^n \to  0$ as $\Delta t \to  0$ and $(\Delta x, \Delta y) \to  (0,0)$. In addition, it is first order in time, and second order in space.
+
+\begin{theorem}
+   The explicit scheme converges under the condition $\nu_x + \nu_y \le  \frac{1}{2}$. 
+\end{theorem}
+\begin{proof}
+   Homework. 
+\end{proof}
+
+\begin{remark}
+   Note that if we let $\Delta x= \Delta y$, the above condition would be:  \[
+       \frac{\Delta t}{(\Delta x) ^2} + \frac{\Delta t}{(\Delta y) ^2} \le  \frac{1}{2} \implies 2 \frac{\Delta t}{(\Delta x)^2} \le  \frac{1}{2} \implies \Delta t \le  \frac{1}{4}(\Delta x)^2
+   .\]   This means that in 2D, the condition for convergence is even more restricted than the 1D case. Because of this, in higher dimensions, we don't want to use explicit schemes.
+\end{remark}
+
+Let's now consider this scheme using Von Neumann stability analysis, for $\sigma = 1$, we have: \[ 
+\implies U_{i,j}^{n+1} = U_{ij}^n + \frac{\Delta t}{(\Delta x)^2} \left( U_{i+1,j}^n + U_{i-1,j}^n - 2U_{i,j}^n \right) +\frac{\Delta t}{(\Delta y)^2} \left( U_{i,j+1}^n + U_{i,j-1}^n - 2U_{i,j}^n \right)  
+.\] 
+We have: \[
+    U_{ij}^n \sim \lambda^n e^{ik_x x_i + jk_jy_j}
+.\] Substituting, we have:
+\begin{align*}
+    \lambda^{n+1} e^{ik_x x_i + jk_y y_j} = \lambda^{n} e^{i(k_x x_i + k_y y_j)} + &\nu_x \lambda^n \left( e^{ik_x x_{i+1}} - e^{ik_x x_i} + e^{ik_x x_{i-1}} \right) e^{ik_y y_j} \\+ &\nu_y \lambda^n \left( e^{ik_y y_{j+1}} -2 e^{ik_y y_{j}} +e^{ik_y y_{j-1}} \right)  e^{ik_x x_i} 
+.\end{align*}
+ \[
+= \lambda^{n}e^{i k_x x_i + jk_y y_j} + \nu_x \lambda^n \left( e^{ik_x\Delta x} - 2 + e^{-ik_x \Delta x} \right) e^{ik_x x_i + ik_y y_j}+ \nu_y \lambda^{n} \left( e^{ik_y \Delta y} - 2 + e^{-ik_y \Delta y} \right)  e^{ik_x x_i + jk_y y_j}
+.\] \[
+\implies \lambda = 1 + \nu_x\left( -4 \sin^2 \frac{k_x \Delta x}{2}\right) + \nu_y \left( -4\sin^2 \frac{k_y \Delta y}{2}\right) 
+.\] Let us consider the case where $\Delta x = \Delta y$, meaning that  $\nu_x = \nu_y$ and  $k_x = k_y$, thus we have:  \[
+\lambda = 1+2\nu_x \left( -4 \sin^2 \frac{k_x \Delta x}{2} \right)  = 1-8 \nu_x \sin^2 \frac{k_x \Delta x}{2} \le  1
+.\] Since we want $|\lambda|\le 1$, we need: \[
+1 - 8 \nu_x \sin^2 \frac{k_x \Delta x}{2}\ge -1 \implies \nu_x \sin^2 \frac{k_x \Delta x}{2} \le  \frac{1}{4}
+.\] If $\Delta x \neq \Delta y$, we can still do it, but just a bit more complicated.
+
+
+\subsection{Implicit Scheme}
+The implicit scheme of the 2D heat equation is of the form: \[ 
+    \implies U_{i,j}^{n+1} = U_{ij}^n + \frac{\Delta t}{(\Delta x)^2} \left( U_{i+1,j}^{n+1} + U_{i-1,j}^{n+1} - 2U_{i,j}^{n+1} \right) +\frac{\Delta t}{(\Delta y)^2} \left( U_{i,j+1}^{n+1} + U_{i,j-1}^{n+1} - 2U_{i,j}^{n+1} \right)  
+.\] To solve this we need to solve a linear system. Since we discretize $i = 1,2,\ldots,J_x-1$ and $j = 1,2,\ldots,J_y-1$, we have a total of $(J_x-1)\times (J_y-1) = M$ equations, with the same number of unknowns. If we write this linear system in a matrix form, we have: \[
+Ax = b
+\] Where \[
+A = \begin{bmatrix} D &L & & \\ L & D &\ddots & \\ &\ddots &\ddots & L \\ & & L & D \end{bmatrix}_{M \times  M}
+\] With \[
+A = \begin{bmatrix} 1+2\nu_x + 2\nu_y &-\nu_x & & \\ -\nu_x &  1+2\nu_x + 2\nu_y &\ddots & \\ &\ddots &\ddots & -\nu_x \\ & & -\nu_x & 1+2\nu_x + 2\nu_y \end{bmatrix} 
+\] and \[
+L = \begin{bmatrix} -\nu_y & & & \\ & \ddots & & \\ & &\ddots &  \\ & & &-\nu_y \end{bmatrix} 
+\] 
+\begin{remark}
+   A is a symmetric-positive definite matrix. 
+\end{remark}
+\begin{remark}
+    The form of matrix $A$, $D$, and  $L$ will depend on how you order  $x$.
+\end{remark}
+
+Rearrange the implicit scheme, we have: \[
+    -\nu_yU_{i,j-1}^{n+1} -\nu_x U_{i-1,j}^{n+1} + (1-2\nu_x -2\nu_y)U_{i,j}^{n+1} - \nu_x U_{i+1,j}^{n+1} - \nu_y U_{i,j+1}^{n+1} = U_{i,j}^{n}
+.\] 
+To order $x$, we will first order them by $y$ and then  $x$, i.e.:
+\[
+x = \begin{bmatrix} U_{11}\\ U_{21} \\ U_{31} \\ \vdots \\ U_{12}\\ U_{22} \\ \vdots \end{bmatrix} 
+.\] 
+Note that $x$ is a vector of lengths $(J_x-1)\times (J_y-1)$, as we only consider the interior points.  
+Similar to the 1D case, the benefit of this implicit scheme is stability.
+
+\begin{remark}
+    If we use gaussian elimination to solve this linear system, the computation cost would be $O((M \times  M)^2)$, which is unfeasible, especially for large $M$. 
+\end{remark}
+
+\end{document}
+

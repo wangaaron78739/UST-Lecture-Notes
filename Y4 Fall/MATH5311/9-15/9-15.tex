@@ -1,0 +1,107 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{September 15th, 2020}
+\subsection{More on the Explicit Method for 1D Heat Equation}
+Last time we showed an explicit method for evaluating $u_t$ and  $u_{xx}$ for the 1D heat equation. It is a explicit scheme because each value at time level $t_{n+1}$ can be independently calculated from values at time level $t_n$. We also showed that the scheme converges for $\nu \le  \frac{1}{2}$, with $\nu = \frac{\Delta t}{(\Delta x)^2}$. 
+
+Let's consider the example with initial conditions: \[
+    u^{0}(x) = \begin{cases}
+        2x, \quad 0 \le  x \le  \frac{1}{2} \\
+        2-2x, \quad \frac{1}{2} \le  x \le  1
+    \end{cases}
+.\] 
+
+\begin{center} 
+\begin{tikzpicture}[
+  declare function={
+      func(\x)= (\x <=  1/2) * (2*\x)   +
+      (\x > 1/2 ) *(2-2*\x) ;
+  }
+]
+\begin{axis}[
+  axis x line=middle, axis y line=left,
+  ymin=0, ymax=1.1, ytick={0,1}, ylabel=$u^0(x)$,
+  xmin=0, xmax=1.1, xtick={0,0.5,1}, xlabel=$x$,
+  domain=0:1,samples=101, % added
+]
+
+\addplot [blue,thick] {func(x)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+Let's assume that the grid size is $\Delta x = 0.05$, i.e. there are 20 grid points in the space dimension. From the condition, we have: \[
+    \Delta t \le  \frac{1}{2} \left( \Delta x \right)^2 = 0.0125
+.\] From this, let's consider the cases: \[
+\Delta t = 0.0012 \implies \nu < \frac{1}{2} \text{ and } \Delta t = 0.0013 \implies \nu > \frac{1}{2}
+.\] Running some MATLAB simulation reveals that $U^n_j$ converges to 0 if $t = 0.0012$, but it does not for $t = 0.0013$. Thus, the condition $\nu \le \frac{1}{2}$ is a stability condition.
+
+\subsection{Fourier Analysis of Error}
+
+Any smooth function can be expanded into a Fourier series: \[
+    f(x,t) = \sum_{n=-\infty}^{+\infty} a_n(t) e^{inx}
+    ,\] for some complex function $a_n(t)$ Where: \[
+e^{inx} = \cos (nx) + i \sin(nx)
+.\]
+Thus we can write our equation as: \[
+    U^n_j = \lambda^n e^{ik(j \Delta x)}, \quad j = 0,2,\ldots,N
+.\] 
+Remember our numerical explicit scheme is: \[
+    U^{n+1}_j = U^n_j + \nu(U^n_{j+1}-2U^n_j+U^n_{j-1}), \quad \nu  = \frac{\Delta t}{(\Delta x)^2}
+.\] \[
+\implies \lambda^{n+1} e^{ik(j \Delta x)} = \lambda^n e^{ik(j\Delta x)} + \nu \lambda^n \left( e^{ik(j+1)\Delta x}-2 e^{ikj\Delta x} +e^{ik(j-1) \Delta x}\right) 
+.\] \[
+\implies \lambda = 1 + \nu\left( e^{ik\Delta x}-2 + e^{-ik\Delta x} \right) \]
+Using the fact that $e^{ik\Delta x} + e^{-ik\Delta x} = 2\cos k\Delta x$, we have: 
+\[\implies \lambda = 1 + \nu \left( 2\cos(k\Delta x) -2 \right) 
+.\] Using the double angle formula: $2(\cos k\Delta x -1) = 2(-2 \sin^2 \frac{k\Delta x}{2})$, we have: \[
+\lambda = 1-4\nu \sin^2 \frac{k\Delta x}{2}
+.\] 
+For the solution to be well behaved, we need $|\lambda| <  1$, since otherwise $|\lambda|^{n}$ will grow to infinity, i.e.: \[
+\left|1-4\nu \sin^2 \frac{k\Delta x}{2}\right| \le  1
+.\] \[
+ \implies 1 - 4 \nu \sin^2 \frac{k\Delta x}{2} \ge -1
+.\] \[
+\nu \sin^2 \frac{k\Delta x}{2} \le  \frac{1}{2}
+.\] which holds if $\nu\le  \frac{1}{2}$.
+
+To reiterate, in order to ensure that the amplitude ($\lambda$) does not grow, we require $\nu \le  \frac{1}{2}$.
+
+THere is a condition called 
+
+The method is stable if there exists a constant  $K$ independent of  $k$ ,s.t.:  \[
+|\lambda^{n}| \le  K \text{ for }n \Delta t \le  t_F
+.\] 
+
+\begin{definition}[\vocab{Von Neumann Stability Condition}] The method is stable if: \[
+|\lambda k| \le  1 + c\Delta t 
+,\] for some constant $c$ and for all  $k$. 
+\end{definition}
+\begin{proof}
+    Note that: \[
+        |\lambda|^{n} \le  (1+c\Delta t)^{n} \le  \left( 1+ \frac{ct_F}{n} \right) ^{n} \le e^{ct_F} = K
+    .\] 
+    Thus it is a necessary and sufficient condition for the convergence of a consistent difference scheme.G
+\end{proof}
+
+Essentially the Von Neumann condition is investigating the condition for converging amplitude of the Fourier series of the numerical scheme. As such, to find the stability, just assume the scheme has the form: \[
+    U^n_j = \lambda^n e^{ik(j\Delta x)}
+.\] 
+
+
+\subsection{Implicit Scheme for $n_t = u_{ x x}$}
+For this we use backward time difference: \[
+    \frac{U^{n+1}-U^n_j}{\Delta t} = \frac{U^{n+1}_{j+1}-2U^{n+1}_j + U^{n+1}_{j-1}}{(\Delta x)^2}, \quad j = 1,2, \ldots,N+1
+.\] This is an implicit scheme since it involves 3 unknown values of $U$ on the new level $n+1$. This gives us $N-1$ equations and $N-1$ unknowns: \[
+(1+2\nu) U^{n+1}_j - \nu U^{n+1}_{j+1} - \nu U^{n+1}_{j-1} = U^n_j, \quad j = 1,2,\ldots, N-1
+.\] This givues a tridagonal matrix: \[
+AU = b
+.\] with : \[
+U = \begin{bmatrix} U_1^{n+1}\\ \vdots\\ U^{n+1}_{N-1} \end{bmatrix}, \quad b = \begin{bmatrix} U^n_1 \\ \vdots \\ U^n_{N-1} \end{bmatrix} , \quad A = \begin{bmatrix} 1+2\nu & - \nu &0 & \\ -\nu & 1+2\nu  & \ddots & \\ 0 &\ddots & \ddots& -\nu \\ & & -\nu & 1+ 2\nu \end{bmatrix} 
+.\] 
+
+\end{document}
+
