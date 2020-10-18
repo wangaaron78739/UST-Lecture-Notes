@@ -47,7 +47,7 @@ Any smooth function can be expanded into a Fourier series: \[
 e^{inx} = \cos (nx) + i \sin(nx)
 .\]
 Thus we can write our equation as: \[
-    U^n_j = \lambda^n e^{ik(j \Delta x)}, \quad j = 0,2,\ldots,N
+    U^n_j = \lambda^n e^{ik(j \Delta x)}, \quad j = 0,1,2,\ldots,N
 .\] 
 Remember our numerical explicit scheme is: \[
     U^{n+1}_j = U^n_j + \nu(U^n_{j+1}-2U^n_j+U^n_{j-1}), \quad \nu  = \frac{\Delta t}{(\Delta x)^2}
@@ -70,8 +70,6 @@ For the solution to be well behaved, we need $|\lambda| <  1$, since otherwise $
 
 To reiterate, in order to ensure that the amplitude ($\lambda$) does not grow, we require $\nu \le  \frac{1}{2}$.
 
-THere is a condition called 
-
 The method is stable if there exists a constant  $K$ independent of  $k$ ,s.t.:  \[
 |\lambda^{n}| \le  K \text{ for }n \Delta t \le  t_F
 .\] 
@@ -92,7 +90,7 @@ Essentially the Von Neumann condition is investigating the condition for converg
 .\] 
 
 
-\subsection{Implicit Scheme for $n_t = u_{ x x}$}
+\subsection{Implicit Scheme for $u_t = u_{ x x}$}
 For this we use backward time difference: \[
     \frac{U^{n+1}-U^n_j}{\Delta t} = \frac{U^{n+1}_{j+1}-2U^{n+1}_j + U^{n+1}_{j-1}}{(\Delta x)^2}, \quad j = 1,2, \ldots,N+1
 .\] This is an implicit scheme since it involves 3 unknown values of $U$ on the new level $n+1$. This gives us $N-1$ equations and $N-1$ unknowns: \[

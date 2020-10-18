@@ -1,0 +1,154 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{October  6th, 2020}
+\subsection{ADI Method}
+The \vocab{ADI Method} or Alternative Directional Implicit Method has two steps
+\begin{itemize}
+    \item 
+Step 1: solve for $u_{ij}^{n+\frac{1}{2}}$ with 
+\[
+    \frac{U_{i,j}^{n+ \frac{1}{2}}- U_{i,j}^n}{\Delta t / 2} = \frac{U_{i+1,j}^{n+\frac{1}{2}}+U_{i-1,j}^{n+\frac{1}{2}}-2U_{i,j}^{n+\frac{1}{2}}}{(\Delta x)^2} +  \frac{U_{i,j+1}^{n+\frac{1}{2}}+U_{i,j-1}^{n+\frac{1}{2}}-2U_{i,j}^{n+\frac{1}{2}}}{(\Delta y)^2} 
+.\] 
+    \item 
+Step 2: solve for $u_{ij}^{n+1}$ with
+\[
+    \frac{U_{i,j}^{n+ 1}- U_{i,j}^{n+\frac{1}{2}}}{\Delta t / 2} = \frac{U_{i+1,j}^{n+\frac{1}{2}}+U_{i-1,j}^{n+\frac{1}{2}}-2U_{i,j}^{n+\frac{1}{2}}}{(\Delta x)^2} +  \frac{U_{i,j+1}^{n}+U_{i,j-1}^{n+1}-2U_{i,j}^{n+1}}{(\Delta y)^2} 
+.\] 
+\end{itemize}
+In both steps, we only need to solve a tridiagonal system. 
+\begin{remark}
+    Note that Step 1 is explicit in $x$, where as Step 2 is implicit in  $y$. As such, instead of having to solve a huge system with 5 diagonals (which is not easy to solve), we only need to solve two tridiagonal systems. 
+\end{remark}
+If we use $\delta_x^2$ and $\delta_y^2$ to denote the finite difference in $x$ and  $y$, i.e.:  \[
+    \delta_x ^2 U = \frac{U_{i+1,j}+U_{i-1,j}-2U_{i,j}}{(\Delta x)^2}
+.\]\[ 
+    \delta_y ^2 U = \frac{U_{i,j+1}+U_{i,j+1}-2U_{i,j}}{(\Delta y)^2}
+.\] and let \[
+\nu_x = \frac{\Delta t}{(\Delta x)^2},\quad \nu_y = \frac{\Delta t}{(\Delta y)^2}
+.\]  we can write the ADI method as: \[
+\begin{cases} 
+U^{n+1} - U^{n} = \frac{1}{2} \nu_x \delta_x^2U^{n+\frac{1}2} + \frac{1}{2} \nu_y \delta_y^2 U^n\\
+U^{n+1} - U^{n+\frac{1}{2}} = \frac{1}{2} \nu_x \delta_x U^{n+\frac{1}{2}} + \frac{1}{2}\nu_y \delta_y^2 U^{n+\frac{1}{2}}
+\end{cases}
+.\] \[
+\implies 
+\begin{cases}
+    (1-\frac{1}2 \nu_x \delta_x^2)U^{n+\frac{1}{2}} = (1+\frac{1}{2}\nu_y \delta_y^2)U^n\\
+    (1-\frac{1}2 \nu_y \delta_y^2)U^{n+\frac{1}{2}} = (1+\frac{1}{2}\nu_x \delta_x^2)U^{n+\frac{1}{2}}
+\end{cases}
+.\] \[
+U^{n+1} = (1-\frac{1}{2}\nu_y \delta_y^2)^{-1}(1+\frac{1}{2}\nu_x\delta_x^2) \underbrace{(1-\frac{1}{2}\nu_x\delta_x^2)^{-1}(1+\frac{1}{2}\nu_y \delta_y^2)}_{U^{n+\frac{1}{2}}}U^n
+.\] 
+which is in a matrix form.
+\begin{remark}
+   The truncation error of the ADI method is second order in both time and space. 
+\end{remark}
+\begin{proof}
+    Homework. 
+\end{proof}
+To verify the stability, we once again use Von Neumann stability analysis with: \[
+    U^n \sim \lambda^n \exp(ik_xx_i + j k_y y_j),\quad x_i = i\Delta x, y_j = j \Delta y
+.\] Solving, we would get: \[
+\lambda = \frac{(1-2\nu_x \sin^2 (\frac{1}{2}k_x \Delta x))(1-2\nu_y \sin^2 (\frac{1}{2}k_y \Delta y))}{(1+2\nu_x sin^2 \frac{1}{2}k_x \Delta x)(1+2\nu_y sin^2 (\frac{1}{2}k_y \Delta y))} = \frac{(1-a)(1-b)}{(1+a)(1+b)}
+.\] where: \[
+a = 2\nu_x \sin^2(\frac{1}{2}k_x \Delta x) \ge  0 \quad b = 2\nu_y \sin^2(\frac{1}{2}k_y \Delta y)\ge  0
+.\] We need to show that $|\lambda| \le  1$, and as such: \[
+|\lambda| = \left| \frac{(1-a)(1-b)}{(1+a)(1+b)} \right| = \left| \frac{1-a}{1+a} \right| \cdot  \left| \frac{1-b}{1+b} \right| 
+.\] \[
+\frac{(1-a)^2}{(1+a)^2} = \frac{1-2a + a^2}{1+2a + a^2} \le  1
+.\] Thus $|\lambda| \le 1$ meaning that the ADI method is unconditionally stable.
+\subsection{Summary of 2D Parabolic (Heat) Equation}
+\begin{itemize}
+    \item The case for 2D heat equation is quite similar to 1D but with higher computational cost.
+    \item We can still achieve second order accuracy both in time and space by using the ADI method, which combines implicit and explicit methods.
+    \item The analysis is quite similar.
+\end{itemize}
+\begin{remark}
+    From the analysis of PDE's the solution to parabolic PDEs are smooth. By smooth, this means that it is infinitely differentiable, which is needed for finite difference to work well since Taylor expansion is the basis of finite difference. If the solution is not smooth, then the solution can not be approximated by the Taylor expansion, thus the finite difference methods do not work. We will see that this is the case for hyperbolic equations.
+\end{remark}
+
+\subsection{Hyperbolic Equations in 1D}
+For the heat equation, if the boundary conditions are fixed at 0, then the whole function will eventually go to zero and reach a steady state. However this is different for hyperbolic equations. Let us consider the simplest hyperbolic equation: \[
+\begin{cases}
+    \frac{\partial u}{\partial t} + a \frac{\partial u}{\partial x} =0 \\
+    u(x,0) = f(x)
+\end{cases}
+.\] This has a solution \[
+u(x,t) = f(x-at)
+.\] 
+\begin{proof}We have:
+    \[
+        u_t = f' \cdot  (-a) \text{ and }u_x = f' \cdot  (1)
+.\] Adding this up, we have: \[
+u_t + a u_x = -af' + af' = 0
+.\] which is the equation.
+\end{proof}
+\begin{remark}
+    This is called the travelling wave solution, since it is the initial condition $f(x)$ shifted by  $at$. The speed is  $a$.
+\end{remark}
+
+\begin{remark}
+    If $a>0$ the wave will shift to the right, but if  $a<0$ it will shift to the left.
+\end{remark}
+Unlike the heat equation which describes the diffusion process, the hyperbolic (transport) equation describes wave propagation.
+
+\subsection{Method of Characteristics}
+To solve the hyperbolic equation, we can use the method of characteristic. The characteristic line of the equation above is: \[
+\frac{dx}{dt} = a \implies x = at + x_0
+.\] Moving along the characteristic line, we have: \[
+\frac{du}{dt}=  \frac{\partial u}{\partial t} + \frac{\partial u}{\partial x} \cdot  \frac{dx}{dt} =  \frac{\partial u}{\partial t} +a \frac{\partial u}{\partial x}  = 0
+.\] This means that $u$ is constant along the characteristic line: \[
+u(x,t) = u_0(x_0) = u_0(x-at) = f(x-at) = f(x_0)
+.\] Generalizing this to multidimensional systems, we have: \[
+\begin{cases}
+    \frac{\partial u}{\partial t} + \frac{\partial }{\partial x} (f(u,v)) = 0 \\
+    \frac{\partial v}{\partial t} + \frac{\partial }{\partial x} (g(u,v)) = 0
+\end{cases}
+.\] 
+Which in vector form is: \[
+    \begin{bmatrix} u\\v \end{bmatrix} _t = \begin{bmatrix} f \\ g \end{bmatrix} _x 
+.\] 
+We can also write this as: \[
+\begin{cases}
+   \frac{\partial }{\partial x} (f(u,v)) = \frac{\partial f}{\partial u}  u_x + \frac{\partial f}{\partial v} v_x\\
+ \frac{\partial }{\partial x} (g(u,v)) = \frac{\partial g}{\partial u} u_x \frac{\partial g}{\partial v} v_x
+\end{cases}
+\implies \begin{bmatrix} \frac{\partial f}{\partial u} &\frac{\partial f}{\partial v} \\ \frac{\partial g}{\partial u} &\frac{\partial g}{\partial v}  \end{bmatrix} \begin{bmatrix} u\\v \end{bmatrix} 
+.\] 
+As such, we have: \[
+    \begin{bmatrix} u\\v \end{bmatrix} _t + A \begin{bmatrix} u \\ v \end{bmatrix} _x \quad A = \begin{bmatrix} \frac{\partial f}{\partial u} &\frac{\partial f}{\partial v} \\ \frac{\partial g}{\partial u} &\frac{\partial g}{\partial v}  \end{bmatrix}
+.\] 
+This is hyperbolic if $A$  has real eigenvalues and a full set of eigenfunctions, which means that $A$ is diagonalizable: \[
+A = S^{-1} \Lambda S
+.\] Where $\Lambda$ is a diagonal matrix and  $S$ is invertible. 
+
+\begin{remark} 
+If  $A$ is a symmetric matrix, it will satisfy this property.
+\end{remark}
+Plugging this into the original  equation, we have: \[
+S u_t + \Lambda S u_x = 0
+.\] 
+With this, we can define a \vocab{Riemann invariant}: \[
+    r = r(u) = \begin{bmatrix} r_1 \\ r_2 \end{bmatrix} 
+.\] such that : \[
+\begin{cases}
+    r_t = Su_t \\
+    r_x = S u_x
+\end{cases} \implies r_t + \Lambda r_x = 0
+.\] Which would allow us to decouple the equation into two transport equations: \[
+\begin{cases} 
+r_{1t} + \lambda_1  r_{1 x} = 0 \\
+r_{2t} + \lambda_2  r_{2 x} = 0
+\end{cases}
+.\] 
+Which leads to two characteristic lines: \[
+\frac{dx}{dt} = \lambda_1 \text{ and } \frac{dx}{dt} = \lambda_2
+.\] 
+
+
+
+\end{document}
+

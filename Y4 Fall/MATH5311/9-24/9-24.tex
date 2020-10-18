@@ -57,13 +57,13 @@ Let's now consider this scheme using Von Neumann stability analysis, for $\sigma
 \implies U_{i,j}^{n+1} = U_{ij}^n + \frac{\Delta t}{(\Delta x)^2} \left( U_{i+1,j}^n + U_{i-1,j}^n - 2U_{i,j}^n \right) +\frac{\Delta t}{(\Delta y)^2} \left( U_{i,j+1}^n + U_{i,j-1}^n - 2U_{i,j}^n \right)  
 .\] 
 We have: \[
-    U_{ij}^n \sim \lambda^n e^{ik_x x_i + jk_jy_j}
+    U_{ij}^n \sim \lambda^n e^{i(k_x x_i + k_yy_j)}
 .\] Substituting, we have:
 \begin{align*}
-    \lambda^{n+1} e^{ik_x x_i + jk_y y_j} = \lambda^{n} e^{i(k_x x_i + k_y y_j)} + &\nu_x \lambda^n \left( e^{ik_x x_{i+1}} - e^{ik_x x_i} + e^{ik_x x_{i-1}} \right) e^{ik_y y_j} \\+ &\nu_y \lambda^n \left( e^{ik_y y_{j+1}} -2 e^{ik_y y_{j}} +e^{ik_y y_{j-1}} \right)  e^{ik_x x_i} 
+    \lambda^{n+1} e^{i(k_x x_i + k_y y_j)} = \lambda^{n} e^{i(k_x x_i + k_y y_j)} + &\nu_x \lambda^n \left( e^{ik_x x_{i+1}} -2 e^{ik_x x_i} + e^{ik_x x_{i-1}} \right) e^{ik_y y_j} \\+ &\nu_y \lambda^n \left( e^{ik_y y_{j+1}} -2 e^{ik_y y_{j}} +e^{ik_y y_{j-1}} \right)  e^{ik_x x_i} 
 .\end{align*}
  \[
-= \lambda^{n}e^{i k_x x_i + jk_y y_j} + \nu_x \lambda^n \left( e^{ik_x\Delta x} - 2 + e^{-ik_x \Delta x} \right) e^{ik_x x_i + ik_y y_j}+ \nu_y \lambda^{n} \left( e^{ik_y \Delta y} - 2 + e^{-ik_y \Delta y} \right)  e^{ik_x x_i + jk_y y_j}
+= \lambda^{n}e^{i (k_x x_i + k_y y_j)} + \nu_x \lambda^n \left( e^{ik_x\Delta x} - 2 + e^{-ik_x \Delta x} \right) e^{i(k_x x_i + k_y y_j)}+ \nu_y \lambda^{n} \left( e^{ik_y \Delta y} - 2 + e^{-ik_y \Delta y} \right)  e^{i(k_x x_i + k_y y_j)}
 .\] \[
 \implies \lambda = 1 + \nu_x\left( -4 \sin^2 \frac{k_x \Delta x}{2}\right) + \nu_y \left( -4\sin^2 \frac{k_y \Delta y}{2}\right) 
 .\] Let us consider the case where $\Delta x = \Delta y$, meaning that  $\nu_x = \nu_y$ and  $k_x = k_y$, thus we have:  \[
