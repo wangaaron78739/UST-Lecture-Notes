@@ -1,0 +1,108 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{October 22th, 2020}
+\subsection{Finite Element Method Cont.}
+Recall that the finite element method transform the PDE into a equivalent weak formulation: \[
+    \int_{\Omega} \nabla v_0 \nabla u + \int_\Omega fu = 0 \quad \text{ for all $u \in H^1_0(\Omega)$}
+.\] 
+With this, we can discretize the function space $H^1_0(\Omega)$ by expressing it in terms of its basis and truncating it to only $N$ basis functions. If we find a solution $ v_0\in S_N$ which satisfies this weak formulation, we would have: 
+\[
+\sum_{i}\int_\Omega v_i\nabla \phi_i \nabla \phi_j + \int_\Omega f \phi_j = 0
+.\] Giving us a linear system $A\vec{v} = \vec{b}$ where: \[
+A = (a_{ij}), \quad a_{ij} = \int_{\Omega} \nabla \phi_i\nabla \phi_j
+.\] \[
+\vec{b} = (b_j), \quad b_j = \int_{\Omega} f \phi_j
+.\] \[
+\vec{v} = \begin{bmatrix} v_1\\\vdots\\v_N \end{bmatrix} 
+.\]
+\begin{remark}
+    The resulting linear system of equations depends on the choice of the basis functions and the subspace $S_N$. 
+\end{remark}
+\begin{remark}
+    Note that the solution is not a discretized solution since we are solving for the coefficients of the basis set. Also, note that this is an approximate solution because we did truncation on the number of basis functions.
+\end{remark}
+With this, we would like to investigate the convergence of this method and the construction of basis functions. \\
+
+Let us consider the 1D elliptical PDE: \[
+\begin{cases}
+    -u'' = f & 0 \le  x \le  1 \\
+    u(0) = u(1) = 0
+\end{cases}
+.\] 
+This has the corresponding weak formulation: \[
+    \text{Find }u \in  H^1_0(\Omega) \text{ such that } \int^1_0 u' v'~dx = \int^1_0 f v ~dx, \quad \forall  v \in  H^1_0(\Omega)
+.\] 
+We have: \[
+    H^1_0(\Omega) = \{v| v,v' \in L^2, v(0) = v(1) = 0\} 
+.\] 
+Now we would like to find a $N$ dimensional subspace of this function space. To do this, let us consider $S_N$ to be the set of continuous piecewise linear functions that vanishes at $x = 0,1$.
+\begin{remark}
+    Piecewise linear means that the function is linear within the subinterval $[x_i,x_{i+1}]$.
+\end{remark} 
+   Let us define a "hat" function at each grid point $x_j$: \[
+       \phi_j(x) = \begin{cases}
+           0 & x < x_{j-1} \lor x > x_{j+1} \\
+           \frac{x-x_{j-1}}{x_j-x_{j-1}} & x \in  [x_{j-1}, x_j] \\
+           \frac{x_{j+1}-x}{x_j-x_{j+1}} & x \in  [x_{j}, x_{j+1}]
+       \end{cases}
+   .\] \begin{claim}
+       $\{\phi_1,\phi_2,\ldots,\phi_N\} $ forms a basis of $S_N$.  
+   \end{claim}
+   \begin{proof}
+      To show that this is a basis, we need to show that they are linearly independent and that they are complete. 
+      \begin{enumerate}
+          \item[Independence:] Suppose $ c_1\phi_1 + c_2\phi_2 + \ldots + c_N \phi_N = 0$. Consider at point $x_j$: \[
+                  c_1\phi_1 + c_2\phi_2 + \ldots + c_N \phi_N = c_j \phi_j(x_j) = 0 \implies c_j = 0
+          .\]  this is true for all $j=1,2,\ldots,N$, meaning that $\{\phi_j\} $ is linearly independent.
+      \item[Complete:] Let $v\in  S_N$. Take $c_j = v(x_j)$: \[
+              \sum c_j \phi_j = \sum v(x_j) \phi_j(x) = v(x)
+          .\] Since they are equal at all $x_i$ and linear in  $[x_i,x_{i+1}]$, they are equal everywhere.
+      \end{enumerate}
+   \end{proof}
+   With these hat functions, we can write down the linear system: \[
+       A \vec{u} = \vec{b}
+   .\] where \[
+       a_{ij} = \int^1_0 \phi_i' \phi_j'~dx ,\quad \vec{u} = \begin{bmatrix} u_1 \\ u_2 \\ \vdots \\ u_N \end{bmatrix} , \quad \vec{b} = \begin{bmatrix} b_1\\ b_2 \\ \vdots \\ b_N \end{bmatrix} , \quad b_j = \int^1_0 f \phi_j~dx
+   .\] Let us assume that we have a uniform grid $\{x_i\} $, where $x_i = i \cdot  h$ and $h = \frac{1}{N}$. With this, we have: \[
+   \phi_i(x) = \begin{cases}
+       0 & x \le  x_{i-1} \\
+       \frac{x-x_{x-1}}{h} & x_{i-1} \le  x \le  x_i \\
+       -\frac{x-x_{x+1}}{h} & x_i \le  x \le  x_{i+1} \\
+       0 & x \ge  x_{i+1}
+   \end{cases} \implies \phi_i'(x) = \begin{cases}
+       0 & x \le  x_{i-1} \\
+      \frac{1}{h}& x_{i-1} \le  x \le  x_i \\
+       -\frac{1}{h}& x_i \le  x \le  x_{i+1} \\
+       0 & x \ge  x_{i+1}
+   \end{cases}
+   .\] Thus, we have: \[
+   a_{ij} = \int^1_0 \phi_i' \phi_j'~dx
+   .\] Note that this is non-zero only when there is overlap between $\phi_i$ and  $\phi_j$. This only happens between  $\phi_i$ and  $\phi_i+1$, giving us:  \[
+   a_{i,i+1} = \int^1_0 \phi_1' \phi_{i+1}'~dx = \int_{x_i}^{x_{j+1}}\phi_i'\phi_{i+1}' ~dx = \int_{x_i}^{x_{i+1}}\left( -\frac{1}{h} \right)\left( \frac{1}{h} \right)dx =  -\frac{1}{h^2}\cdot h = -\frac{1}{h}
+   \]\[ 
+   a_{i,i-1} = \int^1_0 \phi_1' \phi_{i-1}'~dx = \int_{x_{i-1}}^{x_{j}}\phi_i'\phi_{i-1}' ~dx = \int_{x_{i-1}}^{x_{i}}\left( \frac{1}{h} \right)\left( -\frac{1}{h} \right)dx =  -\frac{1}{h^2}\cdot h = -\frac{1}{h}
+   .\] 
+\[ 
+    a_{i,i} = \int^1_0 \phi_1' \phi_{i}'~dx = \int_{x_{i-1}}^{x_{j+1}}\phi_i'\phi_{i}' ~dx = \int_{x_{i-1}}^{x_{i+1}}\left( \frac{1}{h} \right)\left( \frac{1}{h} \right)dx =  \frac{1}{h^2}\cdot 2h = \frac{2}{h}
+.\] 
+   Thus, we have: \[
+A = \frac{1}{h} \begin{bmatrix} 2 &-1 & & \\ -1 & 2 &\ddots & \\ &\ddots &\ddots & -1 \\ & & -1 & 2 \end{bmatrix}
+   .\] For $\vec{b}$, we have $f_i \sim f(x_i)$:  \[
+   b_i = \int^1_0 f \phi_i ~dx = \int_{x_{i-1}}^{x_{i+1}}f_i \phi_i ~dx = f_i \int_{x_{i-1}}^{x_{i+1}} \phi_i ~dx = f_i \frac{1}{2}(2h) = f_i h
+   .\] Thus, we have: \[
+-\frac{1}{h^2}\begin{bmatrix} -2 &1 & & \\ 1 & -2 &\ddots & \\ &\ddots &\ddots & 1 \\ & & 1 & -2 \end{bmatrix} \begin{bmatrix} u_0 \\ u_1 \\ \vdots \\ u_N \end{bmatrix}  = \begin{bmatrix} f_0 \\ f_1 \\ \vdots \\ f_N \end{bmatrix} 
+   .\] 
+   \begin{remark}
+       This is very similar to the finite different scheme we saw before because we assume a uniform grid and use the hat functions for the basis functions. Since this is the same as the finite different method, it converges and is second order in both time and space.
+   \end{remark}
+
+   \begin{remark}
+       The order of accuracy depends on $S_N$, as if we instead used a quadratic piecewise function, we would have a different order error term.
+   \end{remark}
+   Note that our finite element solution is not differentiable in the classical sense because there are corners. This leads to the idea of a weak derivative which will be introduced in the next class.
+
+\end{document}
+

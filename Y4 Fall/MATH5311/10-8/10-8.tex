@@ -39,7 +39,7 @@ Thus, we have: \[
 .\] \[ 
     \frac{U_{j+1}^{n}-U^n_j}{\Delta x}\approx u_x + \frac{1}{2}u_{ x x} (\Delta x) + \ldots
 .\] Since $u_{t t} = -a u_{tx}$, we have: \[
-u_t = -au_x \quad \quad u_{t t }= a^2 u_{ x x} \quad \quad u_{ t t t} = a^3 u_{x x x} 
+u_t = -au_x \quad \quad u_{t t }= a^2 u_{ x x} \quad \quad u_{ t t t} =- a^3 u_{x x x} 
 .\] 
 Thus: \[
     \frac{U^{n+1}- U^n_j}{\Delta t} + a \frac{U_{j+1}^n - U^n_j}{\Delta x} \approx u_t + a u_x + \frac{1}{2}\left( \Delta t a^2 + \Delta x a \right) u_{x x} = 0
@@ -47,7 +47,7 @@ Thus: \[
 In other words, we are approximating: \[
 u_t + a u_x = \epsilon u_{x x} 
 .\] for some \[
-\epsilon = - \frac{a \Delta x}{2}\left( a \frac{\Delta t}{\Delta x}+1 \right) >1
+\epsilon = - \frac{a \Delta x}{2}\left( a \frac{\Delta t}{\Delta x}+1 \right) >0
 .\] 
 \begin{remark} 
     Note that this is similar to a parabolic equation with $u_t = \epsilon u_{ x x}$. In other words, the effect of the leading order error is diffusion or damping, which is why the upwind has a diffusion behavior. Even though $\epsilon$ can be very small, it is non-zero, thus the diffusion effect is always there.
@@ -58,7 +58,7 @@ u(x,t) = e^{i(kx-\omega t)}
 \begin{align*} 
     u_t &= -i\omega e^{i(kx-\omega t)}\\
     u_x &= ik e^{i(kx-\omega t)} \\
-    u_{x x} &= (ik)^2 e^{i(kx-\omega t)} \\
+    u_{x x} &= (ik)^2 e^{i(kx-\omega t)}
 .\end{align*}
 Plugging this into the equation, we have: \[
     e^{i(kx-\omega t)}\left[ -i\omega + aik \right] = e^{i(kx - \omega t)}[-\epsilon k^2]

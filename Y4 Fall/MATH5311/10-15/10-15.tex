@@ -1,0 +1,117 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{October 15th, 2020}
+\subsection{Box Scheme}
+From last time, we looked at the modified equations for the upwind scheme and the Lax-Wendroff schemes and saw that they showed different properties because of the leading order error term. For upwind, this was $u_{x x}$, giving it a dispersive effect, while for Lax-Wendroff this was $u_{x x x}$, giving us an oscillatory effect.
+
+Let us now consider the \vocab{Box Scheme}: \[
+    \frac{1}{2}\left( \frac{U_j^{n+1}-U_j^{n}}{\Delta t} + \frac{U_{j+1}^{n+1} - U_{j+1}^{n}}{\Delta t} \right)  + \frac{a}{2} \left( \frac{U_{j+1}^{n}-U_j^n}{\Delta x} + \frac{U_{j+1}^{n+1}- U_j^{n+1}}{\Delta x} \right)  = 0
+.\] 
+\begin{remark}
+    This is essentially taking the average of the time and space derivatives.
+\end{remark}
+If we let $\nu = \frac{\Delta t }{\Delta x}$, we have: \[
+    (1-a\nu) U_j^{n+1} + (1+a\nu) U_{j+1}^{n+1} = (1+a\nu)U_{j}^{n} + (1-a\beta)U_{j+1}^{n}
+.\] Assume for $j=0$,  $U_j^{n+1}$ is given for the boundary condition. If this is the case, then we have: \[
+(1+a\nu) U_{j+1}^{n+1} = -(1-a\nu)U_j^{n+1} + (1+a\nu)U_{j}^{n} + (1-a\beta)U_{j+1}^{n} 
+.\] allowing us to solve for $U_{j+1}^{n+1}$ recursively. If the boundary condition is given on the right boundary, i.e. $U_N^{n+1}$ is given, then we can solve recursively from the right, as: \[ 
+ (1-a\nu)U_j^{n+1} =-(1+a\nu) U_{j+1}^{n+1} + (1+a\nu)U_{j}^{n} + (1-a\beta)U_{j+1}^{n} 
+.\] 
+\begin{remark}
+Note that for a transport equation to be solved, we need to specify the left boundary condition $a>0$ or the right boundary condition if  $a < 0.$ 
+\end{remark}
+For the stability, let us consider: \[
+    U_j^n \sim \lambda^{n} e^{ikj\Delta x}
+.\] Plugging this into the equation, we have: \[
+(1-a\nu) \lambda^{n+1} e^{ikj\Delta x} = -(1+a\nu) \lambda^{n+1} e^{ik(j+1)\Delta x} + (1+a\nu) \lambda^{n} e^{ikj\Delta x} + (1-a\nu) \lambda^{n} e^{ik(j+1)\Delta x}
+\] \[
+\implies (1-a\nu)\lambda -(1+a\nu)\lambda e^{ik\Delta x} + (1+a\nu) + (1-a\nu) e^{ik\Delta x}
+\]\[
+\implies \lambda = \frac{(1+a\nu) + (1-a\nu) e^{ik\Delta x}}{(1+a\nu)e^{ik\Delta x} + (1-a\nu)}
+.\] If we let $ a_1 = 1+a\nu$ and $ a_2 = 1-a\nu$, we have: \[
+\lambda = \frac{a_1 + a_2 e^{ik\Delta x}}{a_1 e^{ik\Delta x} + a_2}
+.\]\[
+\implies |\lambda| = |\frac{a_1+a_2\cos x + i a_2 \sin x }{a_1 \cos x + ia\sin x + a_2} = \frac{(a_1+a_2\cos x)^2+a_2^2\sin^2 x}{(a_1\cos x + a_2)^2 + a_1^2\sin^2 x} 
+.\] \[
+= \frac{a_1^2+2a_1a_2\cos x + a_2^2}{a_1^2 + 2a_1a_2\cos x + a_2^2} = 1
+.\]  and thus the box scheme is unconditionally stable.
+\begin{remark}
+    The box scheme is also second order in time and space.
+\end{remark}
+\begin{remark}
+    The box scheme has a phase advance error if $|a\nu|\le 1$ and a phase lag error if $|a\nu| > 1$.
+\end{remark}
+\subsection{Leap Frog Scheme}
+The leap-frog scheme takes the central difference in both time and space. The equation we want to solve is: \[
+    u_t + f(a)_x = 0
+.\] or \[
+u_t + au_x = 0
+.\] 
+\[
+    \frac{U_j^{n+1}-U_j^{n-1}}{2\Delta t} + \frac{f(U_{j+1}^{n})-f(U_{j-1}^{n})}{2\Delta x} = 0
+.\] 
+This has a CFL condition of $|\nu| < 1$ where  $\nu = a \frac{ \Delta t}{\Delta x}$.
+\begin{remark}
+    The leap frog scheme is second order in time and space, as it is using the central difference.
+\end{remark}
+For the stability, we have: \[
+    \frac{1}{2\Delta t}(\lambda^{n+1}-\lambda^{n-1})e^{ikj\Delta x} + a \frac{1}{\Delta x}(e^{ik\Delta x}-e^{-ik\Delta x})\lambda^{n}e^{ikj\Delta x} = 0
+\] \[
+\implies \left( \lambda - \frac{1}{\lambda} \right)  + a \frac{\Delta t}{\Delta x}(2i\sin k \Delta x) = 0
+\] \[
+\implies \lambda^2 + (2\nu i \sin k \Delta x) \lambda - 1 = 0
+\] \[
+\implies \lambda = \frac{-2\nu i \sin k \Delta x \pm \sqrt{-4\nu^2\sin^2k\Delta x + 4} }{2} = -\nu i \sin k \Delta x  \pm \sqrt{1-\nu^2\sin^2 k\Delta x} \] \[
+\implies |\lambda| = \nu^2 \sin^2k\Delta x + 1-\nu^2 \sin^2 k \Delta x = 1
+.\] Thus the leap frog is stable if $|\nu| \le  1$.
+\subsection{Leap-Frog Scheme for Wave Equation}
+Now let's consider the leap frog scheme for:
+\[
+u_{t t } - a^2 u_{x x} = 0
+.\] 
+\begin{remark}
+    This second order equation can be converted into a system of first order equation. Let $u_t = -av_x$. We have: \[
+    u_{ t t} = -a v_{t x} = a^2u_{x x }
+    .\] Thus we can rewrite it as \[
+    \begin{cases}
+        u_t + a v_x = 0 \\
+        v_t + a u_x = 0
+    \end{cases}
+    .\] 
+\end{remark}
+To solve this, let $U_j^n$ be defined on the grid points and $V_{j+\frac{1}{2}}^{n+\frac{1}{2}}$ be defined on the center of the grid squares. With this, we can apply the leap frog scheme: \[
+\frac{U_j^{n+1}-U_j^n}{\Delta t} + a \frac{V^{n+\frac{1}{2}}_{j+\frac{1}{2}}-V_{j-\frac{1}{2}}^{n+\frac{1}{2}}}{\Delta x} = 0
+.\]\[ 
+\frac{V^{n+\frac{3}{2}}_{j+\frac{1}{2}}-V_{j+\frac{1}{2}}^{n+\frac{1}{2}}}{\Delta t} + a\frac{U_{j+1}^{n+1}-U_j^{n+1}}{\Delta x} = 0
+.\]  
+\begin{remark}
+    This also has second order time and space accuracy, since it is using central difference.
+\end{remark}
+For the stability, let us construct a Fourier solution: \[
+    (U^{n},V^{n+\frac{1}{2}}) = \lambda ^{n }e^{ik \Delta x}(\hat{u},\hat{v})
+.\] where $\hat{u}$, $\hat{v}$ are constants. This gives us: \[
+\frac{\hat{u} (\lambda^{n+1}e^{ikj\Delta x} - \lambda^{n}e^{ikj\Delta x})}{\Delta t} + a \frac{\hat{v}(\lambda^{n}e^{ik(j+\frac{1}{2})\Delta x}- \lambda^{n}e^{ik(j-\frac{1}{2})\Delta x})}{\Delta x} = 0
+.\] \[ 
+\frac{\hat{v} (\lambda^{n+1}e^{ik(j+\frac{1}{2})\Delta x} - \lambda^{n}e^{ik(j+\frac{1}{2})\Delta x})}{\Delta t} + a \frac{\hat{u}(\lambda^{n+1}e^{ik(j+1)\Delta x}- \lambda^{n+1}e^{ikj\Delta x})}{\Delta x} = 0
+.\] \[
+\implies  
+\begin{cases} 
+\hat{u}(\lambda-1) + \nu \hat{v}(2i\sin k \frac{\Delta x}{2}) = 0 \\
+\hat{v}(\lambda-1)e^{ik \frac{\Delta x}{2}} + \nu \hat{u} \lambda (e^{ik\Delta x}-1) = 0
+\end{cases}
+.\] \[
+\implies \begin{bmatrix} \lambda - 1 & 2i\sin \frac{k\Delta x}{2} \\ 
+2i\lambda \nu \sin \frac{k\Delta x}{2} & \lambda - 1\end{bmatrix}  \begin{bmatrix} \hat{u} \\ \hat{v} \end{bmatrix}  = 0
+.\] for nontrivial solutions, this requires \[
+(\lambda-1)^2 + \lambda 4 \nu^2 \sin ^2 \frac{k\Delta x }{2} = 0
+.\] \[
+\implies \lambda ^2 - 2(1-2\nu \sin^2 \frac{k\Delta x}{2}) \lambda + 1 = 0
+.\] solving this would give us $|\lambda| = 1$ which is stable.
+\begin{remark}
+    We can also do direct discretization of the scheme which is second order in time and space and is stable.
+\end{remark}
+\end{document}
+

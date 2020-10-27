@@ -1,0 +1,107 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{October 20th, 2020}
+\subsection{Elliptic Equation}
+Let us consider a simple elliptic equation: \[
+\begin{cases}
+    -u'' = f \\
+    u(0) = u(1) = 0
+\end{cases}
+.\] This can be approximated by central difference \[
+- \frac{U_{j+1}-2U_{j} + U_{j-1}}{h^2} = f_j
+.\] where $h$ is the step size this can be expressed in the form of a tridiagonal linear system. In 2D, we have a similar construction with: \[
+\frac{U_{i+1,j}-2U_{i,j} + U_{j-1,j}}{(\Delta x)^2} + 
+\frac{U_{i,j+1}-2U_{i,j} + U_{j,j-1}}{(\Delta y)^2} = f_{i,j}
+.\] This would give us a system of equation $AU=F$, with $(M-1)\times (N-1)$ unknowns and $A$ being a matrix with 5 diagonals, similar to the 2D hyperbolic case.
+\begin{remark}
+    How to solve this linear system efficiently will be discussed in next semester.
+\end{remark}
+\subsection{Finite Element Method}
+Finite different methods need the domain to be a rectangular mesh, making it not effective for arbitrary domains. This is where \vocab{finite element method} comes in. The approach of this finite element method is very different from finite difference. In finite difference, we are discretizing the derivative. However, in finite element, we are discretizing the solution space. \\
+
+Let us consider the same equation as before: \[
+\begin{cases}
+    \Delta u = f \\
+u \big\rvert_{\partial \Omega} = 0
+\end{cases}
+.\] 
+
+Let us define a \vocab{functional}: \[
+    I(v) = \int_{\Omega} (\frac{1}{2} |\nabla v|^2 + f v)~ dxdy
+.\] where $ \nabla v$ is the \vocab{gradient} of $v$, i.e.  $ \nabla v = (\frac{\partial v}{\partial x} ,\frac{\partial v}{\partial y} )$. 
+\begin{remark}
+    This is a functional because the parameter $v$ is a function.
+\end{remark}
+We define this over the function space: \[
+H^1_0(\Omega) = \{v | v, \nabla v \in  L^2(\Omega),~ v\big\rvert_{\partial \Omega} = 0\} 
+.\] 
+\begin{remark}
+    $H^1_0(\Omega)$ is set of functions that are square integrable (in $L^2$) and satisfy the boundary condition. Superscript 1 means that the first derivative is square integrable, and subscript 0 means it is zero at the boundary.
+\end{remark}
+We would like to find the minimum over the function space: \[
+    \min_{v\in H^1_0(\Omega)} I(v)
+.\] In order to find the minimum, we want to find the derivative and set it to zero. This is a necessary condition. \\
+
+Let's assume that function $ v_0$ is a minimum of $I(v)$, meaning that: \[
+    I(v_0 + \epsilon u) \ge  I(v_0), \quad \forall  \epsilon,~ u\in H^1_0(\Omega)
+.\] Now we create a function: \[
+J(\epsilon) = I(v_0 + \epsilon u) 
+.\] where $\epsilon=0$ is a minimum of $J(\epsilon)$, i.e.  $J(\epsilon) \ge  J(0)$ for all $\epsilon$. This means that:  \[
+\frac{dJ}{d\epsilon} \bigg\rvert_{\epsilon = 0} = 0
+.\] From the definition of $I$, we have: \[
+J(\epsilon) = I(v_0+\epsilon u) = \int_{\Omega} \frac{1}{2}|\nabla v_0 + \epsilon \nabla u|^2 + f\cdot (v_0 + \epsilon u) dx dy
+.\] Expanding, we have: \[
+\int_{\Omega} \frac{1}{2}|\nabla v_0|^2 + \epsilon \nabla v_0 \nabla  u + \frac{1}{2}\epsilon |\nabla u|^2 + \int_{\Omega} f(v_0) + \epsilon  \int_{\Omega}fu
+.\]
+Taking the derivative and evaluating at zero, we have: \[
+\frac{dJ}{d\epsilon}\bigg\rvert_{\epsilon = 0} = \int_{\Omega}  \nabla v_0 \nabla  u + \int_{\Omega} f u = 0
+.\]
+From the divergence theorem: \[
+    \int_{\Omega} \operatorname{div}\vec{F}(x)~dx = \int_{\partial\Omega} \vec{F}\cdot \vec{n}~ds
+.\] Taking $\vec{F} = v \nabla u $, we have: \[
+\operatorname{div} \vec{F} = \nabla  v \nabla  u + v \Delta u
+.\] Thus, we have: \[
+    \int_{\Omega} \operatorname{div}\vec{F}(x)~dx = \int_{\Omega}\nabla v \nabla u + \int_{\Omega} v \Delta u =  \int_{\partial\Omega} \vec{F}\cdot \vec{n}~ds = 0 
+.\] because we are integrating over the boundary which is zero. Thus, we have: 
+\begin{align*} 
+\frac{dJ}{d\epsilon}\bigg\rvert_{\epsilon = 0} &= \int_{\Omega}  \nabla v_0 \nabla  u + \int_{\Omega} f u = 0\\ 
+&= -\int_{\Omega} \Delta v_0  u + \int_{\Omega} fu = 0 \\
+&= -\int_{\Omega} (\Delta v_0 -f) u~dxdy  = 0 
+.\end{align*}
+Since $u$ is arbitrary, we must have:  \[
+\Delta v_0-f = 0
+.\] As such: \[
+\begin{cases}
+    \Delta v_0 = f \\
+v_0 \big\rvert_{\partial \Omega} = 0
+\end{cases} \iff \int_{\Omega} \nabla v_0 \nabla u + \int_{\Omega} fu = 0\quad \text{ for all $u \in  H^1_0 (\Omega)$}
+.\] 
+\begin{definition}
+    The right hand side is a \vocab{weak formulation} of the original PDE.
+\end{definition}
+\begin{remark}
+    If we have a minimum of the functional, then we have a solution to desired equation.
+\end{remark}
+\begin{remark}
+    This is called the weak formulation because we only involve the first derivative.
+\end{remark}
+Let us assume there is a basis $\{\phi_1,\phi_2,\ldots\phi_N\} $ for $H^1_0(\Omega)$. Let us consider a finite dimensional subspace of $H^1_0(\Omega)$ (thus discretize the function space): \[
+S_N  = \{\phi_1,\phi_2,\ldots,\phi_N\} \subset H^1_0(\Omega) 
+.\] For any $ v_0 \in S_N$, we can express it in terms of the basis functions: \[
+v_0 = \sum_{i=1}^{N} v_i \phi_i
+.\] Since the weak formulation must hold true for any $u \in S_N$, we can choose $u = \phi_j$: \[
+\int_\Omega \nabla v_0 \nabla \phi_j + \int_\Omega f \phi_j = 0, \quad \text{ for } j = 1,2,\ldots,N
+.\] Expanding $ v_0$, we have: \[ 
+\sum_{i}\int_\Omega  v_i\nabla \phi_i \nabla \phi_j + \int_\Omega f \phi_j = 0
+.\] Giving us a linear system $A\vec{v} = \vec{b}$ where: \[
+A = (a_{ij}), \quad a_{ij} = \int_{\Omega} \nabla \phi_i\nabla \phi_j
+.\] \[
+\vec{b} = (b_j), \quad b_j = \int_{\Omega} f \phi_j
+.\] \[
+\vec{v} = \begin{bmatrix} v_1\\\vdots\\v_N \end{bmatrix} 
+.\] 
+\end{document}
+
