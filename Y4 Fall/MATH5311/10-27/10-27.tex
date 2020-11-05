@@ -1,0 +1,146 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{October 27th, 2020}
+\subsection{Weak Derivative}
+From last time, we have that the general approach to solving a PDE using finite element methods is: 
+\begin{enumerate}
+    \item Find the weak formulation of the equation
+    \item Define the solution space
+    \item Find the N-dimensional subspace
+    \item Reduce the weak formulation by a linear system
+\end{enumerate}
+Recall that the weak formulation is to find $u\in S_N$ s.t.: \[
+\int^1_0 u'v' = \int^1_0 fv~dx \quad \forall v \in  S_N
+.\]  In our previous example, we had $S_N$ being continuous piecewise linear functions. However these piecewise linear functions  are not differentiable  at the corners, meaning we cannot interpret derivatives in the point wise sense.  To do this, we will introduce the concept of a weak derivative.
+
+\begin{definition}[weak derivative]
+    $w$ is a \vocab{weak derivative} of  $u$ if  $w$ is integrable and: \[
+        \int ^{+\infty}_{-\infty} uv' = - \int ^{+\infty}_{-\infty} w v ~dx , \quad \forall  v \in  C^{\infty}_{0}(\R)
+    .\]  
+\end{definition}
+\begin{remark}
+   If $u,v$ are differentiable in the classical sense, assuming zero boundary conditions, then: \[
+   \int^{+\infty}_{-\infty} u'v ~dx = uv\bigg\rvert ^{+\infty}_{-\infty} - \int ^{+\infty}_{-\infty} uv'~dx = - \int ^{+\infty}_{-\infty} uv' ~dx
+   .\]  This means that if $u$ is differentiable, then  $w=u'$.
+\end{remark}
+\begin{example}[Weak derivative of hat function]
+   Consider the hat function: \[
+       u(x) = \begin{cases}
+       0 & x < -1 \text{ or } x > 1\\
+       1+x & -1 \le  x < 1 \\
+       1 - x & 0 \le  x \le  1 
+   \end{cases}
+   .\] Plugging this in, we have:
+\begin{align*} 
+\int ^{+\infty}_{-\infty} uv'~dx &= \int^0_{-1} (1+x) v' ~dx + \int^1_0 (1-x) v'~dx \\ 
+                                 &= (1+x)v\bigg\rvert ^{0}_{-1} - \int^0_{-1}1\cdot  v~dx  + (1-x)v \bigg\rvert^1_0 + \int^1_0 1\cdot v~dx \\
+                                 &= v(0) - \int^0_{-1}v~dx - v(0) + \int ^1_0 v~dx \\
+                                 &= -\int^{+\infty}_{-\infty} w v~dx
+.\end{align*} where: \[
+w(x) = \begin{cases}
+       0 & x < -1 \text{ or } x > 1\\
+       +1 & -1 \le  x < 1 \\
+       -1 & 0 \le  x \le  1 
+\end{cases}
+.\] As such, the hat function is weakly differentiable.
+\end{example}
+\begin{example}[Piecewise smooth function that is not weakly differentiable]
+    Consider the step function: \[
+        u(x) = \begin{cases}
+            1 & x < 0 \\
+            -1 & x \ge  0
+        \end{cases}
+    .\] We have: \[
+    \int ^{+\infty}_{-\infty} uv'~dx = \int ^{ 0}_{- \infty} v'~dx -\int ^{\infty}_0 v'~dx = v(0) - (-v(0)) = 2v(0) = \int ^{ +\infty}_{-\infty} w v~dx
+    .\] In this situation, $w$ is the delta function at  $0$. However, it is not integrable in the classical sense. As such,  $u$ is not weakly differentiable.    
+\end{example}
+\begin{theorem}
+    If $f$ is piecewise smooth and continuous, and $f'$ is integrable in each $\Omega_i$, then $f$ is weakly differentiable.  
+\end{theorem}
+\begin{proof}
+Let $f$ be smooth on $\Omega_i$,  $[a,b]= \bigcup\limits_{i}\Omega_i $. We define $g$ by $g\big\rvert_{\Omega_i}$ which is the classical derivative of $f$ on $\Omega_i$. Now we will show that $w$ is the weak derivative of $f$. By definition, we need to show: \[
+    \int^b_a gv ~dx = -\int^b_a f v'~dx, \quad v \in  C^{\infty}_0(a,b)
+.\] To do this, we have: 
+\begin{align*}
+    \int^b_a gv~dx &= \sum_i \int_{\Omega_i} gv~dx = \sum_i \int_{\Omega_i} f'v~dx = \sum_i\int ^{x_{i+1}}_{x_i} f'v ~dx \\
+                   &= \sum_i fv\bigg\rvert ^{x_{i+1}}_{x_i} - \sum_i \int ^{x_{i+1}}_{x_{i}}f v'~dx \\
+                   &= \underbrace{\sum_i \left( fv(x_{i+1}) - fv(x_{i})  \right)}_{ = 0 \text{  since $v$ is continuous}} - \sum_i \int ^{x_{i+1}}_{x_{i}}f v'~dx \\ 
+                   &= -\int^b_a fv'~dx \\
+.\end{align*}as desired.
+Thus $f$ is weakly differentiable with a weak derivative $g$. 
+\end{proof}
+We can generalize this to higher space dimensions:
+\begin{definition}[weak partial derivative]
+   If $\omega_i$ is integrable over  $\Omega$ and:  \[
+       \int_{\Omega} \omega_i v ~dx = - \int_{\Omega} u \frac{\partial v}{\partial x_i} ~dx \quad \forall  v \in  C^{\infty}_0 (\Omega)
+   .\]  then $w_i$ is the \vocab{weak partial derivative} of $u$ with respect to $x_i$.
+\end{definition}
+We can also define higher order derivatives: 
+\begin{definition}
+    Let $\alpha = (\alpha_1,\alpha_2,\ldots,\alpha_n)$ where $\alpha_j$ are non-negative integers. Let us define $|\alpha| = \sum_{j=1}^{n} \alpha_j$, then $w_\alpha$, integrable in  $\Omega$ is the multivariable weak derivative of  $u$ if:  \[
+        \int_{\Omega} u \partial^{\alpha} v~d\Omega = (-1)^{|\alpha|} \int_{\Omega} w_\alpha v~d\Omega, \quad \forall  v \in  C^{\infty}_0 (\Omega)
+    .\] with: \[
+    w_\alpha = \frac{\partial ^{|\alpha|}u}{\partial^{\alpha_1} x_1\partial^{\alpha_2} x_2\ldots\partial^{\alpha_n} x_n} 
+    .\] 
+\end{definition}
+\begin{remark}
+   Consider the case for 2nd order derivative. Integration by parts gives us: \[
+   \int ^{+\infty}_{-\infty} u'' v ~dx = - \int ^{+\infty}_{-\infty} u'v' ~dx = \int ^{+\infty}_{-\infty} uv''~dx
+   .\] Then if there exists a $w$ that is integrable such that: \[
+   \int ^{+\infty}_{-\infty} wv~dx = \int ^{+\infty}_{-\infty} uv''~dx
+   .\] then $u $ has a second order weak derivative equal to $w$.
+\end{remark}
+
+\begin{example}
+    The hat function is not second order weakly differentiable, since it's first order weak derivative is a step function, which is not weakly differentiable. 
+\end{example}
+\begin{remark}
+    A piecewise quadratic function is not necessarily second order weakly differentiable, as you need the additional constraint that the first order derivative at the boundaries are the same. 
+\end{remark}
+\begin{definition}
+    Let us define
+  \[
+      L^2(\Omega) = \{u: \text{ integrable}, \int_\Omega u^2 ~dx < +\infty\}, \quad \|u\|_{L^2} = \left( \int_{\Omega}u^2~dx \right) ^ \frac{1}{2}
+      .\] Then the \vocab{Soboler space } is: \[
+  H^1(\Omega) = \{ u: u \in L^2, \quad \text{$u$ has weak first order derivate which are in $L^2(\Omega)$} \} 
+  .\] \[
+  \|u\|_{H^{1}(\Omega)} = \left( \int_{\Omega}u^2 + \sum_{i=1}^{n} (\partial x_i u)^2~dx \right) 
+  .\] 
+\end{definition}
+\begin{remark}
+    The solution space for FEM is a Soboler space.
+\end{remark}
+Some of the properties of $H^1(\Omega)$ include: 
+\begin{itemize}
+    \item Functions in $H^1(a,b)$ are continuous. ($\Omega = (a,b)$)
+    \item $f$ is piecewise smooth and $f$ is continuous implies that $f \in H^1(\Omega)$ 
+    \item Let $C^1(\Omega) = \{f \text{ which are continuously differentiable in $\Omega$}\} $, then $C^1(\Omega)$ is dense in $H^1(\Omega)$
+\end{itemize}
+\subsubsection{Treatment of Boundary Conditions}
+For now we have only been considering zero boundary conditions. If instead we have a inhomogeneous Dirichlet boundary condition, e.d. \[
+\begin{cases}
+    -u'' = f \\
+    u(0) = a \\
+    u(1) = b
+\end{cases}
+.\] Then we would have: \[
+u(x) = u_H + u_I, \quad u_I = a+(b-a)x
+.\] where $u_H$ is zero at the boundary. With this, we have: 
+\begin{align*}
+    u_H &= u(x) - u_I \\
+    -u_H'' &= -u'' + u''_I = -u'' = f \\
+    u_H(0) &= u(0) - u_I(0) = a-a = 0 \\  
+    u_H(1) &= u(1) - u_I(1) = b-b = 0 
+.\end{align*}
+Thus we would have: \[
+\begin{cases}
+    -u_H'' = f \\
+    u_{H}(0) = u_H\left( 1 \right)  = 0
+\end{cases}
+.\]
+
+\end{document}
+

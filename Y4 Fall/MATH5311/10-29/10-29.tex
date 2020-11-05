@@ -1,0 +1,81 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{October 29th, 2020}
+\subsection{Neumann Boundary Conditions for FEM}
+Recall for finite different, to account for Neumann Boundary conditions, we would introduce ghost points. For FEM, the functional is the same: \[
+    E(u) = \int^1_0(u'^2-2uf)~dx
+\] but with no boundary conditionals imposed explicitly, we would have the solution space: \[
+H^1(\Omega) = \{ u | u , u' \in  L^2(\Omega)\} 
+.\]  
+\begin{remark}
+    For the previous case we would require $u(0) = u(1) = 0$. As such, this is a much bigger solution space than the Dirichlet boundary conditions.
+\end{remark}
+If we once again try and minimize this functional: \[
+    \min_{u \in  H^1(\Omega)} E(u)
+,\] assuming $u$ is a minimizer:
+\begin{align*} 
+\frac{d}{d\epsilon}E(u+\epsilon v)\bigg\rvert_{\epsilon = 0} &= 0, \forall v \in  H^1(\Omega)\\
+    \implies E(u+\epsilon v) &= \int^1_0 (u'+\epsilon v')^2 - 2(u+\epsilon v)f\\
+                             &=  \int^1_0 (u'^2+2\epsilon u'v' + \epsilon^2v'^2-2uf-2\epsilon vf)~dx\\
+\implies \frac{d}{d\epsilon}E(u+\epsilon v)\bigg\rvert_{\epsilon = 0} &= 2\int^1_0 u'v' - 2\int^1_0 vf = 0
+.\end{align*}
+Thus, this gives us the weak formulation: \[
+    \int^1_0 u'v'~dx-\int^1_0 vf~dx = 0, \forall v \in H^1(\Omega)
+.\] Note that this is the same as before. If we do integration by parts, we would get: \[
+v'u\bigg\rvert^1_0 - \int^1_0 u '' v - \int^1_0 vf = 0
+.\] for any $v$. Let first restrict $v \in  H^1_0(\Omega)$, i.e. $v\big\rvert_{\partial \Omega} = 0$, we would get: \[
+\int^1_0(-u'' - f) v ~dx = 0 \implies -u'' -f = 0
+.\] which is the PDE. Alternatively, if we consider arbitrary $v$, if $u$ is the minimizer that satisfies the boundary condition, we must have:  \[
+u'v\bigg\rvert^1_0 = 0 \implies u'(0) = 0, u'(1) = 0
+.\]  This means that for a solution space that does not restrict the boundary condition, the minimizer of the functional satisfies the Neumann boundary condition. Thus, this is called the \vocab{natural boundary condition}.\\
+Now that we have the weak formulation, we have to discretize the solution space. Let us consider: \[
+    S_N = \{\text{piecewise linear funciton space}\}  \subset H^1(\Omega)
+.\] with the hat functions $ \{\phi_j(x)\}, j=0,1,2,\ldots N $. 
+\begin{remark}
+    We add two more hat functions $\phi_0$ and $\phi_N$, with:  \[
+        \phi_0(x) = \begin{cases}
+            \frac{x-x_0}{x_1-x_0} & x_0 \le  x \le  x_1\\
+            0 &\text{otherwise}
+        \end{cases}
+    .\] \[ 
+        \phi_N(x) = \begin{cases}
+            \frac{x_N-x}{x_N-x_{N-1}} & x_{N-1} \le  x \le  x_{N}\\
+            0 &\text{otherwise}
+        \end{cases}
+    .\] 
+\end{remark}
+With this, we want to find $u \in S_N$ such that: \[
+    \int^1_0(u'\phi'_j - f \phi_j)~dx = 0, \forall j = 0,1,2,\ldots,N
+.\] \[
+\implies
+\int^1_0 u_i \phi_i'\phi_j' - \int^1_0 f\phi_j = 0 
+.\] \[
+\implies \sum_i a_{ij}u_i - b_j = 0 \implies Ax = b
+.\] where: \[
+a_{ij} = \int^1_0 \phi_i' \phi_j' ~dx,\quad b_j\int^1_0 f\phi_j, \quad x = \begin{bmatrix} u_0\\u_1\\u_{N} \end{bmatrix} 
+.\] 
+\begin{remark}
+    Homework: show taht $ \{\phi_j, j=0,1,\ldots,N\} $ forms a basis of $S_N$, compute $a _{ij}$ for uniform grid on $[0,1]$.
+\end{remark}
+\subsection{FEM for Polygon Domain}
+One benefit of FEM is that we are not limited to rectangular domains like finite difference methods. Let us consider an arbitrary polygon domain. With this, we triangulate the polygon, turning it into triangles, with interior nodes being the vertices between traingles. With this, we define basis functions at each interior node: \[
+    \phi_i(x_j) = \begin{cases}
+        1 & j = i\\
+        0 & j \neq i
+    \end{cases}
+.\] and is piecwise linear in each triangle. This is the 2D generalization of the hat function, called the \vocab{tent functions}.
+\begin{remark}
+    If we have an arbitrary domain, we can approximate it with a polygon domain by adding points on the boundary.
+\end{remark}
+\begin{remark}
+    Piecewise linear functions in this context defines a plan, meaning that the tent function is "gluing" together many planes.
+\end{remark}
+\begin{remark}
+    We can show that $\{\phi_i,i=1,2,\ldots N\} $ forms a basis of $S_N$. 
+\end{remark}
+As such, we can apply the weak formulation in the same way as before. 
+\end{document}
+

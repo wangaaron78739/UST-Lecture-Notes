@@ -1,0 +1,113 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{November  3th, 2020}
+\subsection{Error Analysis of Finite Element Methods}
+For finite different methods, we can get the error analysis using the Taylor expansion. However, for FEM, it is a bit more complicated. Recall that the truncation error is when we truncate the infinitely dimensional solution space $H^1_0(\Omega)$ into a finite-dimensional subspace  $S_N \subset H^1_0(\Omega)$. Recall that for the problem: \[
+\begin{cases}
+    -\Delta u = f \\
+u\big\rvert_{\partial \Omega} = 0
+\end{cases}
+.\] we have an equivalent weak formulation of finding $u \in  H^1_0(\Omega)$ such that: \[
+\int_\Omega \nabla u\nabla v~dx = \int_\Omega fv, \quad  \forall  v \in  H^1_0(\Omega)
+.\] Let us define a \vocab{bi-linear form}: \[
+a(u,v) = \int_\Omega \nabla u \nabla  v~dx
+.\] 
+\begin{remark}
+    Bi linear form means that $a(u,v)$ is linear in both  $u$ and $v$.
+\end{remark}
+Let us also define a norm: \[
+    \|v\|_E = \sqrt{a(v,v)} = \left( \int_\Omega (\nabla v)^2~dx \right)  ^\frac{1}{2}
+.\] 
+Let us consider a finite dimensional subspace $S_N\subset H^1_0(\Omega)$, meaning that the finite element solution $u_N$ is such function that satisfies:  \[
+    a(u_N,v) = (f,v), \quad\forall  v \in S_N
+    .\] where $(u,v) = \int_\Omega uv$ is the inner product. For the exact solution $u$, we would have: \[
+a(u,v) = (f,v) \quad \forall v \in  S_N
+.\] \[
+\implies a(u-u_N,v) = 0 \quad\forall  v\in S_N\subset H^1_0(\Omega)
+.\] Let us consider the error, i.e. the difference between $u$ and $u_N$:
+\begin{align*} 
+    \|u-u_N\|^2_E &= a(u-u_N,u-u_N) \\
+                  &= a(u-u_N, u-v+v-u_N), \quad \forall  v \in  S_N\\
+                  &= a(u-u_N,u-v) + a(u-u_N,v-u_N) \\
+                  &= a(u-u_N,u-v) \quad\quad (\text{since $v-u_N\in S_N$})\\
+                  &\le \|u-u_N\|_E \|u-v\|_E, \quad \forall  v \in  S_N \quad\text{(Cauchy Schwartz inequality)}
+.\end{align*}
+As such, we have: \[
+    \|u-u_{N}\|_E \le  \|u-v\|_E \quad\forall v \in S_N
+.\] This means that out of all solutions in $S_N$, $u_N$ is the best approximation to the exact solution. \\
+
+To estimate the error, we will use a duality argument. Let $w$ be a solution of the dual problem:  \[
+\begin{cases}
+    -\Delta w = u-u_N\\
+    w(0) = w(1) = 0
+\end{cases}
+.\] Let us consider the $L^2$ norm: \[
+\|v`\|_{L^2} = \left( \int_\Omega |v|^2~dx \right) ^\frac{1}{2}
+.\]we have:
+\begin{align*} 
+    \|u-u_N\|^2_{L^2} &= \int |u-u_N|^2 ~dx \\
+                      &= (u-u_N,u-u_N)\\
+                      &= (u-u_N, -w'') \\
+                      &= ((u-u_N)',w') \\
+                      &= a(u-u_N,w) \\
+                      &= a(u-u_N,w-v+v),\quad\forall v \in  S_N \\
+                      &= (u-u_N,w-v) + a(u-u_N,v) \\
+                      &\le \|u-u_N\|_E \|w-v\|_E 
+.\end{align*}
+As such, we have: \[
+\|u-u_N\|_{2} \le  \frac{\|u-u_N\|_E \|w-v\|_E}{\|u-u_N\|_2} = \frac{\|u-u_N\|_E \|w-v\|_E}{\|w\|_2}, \quad \forall  v \in S_N 
+.\] If we have the approximation assumption: \[
+\int_{w \in  S_N} \|w-v\|_E \le  \epsilon \|w''\|_2 \implies \|u-u_N\|_2 \le \epsilon \|u-u_N\|_E 
+.\] 
+\begin{remark}
+    This approximation assumption is that any second order differentiable function can be approximated by a function in $S_N$. 
+\end{remark}
+Applying the approximation assumption again, we have: \[
+\|u-u_N\|_E \le  \epsilon \|u-v\|_E \le  \epsilon \|u''\|_2
+.\] \[
+\implies \|u-u_N\|_2 \le  \epsilon^2  \|u''\|_2 = \epsilon^2\|f\|_2
+.\] As such, it is second order accurate in $ L^2$ norm.\\
+
+    Consider $0=x_0<x_1<x_2<\ldots<x_N=1$ a partition of $[0,1]$. Let $S_N$ be the continuous piecewise linear function space with hat basis functions  $\phi_1,\ldots,\phi_{N-  1}$. Take any function $u\in H^1_0(\Omega)$. Let $u_I(x) = \sum_{i=1}^{N-1} u(x_i)\phi_i(x)$.
+    \begin{theorem}
+        \[
+            h=\max_i (x_{i+1}-x_i) \implies \|u-u_I\|_E \le  c h \|u''\|_2
+        .\] 
+    \end{theorem}
+    \begin{proof}
+       \[
+           \|u-u_I\|_E^2 = \int^1_0 (u'-u_I')^2 ~dx = \sum_{j=1}^{N} \int ^{x_j}_{x_{j-1}} (u'-u_I')^2 ~dx
+       .\]  
+       Let $e(x) = u(x) - u_I(0)$, with $e(x_j) = 0$. For  $[x_{j-1},x_j]$: \[
+           \exists \xi \in (x_{j-1},x_j),\text{ such that } e'(\xi) = 0, e'(y) = \int^y_{\xi}e''(x)~dx 
+       .\] from the fundamental theorem of calculus.
+       As such, we have: \[
+           |e'(y)| \le  \int^y_\xi |e''(x)|~dx \le  \left( \int_\xi^y ~dx \right)^\frac{1}{2} \left( \int^y_\xi |e''(x)|^2~dx \right) ^\frac{1}{2}
+       .\] \[
+       = (y-\xi)^{\frac{1}{2}} \left( \int^y_\xi|e''(x)|^2~dx \right) ^{\frac{1}{2}} \le  (y-\xi)^{\frac{1}{2}}\left( \int ^{x_j}_{x_{j-1}}|e''(x)|^2~dx\right)^\frac{1}{2}
+       .\] Thus, we have: 
+\begin{align*} 
+    \int ^{x_j}_{x_{j-1}}|e'(y)|~dy &\le  \int ^{x_j}_{x_{j-1}} (y-\xi))\left( \int ^{x_j}_{x_{j-1}}|e''(x)|^2~dx \right) ~dy\\
+                                    &= \frac{1}{2}(y-\xi)^2\bigg\rvert ^{x_j}_{x_{j-1}}\int ^{x_j}_{x_{j-1}} |e''(x)|^2~dx \\
+                                    &\le c(x_j-x_{j-1})^2\int ^{x_j}_{x_{j-1}} |e''(y)|^2~dx\quad \text{ for some constant $c$}\\
+                                    &\le c h^2\int ^{x_j}_{x_{j-1}}(u'')^2~dx \quad\text{since $e'' = u''$}
+.\end{align*}
+Thus, we have: \[
+    \left( \int^1_0(u'-u'_I)^2~dy \right)^{\frac{1}{2}}
+    \le c h \left( \int^1_0 (u'')^2 ~dx \right)^{\frac{1}{2}}
+.\] \[
+\implies \|u-u_I\|_E \le  ch \|u''\|_2
+.\] If we choose $v=w_I \in  S_N$ to be the interpolation function of $w$, we would have: \[
+\| w-v\|_E = \|w- w_I\|_E \le  ch \| w''\|_2
+.\]
+    \end{proof} As such, from before, we would have: \[ \|u-u_N\|_2 \le  ch \|u-u_N\|_E \le ch^2\|u''\|_2 = ch^2 \|f\|_2
+.\] 
+As such, this finite element scheme is second order accurate.
+\begin{remark}
+    We can increase this accuracy by choosing different basis functions, e.g. piecewise quadratic functions.
+\end{remark}
+\end{document}
+
