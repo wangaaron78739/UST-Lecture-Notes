@@ -80,13 +80,13 @@ Now we would like to find a $N$ dimensional subspace of this function space. To 
    \end{cases}
    .\] Thus, we have: \[
    a_{ij} = \int^1_0 \phi_i' \phi_j'~dx
-   .\] Note that this is non-zero only when there is overlap between $\phi_i$ and  $\phi_j$. This only happens between  $\phi_i$ and  $\phi_i+1$, giving us:  \[
-   a_{i,i+1} = \int^1_0 \phi_1' \phi_{i+1}'~dx = \int_{x_i}^{x_{j+1}}\phi_i'\phi_{i+1}' ~dx = \int_{x_i}^{x_{i+1}}\left( -\frac{1}{h} \right)\left( \frac{1}{h} \right)dx =  -\frac{1}{h^2}\cdot h = -\frac{1}{h}
+   .\] Note that this is non-zero only when there is overlap between $\phi_i$ and  $\phi_j$. This only happens between  $\phi_i$ and  $\phi_{i+1}$, giving us:  \[
+   a_{i,i+1} = \int^1_0 \phi_i' \phi_{i+1}'~dx = \int_{x_i}^{x_{j+1}}\phi_i'\phi_{i+1}' ~dx = \int_{x_i}^{x_{i+1}}\left( -\frac{1}{h} \right)\left( \frac{1}{h} \right)dx =  -\frac{1}{h^2}\cdot h = -\frac{1}{h}
    \]\[ 
-   a_{i,i-1} = \int^1_0 \phi_1' \phi_{i-1}'~dx = \int_{x_{i-1}}^{x_{j}}\phi_i'\phi_{i-1}' ~dx = \int_{x_{i-1}}^{x_{i}}\left( \frac{1}{h} \right)\left( -\frac{1}{h} \right)dx =  -\frac{1}{h^2}\cdot h = -\frac{1}{h}
+   a_{i,i-1} = \int^1_0 \phi_i' \phi_{i-1}'~dx = \int_{x_{i-1}}^{x_{j}}\phi_i'\phi_{i-1}' ~dx = \int_{x_{i-1}}^{x_{i}}\left( \frac{1}{h} \right)\left( -\frac{1}{h} \right)dx =  -\frac{1}{h^2}\cdot h = -\frac{1}{h}
    .\] 
 \[ 
-    a_{i,i} = \int^1_0 \phi_1' \phi_{i}'~dx = \int_{x_{i-1}}^{x_{j+1}}\phi_i'\phi_{i}' ~dx = \int_{x_{i-1}}^{x_{i+1}}\left( \frac{1}{h} \right)\left( \frac{1}{h} \right)dx =  \frac{1}{h^2}\cdot 2h = \frac{2}{h}
+    a_{i,i} = \int^1_0 \phi_i' \phi_{i}'~dx = \int_{x_{i-1}}^{x_{j+1}}\phi_i'\phi_{i}' ~dx = \int_{x_{i-1}}^{x_{i+1}}\left( \frac{1}{h} \right)\left( \frac{1}{h} \right)dx =  \frac{1}{h^2}\cdot 2h = \frac{2}{h}
 .\] 
    Thus, we have: \[
 A = \frac{1}{h} \begin{bmatrix} 2 &-1 & & \\ -1 & 2 &\ddots & \\ &\ddots &\ddots & -1 \\ & & -1 & 2 \end{bmatrix}
