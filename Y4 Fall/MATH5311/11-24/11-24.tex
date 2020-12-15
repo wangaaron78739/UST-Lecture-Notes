@@ -1,0 +1,144 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{November 24th, 2020}
+\subsection{Spectral Methods}
+Spectral methods are based on Fourier series and have high accuracy. If we are the domain $[0,2\pi]$, we can define the periodic functions:  \[
+    \phi_k(x) = e^{ikx} = \cos kx + i \sin kx
+.\] For any function $u(x)\in L^2[0,2\pi$, we can express it in terms of its Fourier series: \[
+u(x) = \sum_{k=-\infty}^{+\infty} u_k e^{ikx}
+.\] Where: \[
+u_k = \frac{1}{2\pi}\int_0^{2\pi} u(x) e ^{-ikx}dx
+.\] $u_k$ are called the \vocab{fourier coefficients}.
+
+\begin{remark}
+    $L^2$ function means it is square integrable.
+\end{remark}
+    $\phi_k(x)$ are orthogonal as:  \[
+        \int_0^{2\pi}\phi_k \overline{\phi_\ell} dx = \int_0^{2\pi} e^{ikx}e^{-i\ell x}dx = \int ^{2\pi}_0 e^{i(k-\ell) x}dx = \begin{cases}
+            2\pi & k = \ell \\
+            0 & k \neq \ell
+        \end{cases}
+    .\] 
+    $\phi_k(x)$ are complete, meaning for any  $u\in L^2[0,2\pi]$ it can be approximated by: \[
+        u(x)\sim \sum_{k=-N}^{N} u_k \phi_k(x
+    .\] in the sense that: \[
+    \lim_{N\to \infty} \|u(x) - \sum_{k=-N}^{N} u_k \phi_k(x)\| = 0
+    .\] 
+    As such $\{\phi_k\} $ forms a basis of $L^2[0,2\pi]$.
+
+    \begin{definition}[Spectral Projection]
+        Given a function $u(x) \in  L^2[0,2\pi]$, we define: \[
+            P_Nu(x) = \sum_{k=-N}^N u_k e^{ikx}
+        \] to be the \vocab{spectral projection} of $u$.  
+    \end{definition}
+    \begin{remark}
+        In other words, the spectral projection is the finite truncation of the Fourier series.
+    \end{remark}
+    This spectral projection has a few properties:
+    \begin{itemize}
+        \item $P_N$ is a projection, i.e.  $P_N^2 = P_N$.
+            \begin{proof}
+                Let $\tilde{u}(x) = P_Nu(x)$
+                We have: \[
+                P_N^2 u = P_N \tilde{u}
+                .\] with 
+                .
+                \begin{align*}
+                    \tilde{u_\ell}(x) &= \frac{1}{2\pi} \int ^{2\pi}_0 \tilde{u}(x) e^{-i\ell x}dx \\
+                                      &= \frac{1}{2\pi} \int ^{2\pi}_0 \left( \sum_{k = -N}^{N}u_k e^{ikx} \right)  e^{-i\ell x}dx \\
+                                      &= \frac{1}{2\pi}\sum_{k=-N}^Nu_k \int ^{2\pi}_0 e^{ikx}  e^{-i\ell x}dx \\
+                                      &= u_\ell
+                .\end{align*}
+                by using the orthogonality of $\phi_k$.
+            \end{proof}
+        \item $\|P_N u(x) \|^2_{L^2} = 2\pi \sum |u_k|^2$.
+            \begin{proof}
+                We have: 
+                \begin{align*}
+                    \|P_N u(x)\|^2_{L^2} &= \int ^{2\pi}_0 |P_Nu|^2 dx \\
+                                     &= \int ^{2\pi}_0 \left( \sum_{k=-N}^{N} u_k e^{ikx}\right)\left( \sum_{\ell=-N}^{N} \overline{u_\ell} e^{i\ell x}\right) dx \\
+                                     &= \int ^{2\pi}_0 \sum_{k=-N}^{N}\sum_{\ell=-N}^{N} u_k \overline{u_\ell} e^{i(k-\ell)x}dx \\
+                                     &= \sum_k\sum_\ell u_k \overline{u_\ell} \int ^{2\pi}_0 e^{i(k-\ell) x}dx \\
+                                     &= 2\pi \sum_k |u_k|^2 
+                .\end{align*} again by using the orthogonality of $\phi_k$.  
+            \end{proof}
+    \end{itemize}
+    \subsection{Decay Rate of Spectral Methods}
+    Let us consider the decay rates of the coefficients: \[
+        u_k = \frac{1}{2\pi}\int ^{2\pi}_0 u(x) e^{-ikx}dx
+    .\] If $u$ is differentiable, then do integration by parts giving us: \[
+u_k = -\frac{1}{2\pi} \frac{1}{ik}u(x) e^{-ikx}\bigg\rvert ^{2\pi}_0 + \frac{1}{ik} \frac{1}{2\pi}\int ^{2\pi}_0u'(x) e^{-ikx}dx
+    .\]  Because $u$ is periodic, the first term is 0, meaning that: \[
+    u_k = \frac{1}{ik} \frac{1}{2\pi}\int ^{2\pi}_0 u'(x) e^{-ikx}dx 
+    .\] Note that this is $\frac{1}{ik}(u')_k$. This can be continued, giving us: \[
+    u_k = \frac{1}{(ik)^r} \frac{1}{2\pi}\int ^{2\pi}_0 u^{(r)}e^{-ikx}dx
+    .\]  Taking the absolute value, we have: \[
+    |u_k| \le  \frac{1}{|k|^r} \frac{1}{2\pi} \int ^{2\pi}_0 |u^{(r)}| dx \le  \frac{C}{|k|^r} \| u^{(r)}\|_{L^2}
+    .\] 
+    Note that this goes to zero, as $k$ goes to infinity. Note that since $r$ is arbitrary, this goes to zero faster than any power, as we can just increase  $r$. As such, it goes to zero exponentially fast. Of course, this requires that the function is differentiable to any order. \\
+
+    We will now prove this exponential convergence of Fourier series for smooth functions.
+    \begin{proof}
+        Let $u(x)$ be smooth, i.e. differentiable to any order, then: \[
+            u(x) = \sum_{k=-\infty}^{+\infty}u_k e^{ikx}, \quad u_k = \frac{1}{2\pi} \int ^{2\pi}_0 u(x) e^{-ikx}dx
+        .\] Note that $u(x)$ is absolutely convergent, as  $u_k$ decays faster than any power. As such, we have:  \[
+        |u(x) | \le  \sum_k |u_k| 
+        .\] If $u_k \le  \frac{1}{|k|^2}$, then the right hand side is convergent. Now let's consider: \[
+        \|u(x) - \sum_{k=-N}^N u_k e^{ikx}\|_{\infty}
+        .\] which converges to $0$ as $N\to  +\infty$. We have: 
+        \begin{align*} 
+        \|u(x) - \sum_{k=-N}^N u_k e^{ikx}\|_\infty &= \|\sum_{|k| > N}u_k e^{ikx}\|_\infty \\
+        &\le \sum_{|K| > N} |u_k| |e^{ikx}| \\
+        &= \sum_{|k| > N} |u_k| \\
+        &\le  \sum_{|k| > N} \frac{1}{|k|^r} \|u^{(r)}\| \\
+        &\le  C \sum_{|k| > N} \frac{1}{|k|^r} \\
+        &= \frac{C}{(N+1)^r} \left( \sum_{j = 1} \left( \frac{N+1}{N+j} \right)^ r \right)  \\
+        &\le  \frac{C}{(N+1)^r} \cdot  C_1
+        .\end{align*}
+        This means that: \[
+            \|u(x) - P_Nu(x)\| \le  \frac{M}{(N+1)^r} \to  0
+        .\] for some constant $M$, which converges faster than any power. As such, it has exponential convergence.
+\end{proof}
+         \begin{remark}
+            How fast the function decays in the frequency space depends on how smooth it is in the physical space.
+        \end{remark}
+        \begin{definition}[Total Variation]
+            Let us define $u(x)$ on  $[0,2\pi]$ with a mesh $0=x_0\le  x_1 \le  x_2 \le  \ldots \le x_n \le  x_{n+1} = 2\pi$. We define the \vocab{total variation} as: \[
+                \gamma(u) = \sup_n\sup_{\{x_i\} }\sum_i |u(x_i) - u(x_{i-1}) |
+            .\] 
+            
+        \end{definition}
+        \begin{example}
+            If $u(x)$ is a monotone increasing function on  $[0,2\pi]$, then we have $\gamma(u) = u(2\pi) - u(0)$.
+        \end{example}
+        \begin{remark}
+            If $u(x)$ is not monotone $[0,2\pi]$, then if we can split the region into monotone sections, we can calculate the total variation as the absolute value of all the difference in the monotone sections.
+        \end{remark}
+        \begin{example}
+            Consider $u(x) = \sin x$. We can split it into 3 sections, with the total variation being $\gamma(u) = 4$.
+        \end{example}
+        \begin{example}
+            If $u(x) = \sin \frac{1}{x}$, then $u(x)$ has no bounded variation.
+        \end{example}
+            Bounded variation is a very important property to determine the convergence of its Fourier series. It has the following properites: 
+            \begin{itemize}
+                \item If $u$ is continuous, periodic, and has bounded variation, then we have: $P_Nu(x) \to  u(x) $ uniformly.
+                \item If $u(x)$ has bounded variation, then  $P_Nu(x) \to  \frac{1}{2}(u^+(x) + u^-(x))$, which is the average of its left and right limits (note that it does not need to be continuous), this is pointwise convergence.
+                \item If $u \in  L^2[0,2\pi]$, then: \[
+                        \|P_Nu(x) - u(x)\|_{L^2} = \int ^{2\pi}_0 |P_N u(x) - u(x)|^2dx \to  0 
+                .\] This means it converges in the average sense.
+            \item If $u(x)$ is continuous and periodic, but not of bounded variation, then $P_Nu(x)$ does not  necessarily converge for all $x$, e.g.  $u(x) = x\sin \frac{1}{x}, x \in [-\frac{1}{\pi} , \frac{1}{\pi}]$. At $x=0$,  $P_Nu(x)$ is not convergent.
+            \end{itemize} 
+            \begin{remark}
+                Uniform convergence means that: \[
+                    \lim\limits_{N \to \infty} \max_{x \in [0,2\pi]} |u(x) - P_N u(x) | = 0
+                .\] 
+                Pointwise convergences means that for any $x \in [0,2\pi]$: \[
+                    \lim\limits_{N \to \infty} |u(x) - P_Nu(x) | = 0
+                .\] 
+            \end{remark}
+\end{document}
+

@@ -1,0 +1,81 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{November 26th, 2020}
+\subsection{Spectral Method Continued}
+\begin{example}
+    Consider $u(x) = 1$  $x \in [0,2\pi]$. The corresponding Fourier coefficients are given by: \[
+        u_k = \frac{1}{2\pi}\int^{2\pi}_0 u(x) e^{ikx}dx = \frac{1}{2\pi} \int ^{2\pi}_0 e^{ikx}dx = \begin{cases}
+            1 & k=0 \\
+        \frac{1}{2\pi} \frac{1}{ik}e^{ikx}\bigg\rvert ^{2\pi}_0 = 0 & k\neq 0
+        \end{cases}
+    .\] 
+\end{example}
+\begin{example}
+    Consider $u(x) = \begin{cases}
+        x & 0 \le x < 2\pi \\
+        0 & x=2\pi
+    \end{cases}$. Note that this is periodic. Computing the Fourier series, we have: \[
+u_k = \frac{1}{2\pi} \int ^{2\pi}_0 x e^{ikx}dx = \frac{1}{2\pi} \frac{1}{ik}e^{ikx}\bigg\rvert ^{2\pi}_0 - \frac{1}{2\pi} \frac{1}{ik} \int ^{2\pi}_0 e^{ikx}dx 
+    .\] \[
+    =\begin{cases}
+        \frac{1}{ik} (-1)^{k+1} & k\neq 0 \\
+         \frac{1}{2\pi}\int ^{2\pi}_0 xdx = \frac{1}{2\pi} 2\pi = \pi & k = 0 \end{cases}
+    .\] 
+    Thus: \[
+        u(x) = \pi + \sum_{k\neq 0} \frac{1}{ik}(-1)^{k}e^{ikx}
+    .\] 
+\end{example}
+Let us consider $\begin{cases}
+    -u'' = f \\ 
+    u(0) = u(2\pi)
+\end{cases}$ meaning $u$ is periodic. We have:  \[
+u(x) = \sum_{k=-\infty}^{+\infty} u_k e^{ikx}
+.\] Taking derivative, we have: \[
+u' = \sum_{k=-\infty}^{+\infty} u_k(ik) e^{ikx} \quad
+u'' = \sum_{k=-\infty}^{+\infty} u_k(ik)^2 e^{ikx} =- \sum_{k=-\infty}^{+\infty} u_kk^2 e^{ikx} 
+.\] Let us also consider the Fourier expansion of $f$:  \[
+f = \sum_{k=-\infty}^{+\infty} f_k e^{ikx} \quad f_k = \frac{1}{2\pi} \int ^{2\pi}_0 f(x) e^{-ikx}dx
+.\] Plugging this in, we have: \[
+-u'' = f \implies \sum_{k=-\infty}^{+\infty} k^2u_k e^{ikx} = \sum_{k=-\infty}^{+\infty} f_k e^{ikx}
+.\] Since $e^{ikx}$ forms a base, we have: \[
+k^2 u_k = f_k \quad \forall  k
+.\] and if $k\neq 0$:  \[
+u_k = \frac{1}{k^2}f_k
+.\] If $k = 0$, then  $f_0 = 0$, meaning  $u_0$ is arbitrary. This is reasonable,  since we can add any constant to a solution to get another solution. For simplicity, we can set  $u_0 = 0$. As such, we have:  \[
+u(x) = \sum_{k\neq 0} \left( \frac{1}{k^2}f_k \right) e^{ikx} = \sum_{k=-\infty}^{+\infty} u_k e^{ikx}
+.\] Truncating this infinite series, we have: \[
+u_N = \sum_{k=-N}^{N} \hat{u_k} e^{ikx}
+.\] where: \[
+\hat{u_k} = \frac{1}{2\pi} \frac{1}{k^2}\int ^{2\pi}_0 f(x) e^{ikx}dx
+.\] This can be computed numerically. \\
+
+One way to do this is to use Trapezoidal rule, with: \[
+    \int ^{2\pi}_0 g(x) dx = \sum_{i=0}^{N-1} \frac{1}{2}\left( g(x_i) + g(x_{i+1}) \right) h
+.\] where $h = \frac{2\pi}{N}$ being the width between grid points. Since $g(x_0) = g(x_N)$, this would give us:  \[
+\sum_{n=0}^{N-1} g(x_i) h
+.\] since each point is counted twice and $g(x_0) = g(x_N)$. \\
+
+Applying this, we have:  \[
+\hat{f_k} = \frac{1}{2\pi} \sum_{j=0}^{N-1} f(jh) e^{-ik(jh)} h = \frac{1}{N} \sum_{j=0}^{N-1} f_j e^{\frac{-ikj \pi}{N}} 
+.\] 
+This is the definition of the \vocab{discrete Fourier transform (DFT)}. The computational cost for $\hat{f_k}$ is $O(N^2)$. Which is much higher than the $O(N)$ for finite difference (for this case) since it is tridiagonal. As such, even though it gives good accuracy, it was not used early on since the direct method is computationally expensive. This is until FFT was discovered, which reduces it to $O(N\log N)$. This makes the spectral method very popular and affordable.
+
+\subsection{Fast Fourier Transform}
+FFT assums that $N = 2^{p}$. Consider $f_j$ for  $j \in \{1,2,\ldots,2N-1\} $ since $f_{2N} = f_1$. Then the Fourier coefficients: \[
+\hat{f_k} \frac{1}{2N} \sum_{j=0}^{2N-1} f_je^{-ikx_j}
+.\] with $\hat{f_{2N}} = \hat{f_0}$ Separating the indexes into even and odd indices: \[
+f_1(k) = f_{2k}, \quad k  = 0,1,\ldots,N-1
+.\] \[
+f_2(k) = f_{2k+1}, \quad k = 0,1,\ldots,N-1
+.\] With this, we can calculate: \[
+\hat{f_1}(k) = \frac{1}{N} \sum_{n=0}^{N-1} f_1(j) e^{-ik (j \frac{2\pi}{N})}
+.\] \[ 
+\hat{f_2}(k) = \frac{1}{N} \sum_{n=0}^{N-1} f_2(j) e^{-ik (j \frac{2\pi}{N})}
+.\] 
+
+
+\end{document}
+

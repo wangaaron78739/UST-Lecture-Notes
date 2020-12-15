@@ -1,0 +1,123 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{November 12th, 2020}
+\subsection{Iterative Methods to Solve Linear Systems}
+Last time, we introduced three methods, Jacobi, Gauss-Seidel, and SOR. Let us consider the Jacobi iteration. We want to show that it is irreducibly diagonally dominant matrix.
+
+\begin{proof} Assume $A$ is irreducibly diagonally dominant.
+    Recall that the Jacobi iteration is of the form \[
+        G = D^{-1}(L+U)
+    .\] We want to show that $\rho(G) < 1$. Assume  $\lambda$ is an eigenvalue of  $G$. We need to now show that $|\lambda| < 1$. We have:
+    \begin{align*} 
+        Gv &= \lambda v \\
+        \implies D^{-1}(L+U) v &=  \lambda v \\
+        \implies(L+U)v &=  \lambda Dv \\
+        \implies (\lambda D - L - U) v &= 0
+    .\end{align*}
+    Writing down each row explicitly, we have: \[
+    \lambda A_{k k} v_k + \sum_{\ell \neq k} A_{k \ell} v_{\ell} = 0 \quad \forall  k
+    .\] \[
+    \lambda A_{k k} v_k  = - \sum_{\ell \neq k} A_{k \ell} v_{\ell} \quad \forall  k 
+    .\] Taking absolute value on both sides, we have: \[
+    |\lambda | |A_{k k} | |v_k | = | \sum_{\ell \neq k } A_{k \ell} v_\ell | \le  \sum_{\ell \neq k} | A_{k\ell}| |v_{\ell}|
+    .\] If we choose $|v_k| = \max_i |v_i|\neq 0$, we would have:  \[
+    |\lambda| \le  \sum_{\ell \neq k} \frac{|A_{k \ell}|}{|A_{k k}|} \frac{|v_{\ell}|}{|v_k|} \le \frac{1}{|A_{k k}|} \sum_{\ell \neq k} |A_{k \ell}| \le  1
+    .\] The last inequality is because we assume that $A$ is diagonally dominant. \\
+
+If $|\lambda|= 1$, we would have: \[
+1 \le  \sum_{\ell \neq k} \frac{|A_{k \ell}|}{|A_{k k}|} \frac{|v_{\ell}|}{|v_k|}  \le  1 \implies |v_{\ell}| = |v_{k}| , \forall  \ell
+.\] Now for all $k$, we have: \[
+\sum_{\ell \neq k} |A_{k \ell}| = |A_{kk}| 
+.\] which is a contradiction to the irreducibility of $A$. As such $|\lambda| < 1$ for all eigenvalues of  $A$, meaning that the Jacobi iteration converges.
+\end{proof}
+   As shown last time, if we consider the central difference for $-u'' = f$, then the matrix is irreducibly diagonally dominant. We can compute $G$, with: \[
+       G = D^{-1} (L+U) = \frac{1}{2}\begin{bmatrix} 0 & 1 & & & \\ 1 & \ddots &\ddots & & \\ &\ddots&\ddots&\ddots& \\ &&\ddots&\ddots&1 \\ &&&1& 0 \end{bmatrix} _{(N-1)\times (N-1)}
+.\] 
+In addition, we can directly compute the eigenvalues of the original differential operator, as we have: \[
+    -u'' = \lambda u, \quad u(0) = u(1) = 0
+.\] Since the general solution to $-u'' = \lambda u$ is: \[
+u=
+\begin{cases}
+     A\sin (\sqrt{\lambda} x) +B \cos(\sqrt{\lambda} x ) & \lambda > 0 \\
+    Ae^{\sqrt{-\lambda} x } +B e^{-\sqrt{-\lambda} x }& \lambda < 0 
+\end{cases}
+.\]  
+Note that the second case does not satisfy the boundary condition, as: \[
+    u(0) = A+B = 0 \quad u(1) = Ae^{\sqrt{-\lambda} } + B e^{-\sqrt{-\lambda} } = 0
+.\] \[
+\implies A e^{\sqrt{-\lambda} } (1-e^{-2\sqrt{-\lambda} }) = 0
+.\] which is untrue, since $e^{-2\sqrt{-\lambda} } < 1$. As such, $\lambda>0$. Considering the boundary conditions, we have: \[
+u(0) = B = 0
+.\] \[
+u(1) = A\sin(\sqrt{\lambda}) = 0 \implies \lambda_n =  (n \pi)^2
+.\] since $A\neq 0$, otherwise we would get the trivial solution. The eigenvectors are thus: \[
+u_n(x) = \sin (n\pi x)
+.\] 
+Now consider the eigenvalues and eigenvectors of $G$, which are discretized. We predict that the eigenvectors are of form: \[
+    u_n = \sin (n\pi x_j) = \begin{bmatrix} \sin(n\pi x_1) \\ \sin(n\pi x_2) \\ \vdots \\\sin(n\pi x_{N-1})\end{bmatrix} 
+.\] where $x_j = jh = \frac{j}{N}$. We want to show that:\[
+G u_n = \lambda_n u_n
+.\] 
+Consider the $j$-th row of $G u_n$, we have:  \[
+    \frac{1}{2}\begin{bmatrix} 0 & 0 & \ldots & 1 & 0 & 1 & 0 \ldots  \end{bmatrix} \begin{bmatrix} u_1 \\ u_2 \\ \vdots \\ u_j \\ u_{j+1} \\ \vdots \\u_{N-1} \end{bmatrix}   = \frac{1}{2}(u_{j-1} + u_{j+1}) = \lambda_n u_j
+.\] Thus, we have: \[
+\frac{1}{2}(\sin (n\pi x_{j-1}) + \sin(n\pi x_{j+1} )) = \lambda_n \sin(n\pi x_j)
+.\] \[
+\implies \frac{1}{2}(\sin (n\pi (j-1)h) + \sin(n\pi (j+1)h )) = \lambda_n \sin(n\pi jh)
+.\] Recalling that $\sin(x+y) = \sin x \cos y + \cos x \sin y$, giving us: \[
+(\sin(n\pi jh) \cos(n\pi h) - \cos(n\pi j h) \sin(n\pi h) )
++ (\sin(n\pi jh) \cos(n\pi h) + \cos(n\pi j h) \sin(n\pi h) )
+.\] \[
+\implies \cos(n\pi h)\sin (n\pi jh) = \lambda_n \sin(n \pi j h)
+.\] This means that: \[
+\lambda_n = \cos(n\pi h)
+.\] with eigen vectors: \[
+u_n(x) = \sin(n\pi jh)
+.\] Thus, we have: \[
+|\lambda_n| = |\cos(n \pi h)| < 1, \quad n = 1,2,\ldots,N-1
+.\] 
+We now want to investigate the rate of iteration, which indicates the number of iterations required to obtain a required accuracy.
+
+\begin{definition}
+The \vocab{rate of convergence} is \[
+        R ln-\ln(\rho)
+    .\] 
+\end{definition}
+\begin{example}
+    To reduce the error by a factor of $10^p$, the number of iterations required is $\frac{P}{R} \ln(10)$.
+\end{example}
+Let's assume that $G = S\Lambda S^{-1}$, i.e. $G$ is diagonalizable. Recall, we have:  \[
+x_{n+1} = Gx_n + C
+.\] \[
+x_* = G x_* + C
+.\] We have: 
+\begin{align*} 
+&x_{n+1} - x_* = G(x_n - x_{*}) \\
+\implies& e_{n+1} = G e_n = G^2 e_{n-1} = \ldots = G^{n+1} e_0  
+.\end{align*} This gives us: \[
+\|e_n\| \le  \| G^n\| \| e_0\| \le  \| S \Lambda^n S^{-1}\| \|e_0\| \le  \| S\| \|S^{-1}\| \|\Lambda^n\| \| e_0\|
+.\] 
+As such: \[
+\frac{\|e_n\|}{\|e_0\|} \le  \| S\| \|S^{-1}\| \|\Lambda\|^n \le  \| S\| \|S^{-1}\| \rho^n
+.\] Say we want to reduce the error by a factor of $10^p$, we have: 
+\begin{align*}
+&\| S\| \| S^{-1}\| \rho^n \le  10^{-p} \\
+    \implies& (\| S\| \| S^{-1}\|)^{\frac{1}{n}} \rho \le  10^{-\frac{p}{n}} \\
+            \implies& \frac{1}{n} \ln(\| S\| \| S^{-1}\|) + \ln \rho \le  - \frac{p}{n} \ln 10  \\
+            \implies & \frac{\ln(\| S\| \| S^{-1}\|)}{\ln \rho} +  n \ge   - \frac{p}{\ln \rho} \ln 10 \\
+            \implies& n \ge  \frac{P}{R}\ln 10 - C
+.\end{align*} where $R = -\ln \rho$ for some constant $C$.
+
+\begin{remark}
+    If $\rho$ is close to 1, then $n\sim \infty$.
+\end{remark}
+\begin{remark}
+    If $N$ is very large, then  the first eigenvalue will be close to 1, meaning that  $\rho $ is close to 1. This is not good, since for accuracy reason we want  $N$ to be large, but convergence would be slow. 
+\end{remark}
+
+
+\end{document}
+

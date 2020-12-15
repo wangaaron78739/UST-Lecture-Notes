@@ -1,0 +1,65 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{November 17th, 2020}
+\subsection{Methods to solve PDEs}
+Last time, we tried to calculate the explicit scheme for some iterative schemes. Let us consider the model: \[
+\begin{cases}
+    -u''(x) + \sigma u(x) = f(x) & 0 < x < 1, \sigma > 0\\
+    u(0) = u(1) = 0
+\end{cases}
+.\] 
+If we use a uniform grid with: \[
+h = \frac{1}{N}, x_i = ih
+.\] We can use the Taylor expansion to approximate the second derivative using central different with second order accuracy. With this, we can approximate the boundary value problem with a finite difference scheme, giving us a symmetric positive definite matrix equation that we solve iteratively. 
+
+There are a few other methods to solve this: 
+\begin{itemize}
+    \item Direct Methods
+        \begin{itemize}
+            \item Gaussian elimination
+            \item Factorization
+        \end{itemize}
+    \item Iterative Methods
+        \begin{itemize}
+            \item Jacobi
+            \item Gauss-Seidel
+            \item SOR
+            \item Conjugate Gradient
+        \end{itemize}
+\end{itemize}
+
+If we have a 2D problem, we would have a similar situation with a linear block tridiagonal system.  
+
+Coming back to the iterative method, consider $Au=f$ where $A$ is NxN and let $v$ be an approximation of $u$. There are two important measures: 
+\begin{itemize}
+    \item The error: $e=u-v$ with norms: \[
+    \|e\|_\infty = \max |e_i| \quad \|e\|_2 = \sqrt{\sum_{i=1}^{N} e_i^2} 
+    .\] 
+\item The residual: $r=f-Av$ with norms: \[
+\|r\|_\infty \quad \|r\|_2
+.\] 
+\end{itemize}
+We can rewrite $Au=f$ as: \[
+    A(v+e) = f
+.\] which means that \[
+Ae = f - Av = f
+.\] which is called the \vocab{residual equation}. This means that if we know the error we can correct it with $u=v+e$. This is called \vocab{residual correction}.
+
+\subsection{Relaxation Schemes}
+The Jacobi and Gauss-Seidel iterations are both relaxation schemes. 
+
+Let us consider the weighted Jacobi relaxation: \[
+    v^{n+1}_i = (1-\omega) v^{n}_i + \frac{\omega}{2}(v^{n}_{i-1} + v^{n}_{i+1} + h^2 f_i), \quad0 < \omega < 2
+.\] 
+\begin{remark}
+    When $\omega=1$, this is the Jacobi iteration.
+\end{remark}
+
+There a few other version as well
+
+
+\end{document}
+
