@@ -77,8 +77,10 @@ Both schemes have first order error in time $t$ and second order in space. This 
 \end{remark}
 However, if use $\theta = \frac{1}{2}$, we have 2nd order in time and space. This is because there is some cancellation when $\theta = \frac{1}{2}$. For any other values of $\theta$, this will not be true. To calculate the truncation error for the $\theta$ method, we expand terms  at  $(x_j, t_{n+\frac{1}{2}})$: 
 \begin{align*}
-    u(x_j,t_n) &= u(x_j,t_{n+\frac{1}{2}}) - u_t(\frac{1}{2}\Delta t) + \frac{1}{2}u_{tt}\left( -\frac{1}{2}\Delta t \right) ^2 \\ 
-    u(x_j,t_n) &= u(x_j,t_{n+\frac{1}{2}}) - u_t(\frac{1}{2}\Delta t) + \frac{1}{2}u_{tt}\left( -\frac{1}{2}\Delta t \right) ^2 \\ 
+    u(x_j,t_n) &= u(x_j,t_{n+\frac{1}{2}}) - u_t(\frac{1}{2}\Delta t) + \frac{1}{2}u_{tt}\left( -\frac{1}{2}\Delta t \right) ^2 +\frac{1}{6}u_{ttt}\left( -\frac{1}{2}\Delta t \right) ^3 +\ldots \\
+    u(x_j,t_{n+1}) &= u(x_j,t_{n+\frac{1}{2}}) + u_t(\frac{1}{2}\Delta t) + \frac{1}{2}u_{tt}\left( -\frac{1}{2}\Delta t \right) ^2 +\frac{1}{6}u_{ttt}\left( -\frac{1}{2}\Delta t \right) ^3 + \ldots\\
+  u(x_{j\pm 1},t_n) &= u(x_j,t_{n+\frac{1}{2}}) - u_t(\frac{1}{2}\Delta t) \pm u_{x}\Delta x + \frac{1}{2}u_{tt}\left(-\frac{1}{2}\Delta t \right) ^2  +\frac{1}{2}u_{xx}\left(\Delta x \right) ^2 \mp \frac{1}{2}u_{xt}\Delta x \Delta t  +\ldots \\
+  u(x_{j\pm 1},t_{n+1}) &= u(x_j,t_{n+\frac{1}{2}}) + u_t(\frac{1}{2}\Delta t) \pm u_{x}\Delta x + \frac{1}{2}u_{tt}\left(-\frac{1}{2}\Delta t \right) ^2 + \frac{1}{2}u_{xx}\left(\Delta x \right) ^2 \pm \frac{1}{2}u_{xt}\Delta x \Delta t + \ldots \\
 \end{align*}
 %\[ 
     %u(x_j,t_n) &= u(x_j,t_{n+\frac{1}{2}}) - u_t(\frac{1}{2}\Delta t) + \frac{1}{2}u_{tt}\left( -\frac{1}{2}\Delta t \right) ^2 \\ 
