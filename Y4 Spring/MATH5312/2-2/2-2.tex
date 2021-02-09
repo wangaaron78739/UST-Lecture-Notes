@@ -1,0 +1,208 @@
+\documentclass[../main/main.tex]{subfiles}
+
+\begin{document}
+
+\section{February 2nd, 2021}
+\subsection{Class Logistics}
+This course is a continuation of MATH5311. In MATH5311, we introduced how to discretize differential equations.
+In the course, we focus on the algebraic side of numerical analysis, introducing some more advanced solvers for these numerical methods.
+
+\subsubsection{Assessment Scheme}
+\begin{description}
+  \item[Biweekly Homework] - 60\%
+  \item[Take-home Final Exam] - 40\%
+\end{description}
+\subsubsection{Reference Books}
+\begin{description}
+  \item[Lecture Notes] - Main content that will be covered
+  \item[Youset Saad: Iterative Methods for Sparse Linear Systems] - Free ebook can be found on Canvas
+  \item[Golub, Van Lean: Matrix Computations]
+  \item[Trefethen, Bau: Numerical Linear Algebra]
+\end{description}
+
+\subsection{Direct Methods for Systems of Lienar Equations}
+The goal of this chapter is very simple, solve: \[
+Ax = b
+\] where \[
+A = \begin{bmatrix}
+  a_{11} & a_{12} & \ldots & a_{1n}\\
+  a_{21} & a_{22} & \ldots & a_{2n}\\
+  \vdots & \vdots & \ddots &\vdots \\
+  a_{n1} & a_{n2} & \ldots & a_{nn}\\
+\end{bmatrix} \in \RR^{n \times n}
+\]
+and: \[
+x = \begin{bmatrix}
+  x_1\\ x_2 \\ \vdots \\x_{n}
+\end{bmatrix} \in \RR^{n}
+\] which is the unknown vector, and: \[
+b = \begin{bmatrix}
+  b_1\\ b_2 \\ \vdots \\b_{n}
+\end{bmatrix} \in \RR^{n}
+\] is the right hand side (RHS).
+
+The solution of system of linear equations is a fundamental task in numerical analysis. If we want to solve a non-linear equation, we can do it iteratively, where each step is solving a linear system. In this chapter, we will introduce \textbf{Direct Methods}.
+
+\begin{definition}
+A \vocab{Direct Method} is a method in which, if there is no truncation error in the computer, can solve the system exactly in finite time.
+\end{definition}
+
+One example of a direct method is \vocab{Gaussian Elimination}.
+
+\begin{example}
+  \label{2-2-ex1}
+  Consider:
+  \[
+    \begin{cases}
+      2x_1+x_2-x_3 = 1 \\
+      4x_1+5x_2- 3x_3 = -3 \\
+      -2x_1+5x_2-2x_3 = -8\\
+    \end{cases}
+  \]
+  To perform Gaussian Elimination, we eliminate $x_1$ from Equations 2 and 3 by subtracting Equation 1, and then $x_{2}$ from Equation 3 by subtracting Equation 2. Doing so, we get: \[
+    \begin{cases}
+      2x_1+x_2-x_3 = 1 \\
+      3x_{2}- x_3 = -5 \\
+      -x_3 = 3\\
+    \end{cases}
+  \]
+  After this, we can solve $x_{3}$ and then using its value solve $x_2$ and $x_{3}$.
+\end{example}
+
+Typically we use matrix terminology to reformulate the methods. We do this by writing the \vocab{augmented matrix} of the above linear system:
+\[
+  \left[
+\begin{array}{ccc|c}
+  2&1&-1&-1 \\
+  4&5&-2&-3 \\
+  -2&5&-3&-8 \\
+\end{array}
+\right]
+\]
+
+\begin{lemma}
+Row Operations are equivalent to left matrix multiplications.
+\end{lemma}
+
+\begin{example}
+  In Example \ref{2-2-ex1}, the row operation to eliminate $x_{1}$ for Equations 2 and 3 can be represented as:
+  \[
+  \begin{bmatrix}
+    1&0&0\\
+    -2&1&0\\
+    1&0&1
+  \end{bmatrix}
+  \left[
+\begin{array}{ccc|c}
+  2&1&-1&-1 \\
+  4&5&-2&-3 \\
+  -2&5&-3&-8 \\
+\end{array}
+\right]
+=
+  \left[
+\begin{array}{ccc|c}
+  2&1&-1&-1 \\
+  0&3&-1&-5 \\
+  0&6&-3&-7 \\
+\end{array}
+\right]
+  \]
+\end{example}
+
+As such, if $A$ is the augmented matrix and we want to solve the system $Ax = b$, we have: \[
+L_{n-1}\ldots L_1 Ax = L_{n-1}\ldots L_1b
+\] and until the LHS is an upper triangular matrix.
+
+\begin{remark}
+  Note that the row operations $L_{i}$ are lower triangular matrix. In particular, it is a rank 1 modification of the identity matrix: \[
+L_{i} = I - v e^{T}_{i}
+  \] where $v \in \RR^{n}$ and $v_1=v_2=\ldots=v_{i}=0$ and $e_{i}$ is the $i$-th unit vector.
+\end{remark}
+\begin{definition}
+ $L_{i}$ are called \vocab{Gauss Transformations}.
+\end{definition}
+In summary, Gaussian Elimination consists of the following steps:
+\begin{enumerate}
+  \item Left multiply Gaussian Transformations to reduce $A$ to an upper triangular matrix: \[
+A^{(1)} = A = \begin{bmatrix}
+  a_{11}^{(1)} & a_{12}^{(1)} & \ldots & a_{1n}^{(1)}\\
+  a_{21}^{(1)} & a_{22}^{(1)} & \ldots & a_{2n}^{(1)}\\
+  \vdots & \vdots & \ddots &\vdots \\
+  a_{n1}^{(1)} & a_{n2}^{(1)} & \ldots & a_{nn}^{(1)}\\
+\end{bmatrix}\text{ and  } b^{(1)} = b = \begin{bmatrix}
+b^{(1)}_{1} \\
+b^{(1)}_{2} \\
+\vdots \\
+b^{(1)}_{n} \\
+\end{bmatrix}
+        \]
+        In step 1, we have: \[
+L_1 = \begin{bmatrix}
+  1 &  & &\\
+  -\frac{a_{21}^{(1)}}{a_{11}^{(1)}} & 1 & &\\
+  \vdots &  & \ddots & \\
+  -\frac{a_{n1}^{(1)}}{a_{11}^{(1)}} & 0 & \ldots& 1\\
+\end{bmatrix} = I-\ell_{1} e^{T}_{1}, \quad \ell1 = \begin{bmatrix}
+0 \\\frac{a_{21}^{(1)}}{a_{11}^{(1)}} \\ \vdots \\ \frac{a_{n1}^{(1)}}{a_{11}^{(1)}}
+\end{bmatrix}
+        \]
+        After step 1, we have: \[
+L_{1}A^{(1)} = A^{(2)} = \begin{bmatrix}
+  a_{11}^{(1)} & a_{12}^{(1)} & \ldots & a_{1n}^{(1)}\\
+   0& a_{22}^{(2)} & \ldots & a_{2n}^{(2)}\\
+  \vdots & \vdots & \ddots &\vdots \\
+  0 & a_{n2}^{(2)} & \ldots & a_{nn}^{(2)}\\
+\end{bmatrix}\text{ and  } L_{1}b^{(1)} = b^{(2)} = \begin{bmatrix}
+b^{(1)}_{1} \\
+b^{(2)}_{2} \\
+\vdots \\
+b^{(2)}_{n} \\
+\end{bmatrix}
+        \]
+        We can continue this process until the LHS is upper left triangular.
+        The pseudocode of this first part is given in \ref{22a1}.
+        	\begin{algorithm}[h!]
+	\caption{Gaussian Elimination Part 1}
+      \label{22a1}
+	\begin{algorithmic}[1]
+      \For{ $k=1:n-1$}
+        \For{$i=k+1:n$}
+            \State $\ell_{ik} = a_{ik}^{(k)} / a_{kk}^{(k)}$
+        \EndFor
+        \For{$i=k+1:n$}
+            \For{$j=k+1:n$}
+                \State $a_{ij}^{(k+1)} = a_{ij}^{(k+1)} - \ell_{ik}a_{kj}^{(k)}$
+                \Comment Compute $A^{(k+1)} = L_{k} A^{(k)}$
+            \EndFor
+        \EndFor
+        \For{$i=k+1:n$}
+            \State $b_{i}^{(k+1)} = b_{i}^{(k+1)} - \ell_{ik}b_{i}^{(k)}$
+            \Comment Compute $b^{(k+1)} = L_{k} b^{(k)}$
+        \EndFor
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+  \item For part 2, we solve the resulting upper triangular linear system: \[
+        A^{(n)} x = b^{(n)}\] This is quite straightforward, as we just start from the last row and solve each equation, since we are only introducing one unknown with each equation.
+        The pseudocode of this second part is given in \ref{22a2}.
+        	\begin{algorithm}[h!]
+	\caption{Gaussian Elimination Part 2}
+      \label{22a2}
+	\begin{algorithmic}[1]
+      \For{ $k=n:-1:1$}
+        \For{$j=n:-1:k+1$}
+            \State $y_{k} = y_{k} - u_{kj}x_{j}$
+        \EndFor
+        \State $x_{k} = y_{k} / a_{k k}$
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+\end{enumerate}
+\begin{remark}
+  Note that a naive implementation would take $O(n^{3})$ memory, as three indexes are used for $a_{ij}^{(k)}$.
+\end{remark}
+We can implement this more efficiently by dropping the superscript, since we do not change it. In other words, we use $a_{ij}^{(k)}$ to overwrite $a_{ij}$. This will take up the upper triangular part of the matrix. Since the lower triangular part of the matrix is 0, we can use write $\ell_{ik}$ to this memory. If we do not need $b$ anymore, we can overwrite it as well, meaning that we can do Gaussian Elimination without requiring additional memory.
+
+
+\end{document}

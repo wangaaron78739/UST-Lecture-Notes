@@ -1,0 +1,331 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 9th, 2021}
+\subsection{Pivoting LU Decomposition}
+\begin{example}
+  Consider $Ax = b$: \[
+    \begin{bmatrix}
+      2&1&-1 \\
+      4&5&-3\\
+      -2&5&-2\\
+    \end{bmatrix}
+    \begin{bmatrix}
+      x_1\\ x_2\\ x_3
+    \end{bmatrix}
+    = \begin{bmatrix}
+1\\-3\\-8
+    \end{bmatrix}
+  \] At each step, we have:
+  \begin{enumerate}
+    \item \[
+          A=
+    \begin{bmatrix}
+      2&1&-1 \\
+      2&3&-1\\
+      -1&6&-3\\
+    \end{bmatrix}
+          \]
+    \item \[
+          A=
+    \begin{bmatrix}
+      2&1&-1 \\
+      2&3&-1\\
+      -1&2&-1\\
+    \end{bmatrix}
+          \]
+  \end{enumerate}
+  Thus, we have: \[
+L =
+    \begin{bmatrix}
+      1&& \\
+      2&1&\\
+      -1&2&1\\
+    \end{bmatrix}
+     \quad U =
+    \begin{bmatrix}
+      2&1&-1 \\
+      &3&-1\\
+      &&-1\\
+    \end{bmatrix}
+  \]
+  Now we solve $Ly = b$ by forward substitution: \[
+    \begin{bmatrix}
+      1&& \\
+      2&1&\\
+      -1&2&1\\
+    \end{bmatrix}
+    \begin{bmatrix}
+      y_1\\ y_2\\ y_3
+    \end{bmatrix}
+    = \begin{bmatrix}
+1\\-3\\-8
+    \end{bmatrix}
+    \implies \begin{cases}
+      y_1=1\\
+      y_2=-5\\
+      y_3=3
+    \end{cases}
+  \]
+  Then we solve $Ux = y$ by back substitution: \[
+    \begin{bmatrix}
+      2&1&-1 \\
+      &3&-1\\
+      &&-1\\
+    \end{bmatrix}
+    \begin{bmatrix}
+      x_1\\ x_2\\ x_3
+    \end{bmatrix}
+    = \begin{bmatrix}
+1\\-5\\3
+    \end{bmatrix}
+    \implies \begin{cases}
+      y_1=1 / 3\\
+      y_2=-8 / 3\\
+      y_3=-3
+    \end{cases}
+  \]
+\end{example}
+  In LU Decomposition, $A(k,k)$ at step $k$ is in the denominator, which means:
+  \begin{enumerate}
+\item The procedure cannot continue if $A(k,k)=0$
+          \begin{example}
+            \[
+              \begin{bmatrix}
+                0&1\\
+                1&0
+              \end{bmatrix}
+              \begin{bmatrix}
+x_1\\ x_2
+              \end{bmatrix}
+              = \begin{bmatrix}
+                1\\ 2
+              \end{bmatrix}
+            \]
+          \end{example}
+          \item If $A(k,k)$ is small, then the computation becomes inaccurate.
+  \end{enumerate}
+
+  As such, LU Decomposition is unstable unless $A(k,k) $ is large.
+\begin{definition}
+  We call $A(k,k)$ at step $k$ a \vocab{pivot entry}.
+\end{definition}
+
+In order to avoid small pivots, we use ``pivoting'', where we interchange the row or columns of the matrix. There are many pivoting schemes, for example Row Pivoting, where at each step $k$, we choose the largest entry in the $k$ column under $A(k,k)$.
+        	\begin{algorithm}[h!]
+	\caption{Row Pivoting}
+	\begin{algorithmic}[1]
+      \For{ $k=1:n-1$}
+      \State Find the max entry in abs. value in $A(k:n,k)$ denoted by $i_{k}$
+      \State $A(i_{k},:) \iff A(k,:)$
+      \Comment Swap row $i_{k}$ and $k$
+      \State $A(k+1:n,k)=A(k+1:n,k) / A(k,k)$
+      \State $A(k+1:n,k+1:n)=A(k+1:n,k+1:n) - A(k+1:n,k)A(k,k+1:n)$
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+
+    Row interchanging (row $i_{k} \iff$ row $k$) is equivalent to Left multiplying by a permutation matrix: \[
+      P_{k} = \begin{bmatrix}
+        1 &&&&&&\\
+         &\ddots&&&&&\\
+         &&0&&1&&\\
+         &&&\ddots&&&\\
+         &&1&&0&&\\
+         &&&&&\ddots&\\
+         &&&&&&1\\
+      \end{bmatrix}
+    \]
+    Thus when we perform the LU decomposition, we have: \[
+L_{n-1} P_{n-1} \ldots L_{2} P_{2} L_{1}P_{1} A = U
+    \]
+    However, this is too complicated, so we will do some simplification. It is easy to check that $P_{k}P_{k} = I$, since we are swapping the two rows again, and that $P^{T}_{k} = P_{k}$.
+    \begin{lemma}
+ \[P_{n-1}P_{n-2}\ldots P_{k+1}L_{k}P_{k+1}\ldots P_{n-2} P_{n-1} = I - (P_{n-1}P_{n-2}\ldots P_{k+1}\ell_{k})e^{T}_{k}\]
+    \end{lemma}
+    \begin{proof}
+      We have:
+      \begin{align*}
+L_{k} &= I - \ell e^{T}_{k} \\
+        P_{k+1}L_{k}P_{k+1} &= P_{k+1}(I-\ell _{k}e^{T}_{k})P_{k_{1}} = I - P_{k+1}\ell_{k}e^{T}_{k}P_{k+1} \\
+        &= I - (P_{k+1}\ell _{k}) e^{T}_{k} \\
+        & \vdots
+        .\end{align*}
+    \end{proof}
+    If we denote $P_{n-1}P_{n-2} \ldots P_{k+1}\ell_{k} = \tilde{\ell_{k}}$, we have:
+\begin{align*}
+  &L_{n-1} P_{n-1} \ldots L_{2} P_{2} L_{1}P_{1} A \\
+  &=L_{n-1} (P_{n-1} L_{n-2}P_{n-1})(P_{n-1}P_{n-2} \ldots L_{2} P_{2} L_{1}P_{1} A \\
+  &=\tilde{L_{n-1}}\tilde{L_{n-2}}\ldots\tilde{L_{1}}P_{n-1}P_{n-2}\ldots P_{1}A
+    .\end{align*}
+  Denoting $P_{n-1}P_{n-2}\ldots P_{1}=P$, we have: \[
+    PA = \tilde{L_{1}^{-1}}\tilde{L_{2}^{-1}}\ldots\tilde{L_{n-1}^{-1}}U
+  \]
+  Giving us \[
+    PA = LU
+  \]
+  \begin{example}
+    Using the same example as before, $A =
+    \begin{bmatrix}
+      2&1&-1 \\
+      4&5&-3\\
+      -2&5&-2\\
+    \end{bmatrix}
+    $ we have:
+    \begin{enumerate}
+      \item \[
+    \begin{bmatrix}
+      2&1&-1 \\
+      4&5&-3\\
+      -2&5&-2\\
+    \end{bmatrix}
+            \xrightarrow{\text{row }1 \leftrightarrow \text{row }2}
+    \begin{bmatrix}
+      4&5&-3\\
+      2&1&-1 \\
+      -2&5&-2\\
+    \end{bmatrix}
+            \to
+    \begin{bmatrix}
+      4&5&-3\\
+      \frac{1}{2}&-\frac{3}{2}&\frac{1}{2} \\
+      -\frac{1}{2}&\frac{15}{2}&-\frac{7}{2}\\
+    \end{bmatrix}
+            \]
+      \item \[
+    \begin{bmatrix}
+      4&5&-3\\
+      \frac{1}{2}&-\frac{3}{2}&\frac{1}{2} \\
+      -\frac{1}{2}&\frac{15}{2}&-\frac{7}{2}\\
+    \end{bmatrix}
+            \xrightarrow{\text{row }2 \leftrightarrow \text{row }3}
+    \begin{bmatrix}
+      4&5&-3\\
+      \frac{1}{2}&-\frac{3}{2}&\frac{1}{2} \\
+      -\frac{1}{2}&\frac{15}{2}&-\frac{7}{2}\\
+    \end{bmatrix}
+      \to
+    \begin{bmatrix}
+      4&5&-3\\
+      -\frac{1}{2}&\frac{15}{2}&-\frac{7}{2}\\
+      \frac{1}{2}&-\frac{1}{5}&-\frac{1}{5} \\
+    \end{bmatrix}
+            \]
+    \end{enumerate}
+    Giving us an output: \[
+      PA =
+    \begin{bmatrix}
+      4&5&-3\\
+      -\frac{1}{2}&\frac{15}{2}&-\frac{7}{2}\\
+      \frac{1}{2}&-\frac{1}{5}&-\frac{1}{5} \\
+    \end{bmatrix}
+    \]
+    With this, we have: \[
+      L =
+    \begin{bmatrix}
+      1&&\\
+      -\frac{1}{2}&1&\\
+      \frac{1}{2}&-\frac{1}{5}&1 \\
+    \end{bmatrix}
+    \quad U =
+    \begin{bmatrix}
+      4&5&-3\\
+      &\frac{15}{2}&-\frac{7}{2}\\
+      &&-\frac{1}{5} \\
+    \end{bmatrix}
+    \quad P =
+    \begin{bmatrix}
+      0&1&0\\
+      0&0&1\\
+    1&0&0
+    \end{bmatrix}
+    \]
+  \end{example}
+  \begin{remark}
+All entries in $L$ have an abs. value smaller than 1.
+  \end{remark}
+  There are also other pivoting strategy, such as \vocab{full pivoting} where you swap the columns as well go get the maximum pivot in the lower submatrix. This would give us: \[PAQ = LU\] where $Q$ is also a permutation matrix.
+  \begin{remark}
+Full pivoting not only rearranges the equation, but it also rearranges the unknowns.
+  \end{remark}
+  \begin{remark}
+Full pivoting is more stable than row pivoting but it is computationally more expensive.
+  \end{remark}
+  For any non-singular matrix, we can solve it using pivoting LU decomposition. However, we can consider the structure of the matrix to improve the algorithm.
+
+  \subsection{LU Decomposition on SPD Matrices}
+
+  \begin{definition}
+    $A \in\RR^{n \times n}$ is \vocab{symmetric positive definite (SPD)} if it is:
+    \begin{itemize}
+\item Symmetric: $A = A^{T}$
+            \item Positive Definite: $x^{T}Ax > 0$ for all $x \in \RR^{n}$ and $x\neq 0$
+    \end{itemize}
+  \end{definition}
+  \begin{example}
+    Examples of SPD matrices include:
+    \begin{itemize}
+\item
+    Discrete Laplacian is SPD
+\item Normal equation of Least Squares
+\item Hessian of strictly convex functions
+    \end{itemize}
+  \end{example}
+  For general matrices, the LU decomposition is $\frac{2}{3}n^{3} + O(n^2)$. For SPD matrices, we can reduce this to $\frac{1}{3}n^{3} + O(n^2)$, meaning we can reduce the computation cost by half. In addition, no pivoting is necessary for SPD matrices.
+
+  There is a slight modification of LU for SPD matrices called the \vocab{Cholesky Decomposition}.
+  \subsection{Cholesky Decomposition}
+  Assume $A \in \RR^{n \times n}$ is SPD. Then there exists a decomposition such that: \[
+A = L L ^{T}
+  \]
+  where $L$ is a lower triangular matrix. With Cholesky decomposition, we can solve the linear system: \[
+  Ax = b \iff L L^{T}x = b \iff \begin{cases}
+    Ly = b \\
+    L^{T}x = y
+  \end{cases}\]
+
+%         	\begin{algorithm}[h!]
+% 	\caption{Cholesky Decomposition}
+% 	\begin{algorithmic}[1]
+%       \State set $L = \begin{bmatrix}
+% \ell_{11} &&& \\
+% \ell_{21} &\ell_{22}&& \\
+% \vdots &\vdots&\ddots& \\
+% \ell_{n1} &\ell_{n2}&&\ell_{nn} \\
+%       \end{bmatrix}$
+% 	\end{algorithmic}
+% 	\end{algorithm}
+
+    Since $A = L L^{T}$ with: \[
+      A=
+\begin{bmatrix}
+a_{11} &a_{12}&\ldots&a_{1n} \\
+a_{21} &a_{22}&&\vdots \\
+\vdots &\vdots&\ddots& \vdots\\
+a_{n1} &a_{n2}&&a_{nn} \\
+\end{bmatrix}
+\quad L = L = \begin{bmatrix}
+\ell_{11} &&& \\
+\ell_{21} &\ell_{22}&& \\
+\vdots &\vdots&\ddots& \\
+\ell_{n1} &\ell_{n2}&&\ell_{nn} \\
+      \end{bmatrix}
+      \quad
+L^{T} =  \begin{bmatrix}
+\ell_{11} &\ell_{21}&\ldots& \ell_{n_1} \\
+ &\ell_{22}&\ldots&\ell_{n_2} \\
+&&\ddots&\vdots \\
+ &&&\ell_{nn} \\
+\end{bmatrix}
+    \]
+
+    We have:
+    \begin{itemize}
+\item $a_{11} = \ell_{11}^2 \implies \ell_{11} = \sqrt[]{a_{11}}$
+            \item $a_{21}= \ell_{21}\ell_{11} \implies \ell_{21} = a_{21} / \ell_{11}$
+            \item $a_{n1}= \ell_{n1}\ell_{11} \implies \ell_{n1} = a_{n1} / \ell_{11}$
+    \end{itemize}
+To be continued in the next lecture.
+\end{document}

@@ -1,0 +1,155 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 4th, 2021}
+\subsection{Efficient Gaussian Elimination}
+Last time, we introduced a memory efficient way to perform Gaussian Elimination by reusing the inputs. However, this implementation is \textbf{not} the most time efficient. To do this, we need to consider the computer architecture. Recall that computers have a few different layers of memory:
+\begin{itemize}
+  \item CPU register
+  \item Cache
+  \item RAM
+  \item Disk
+\end{itemize}
+The lower the level, the larger the memory but communicating is slower. As such, to improve the efficiency, we should minimize the communication between the different levels of memory.
+
+\begin{remark}
+This principle of memory management should always be considered when performing matrix multiplication.
+\end{remark}
+Note that we can reformulate the previous algorithms into matrix operations. First we perform a vector scaling, then we perform a rank 1 update, and then a matrix vector product. Since these are very basic operations, there are many very efficient implementations of these \vocab{Basic Linear Algebra Subroutines (BLAS)}. There are a few different levels of these BLAS.
+\begin{description}
+  \item[BLAS1]: Vector operations, e.g. \[
+        \beta = x^{T} y, y = \beta x +y,\quad \text{where }x,y \in \RR^{n},! \beta \in \RR
+        \]
+  \item[BLAS2]: Matrix-Vector operations \[
+        y = Ax + y, \quad \text{where }A\in \RR^{m \times n},~ x,y\text{ are vectors}
+        \]
+  \item[BLAS3]: Matrix-Matrix operations \[
+        C = AB + C, \quad \text{where }A,B,C \text{ are matricies }
+        \]
+\end{description}
+These BLAS are implemented to be optimized on the given computer architecture.
+\begin{remark}
+  Since BLAS3 can be constructed using BLAS2, etc. in terms of the efficiency, we have: \[
+    \text{BLAS3} > \text{BLAS2} > \text{BLAS1}
+  \]where efficiency is the time needed
+\end{remark}
+% \begin{remark}
+%   For interfaces of BLAS, \href{www.netlib.org/blas}
+% \end{remark}
+\begin{remark}
+BLAS will come with the CPU.
+\begin{description}
+  \item[AMD] Core Math Library (ACML)
+\item[Intel] Math Kernel Lib (MKL)
+\end{description}
+\end{remark}
+% \begin{remark}
+% Use BLAS when doing matrix computations.
+% \end{remark}
+Replacing the algorithm with BLAS, we have:
+
+        	\begin{algorithm}[h!]
+	\caption{Gaussian Elimination with BLAS}
+	\begin{algorithmic}[1]
+      \For{ $k=1:n-1$}
+      \State $A(k+1:n,k)=A(k+1:n,k) / A(k,k)$
+      \State $A(k+1:n,k+1:n)=A(k+1:n,k+1:n) - A(k+1:n,k)A(k,k+1:n)$
+      \State $b(k+1:n,1)= b(k+1:n,1) - b(k.1)A(k+1:n,k)$
+      \EndFor
+      \For{ $k=n:-1:1$}
+      \State $b(k) = b(k) - A(k,k+1:n)b(k+1:n)$
+      \State $b(k) = b(k)  / A(k,k)$
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+
+\subsection{Complexity of Gaussian Elimination}
+For this,we want to see how many scalar operations are needed. Counting the cost, we have: \[
+  \sum_{k=1}^{n-1} \left[(n-k)+2(n-k)^2+2(n-k)\right] + \sum_{k=1}^n \left[2(n-k)+1\right]
+\]
+\begin{align*}
+  &\sum_{k=1}^{n-1} \left[(n-k)+2(n-k)^2+2(n-k)\right] + \sum_{k=1}^n \left[2(n-k)+1\right] \\
+  &= 3 \sum_{k=1}^{n-1} (n-k) + 2 \sum_{k=1}^{n-1} (n-k)^2 + 2 \sum_{k=1}^{n-1} k + \sum_{k=1}^n 1\\
+  &= \frac{2}{3}n^{3} + \frac{3}{2}n^2 - \frac{1}{3}n \\
+  &= \frac{2}{3}n^{3} + O(n^2)\\
+  &= O(n^{3})
+  .\end{align*}
+\begin{theorem}
+The computational complexity of Gaussian Elimination is $O(n^{3})$.
+\end{theorem}
+
+\subsection{LU Decomposition view of Gaussian Elimination}
+Remember we can express Gaussian Elimination as: \[
+L_{n-1}\ldots L_{2}L_{1} Ax = L_{n-1} \ldots L_{1} b
+\]
+Note that $L_{n-1}\ldots L_{2}L_{1} A = A^{(n)}$ which is upper triangular. Let us denote this by: \[
+U = \begin{bmatrix}
+  u_{11} & u_{12} & \ldots & u_{1n}\\
+   & u_{22} & \ldots & u_{2n}\\
+   &  & \ddots &\vdots \\
+   &  &  & u_{nn}\\
+\end{bmatrix} \in \RR^{n \times n}
+\]
+Note that since each $L_{i}$ is a Gaussian transformation which is invertable, we have: \[
+A = L^{-1}_{1}L^{-1}_{2}\ldots L^{-1}_{n-1} U
+\]
+\begin{theorem}
+  \[
+    L^{-1}_{k} = I + \ell_{k} e^{T}_{k}
+  \]
+\end{theorem}
+\begin{proof}
+\begin{align*}
+ & (I - \ell_{k}e^{T}_{k}) (I + \ell_{k}e^{T}_{k}) \\
+  &= I - \ell_{k}e^{T}_{k}+\ell_{k}e^{T}_{k} - \ell_{k } e^{T}_{k}\ell_{k}e^{T}_{k} \\
+    &= I
+  .\end{align*}
+\end{proof}
+\begin{theorem}
+  \[
+    L^{-1}_{1}L_2^{-1}\ldots L_{n-1}^{-1} = I + \sum_{i=1}^{n-1} \ell_{i}e_{i}^{T}
+  \]
+  which is lower triangular.
+\end{theorem}
+\begin{proof}
+Direct computation.
+\end{proof}
+\begin{theorem}
+  Gaussian Elimination gives: \[
+  A = LU\] where $L$ is unit lower triangular, and $U$ is upper triangular. This is called the \vocab{LU Decomposition}.
+\end{theorem}
+\begin{remark}
+  Note that in the memory efficient implementation of GE, we are computing $L$ and $U$ and it is stored in the original matrix.
+\end{remark}
+With this, we have: \[
+Ax = b \iff LUx = b \iff \begin{cases}
+  Ly = b \\
+  Ux = y
+\end{cases}
+\]
+\begin{theorem}
+The computation cost is: $\begin{cases}
+  \text{LU decomposition} & \frac{2}{3}n^{3} + O(n^2)\\
+  \text{Forward Substitution} &  O(n^2)\\
+  \text{Backward Substitution} &  O(n^2)\\
+\end{cases}$
+\end{theorem}
+
+\begin{remark}
+If we use the same coefficient matrix, we only need to compute the decomposition once.
+\end{remark}
+This LU decomposition view of Gaussian Elimination has a number of advantages:
+\begin{enumerate}
+  \item If we want to solve $Ax_{i}= b_{i}$ for $i=1, \ldots m$, then we only need to do LU decomposition once
+  \item LU decomposition can be used for other matrix computation tasks. e.g.
+\begin{enumerate}
+  \item $ \det(A) = \det(LU) = \det(L)\det(U) = u_{11}u_{22}\ldots u_{nn} $
+  \item $A^{ -1 } = U^{-1}L^{-1}$
+\end{enumerate}
+
+\end{enumerate}
+
+
+\end{document}
