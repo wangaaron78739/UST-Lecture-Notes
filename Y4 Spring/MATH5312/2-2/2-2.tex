@@ -43,10 +43,11 @@ b = \begin{bmatrix}
 
 The solution of system of linear equations is a fundamental task in numerical analysis. If we want to solve a non-linear equation, we can do it iteratively, where each step is solving a linear system. In this chapter, we will introduce \textbf{Direct Methods}.
 
-\begin{definition}
+\begin{definition}\index{direct method}
 A \vocab{Direct Method} is a method in which, if there is no truncation error in the computer, can solve the system exactly in finite time.
 \end{definition}
 
+\index{gaussian elimination}
 One example of a direct method is \vocab{Gaussian Elimination}.
 
 \begin{example}
@@ -119,7 +120,7 @@ L_{n-1}\ldots L_1 Ax = L_{n-1}\ldots L_1b
 L_{i} = I - v e^{T}_{i}
   \] where $v \in \RR^{n}$ and $v_1=v_2=\ldots=v_{i}=0$ and $e_{i}$ is the $i$-th unit vector.
 \end{remark}
-\begin{definition}
+\begin{definition}\index{gauss transformation}
  $L_{i}$ are called \vocab{Gauss Transformations}.
 \end{definition}
 In summary, Gaussian Elimination consists of the following steps:

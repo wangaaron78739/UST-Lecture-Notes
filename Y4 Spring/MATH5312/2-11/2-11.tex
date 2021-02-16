@@ -1,0 +1,233 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 11th, 2021}
+\subsection{LU Decomposition Continued}
+Recall that: \[
+      A=
+\begin{bmatrix}
+a_{11} &a_{12}&\ldots&a_{1n} \\
+a_{21} &a_{22}&&\vdots \\
+\vdots &\vdots&\ddots& \vdots\\
+a_{n1} &a_{n2}&\ldots&a_{nn} \\
+\end{bmatrix}
+\quad L = L = \begin{bmatrix}
+\ell_{11} &&& \\
+\ell_{21} &\ell_{22}&& \\
+\vdots &\vdots&\ddots& \\
+\ell_{n1} &\ell_{n2}&&\ell_{nn} \\
+      \end{bmatrix}
+      \quad
+L^{T} =  \begin{bmatrix}
+\ell_{11} &\ell_{21}&\ldots& \ell_{n_1} \\
+ &\ell_{22}&\ldots&\ell_{n_2} \\
+&&\ddots&\vdots \\
+ &&&\ell_{nn} \\
+\end{bmatrix}
+    \]
+
+    Observing the first column of $L L ^{ T }$, we have:
+    \begin{itemize}
+\item $a_{11} = \ell_{11}^2 \implies \ell_{11} = \sqrt[]{a_{11}}$
+            \item $a_{21}= \ell_{21}\ell_{11} \implies \ell_{21} = a_{21} / \ell_{11}$
+            \item $a_{n1}= \ell_{n1}\ell_{11} \implies \ell_{n1} = a_{n1} / \ell_{11}$
+    \end{itemize}
+    \begin{remark}
+Note that we only need to compare the lower triangular part of $L L^{T}$, since it is symmetric.
+    \end{remark}
+    For the second column, note that we have: \[
+a_{k2} = \ell_{k1}\ell_{21} + \ell_{k 2} \ell_{22}
+    \] As such, we have:
+    \begin{itemize}
+\item $a_{22} = \ell_{21}^2 + \ell_{22}^2 \implies \ell_{22} = (a_{22}-\ell_{21}^2)^{\frac{1}{2}}$
+            \item $\ell_{k 2} = (a_{k 2} - \ell_{k 1} \ell_{21}) \ell_{22}$ for $k = 3, \ldots , n$.
+    \end{itemize}
+    We can continue this process, and for the $k$-th column, we have: \[
+      a_{k k} = \ell_{k 1}^2 + \ell_{k 2}^2 + \ldots + \ell_{k k}^2 \implies \ell_{k k} = (a_{k k} - \sum_{i=1}^{k-1} \ell_{k i }^2)^{\frac{1}{2}}
+    \]and: \[
+      a_{i k} = \sum_{j=1}^k \ell_{ij} \ell_{kj} \implies \ell_{k j} = a_{i k} - (\sum_{j=1}^{k-1} \ell_{ij} \ell_{kj}) / \ell_{k k}
+    \] for $i = k+1, \ldots,n$. Thus, we have Algorithm \ref{2-11-v1}.
+
+        	\begin{algorithm}[h!]
+	\caption{Cholesky Decomposition Version 1}
+    \label{2-11-v1}
+	\begin{algorithmic}[1]
+      \For{$k=1:n$}
+      \State $\ell_{k k} = (a_{k k}- \sum_{i=1}^{k-1} \ell_{k i}^2)^{1 / 2}$
+      \For{$i=k+1:n$}
+      \State $\ell_{ik} = (a_{ik}- \sum_{j=1}^{k-1} \ell_{ij}\ell_{kj}) / \ell_{k k}$
+      \EndFor
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+    However, Algorithm \ref{2-11-v1} is not memory efficient. To create a memory efficient version, we should use the lower triangular part of $L$ to overwrite that of $A$. This gives us Algorithm \ref{2-11-v2}.
+        	\begin{algorithm}[h!]
+	\caption{Cholesky Decomposition Version 2 - Memory Efficient}
+    \label{2-11-v2}
+	\begin{algorithmic}[1]
+      \For{$k=1:n$}
+      \State $a_{k k} = (a_{k k}- \sum_{i=1}^{k-1} a_{k i}^2)^{1 / 2}$
+      \For{$i=k+1:n$}
+      \State $a_{ik} = (a_{ik}- \sum_{j=1}^{k-1}a_{ij}a_{kj}) / a_{k k}$
+      \EndFor
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+    \begin{remark}
+The only difference between Algorithm \ref{2-11-v1} and \ref{2-11-v2} is that we change $\ell$ to $a$.
+    \end{remark}
+    Using BLAS, we have Algorithm \ref{2-11-v3}.
+        	\begin{algorithm}[h!]
+	\caption{Cholesky Decomposition Version 3 - BLAS}
+    \label{2-11-v3}
+	\begin{algorithmic}[1]
+      \For{$k=1:n$}
+      \State $A(k,k) = A(k,k)- \text{norm}(A(k,1:k-1),2)^2$
+      \State $A(k,k) = (A(k,k))^{1 / 2}$
+      \State $A(k+1:n,k) = A(k+1:n,k)-A(k+1:n,1:k-1)(A(k,1:k-1))^{T}$
+      \State $A(k+1:n,k) = A(k+1:n,k) / A(k,k)$
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+    \begin{theorem}
+      Cholesky decomposition has a complexity of: \[
+        \frac{1}{3}n^{3}+O(n^2)
+      \] which is only half of LU for general $A$. In addition, the memory required is also halved.
+    \end{theorem}
+    \begin{example}
+Consider $A= \begin{bmatrix}
+  2&1&0\\
+  1&2&1\\
+  0&1&2
+\end{bmatrix}$. We have:
+\begin{itemize}
+\item Step 1: $\begin{bmatrix}
+  \sqrt{2}&&\\
+  \frac{1}{\sqrt{2}}&2&\\
+  0&1&2
+\end{bmatrix}$
+\item Step 2: $\begin{bmatrix}
+  \sqrt{2}&&\\
+  \frac{1}{\sqrt{2}}&\sqrt{\frac{3}{2}}&\\
+  0&\sqrt{\frac{2}{3}}&2
+\end{bmatrix}$
+\item Step 3: $\begin{bmatrix}
+  \sqrt{2}&&\\
+  \frac{1}{\sqrt{2}}&\sqrt{\frac{3}{2}}&\\
+  0&1&\sqrt{\frac{4}{3}}
+\end{bmatrix}$
+\end{itemize}
+This gives us: \[
+  L = \begin{bmatrix}
+  \sqrt{2}&&\\
+  \frac{1}{\sqrt{2}}&\sqrt{\frac{3}{2}}&\\
+  0&1&\sqrt{\frac{4}{3}}
+\end{bmatrix}
+\]
+    \end{example}
+
+\begin{remark}
+  The SPD-ness of $A$ guarantees that $a_{k k} - \sum_{i=1}^{k-1} \ell_{k i} ^2$ is positive.
+\end{remark}
+
+\subsection{LU on Banded Matrices}
+\begin{definition}\index{banded matrix}
+  A matrix is \vocab{banded}  if there exists an integer $p> 0$ such that: \[
+    a_{ij}\neq 0 \implies |i-j| \leq p
+  \]
+\end{definition}
+\begin{example}\index{tri-diagnoal matrix}.
+  For $p=1$, the matrix is called a \vocab{tri-diagonal matrix}: \[
+A = \begin{bmatrix}
+  \times &\times &&&& \\
+  \times & \times & \ddots &&& \\
+  & \ddots & \ddots & \ddots && \\
+  &&\ddots & \ddots & \ddots & \\
+  &&&\ddots & \ddots & \times \\
+  &&& & \times& \times\\
+\end{bmatrix} \in\RR^{n\times n}
+  \]
+\end{example}
+If we apply LU decomposition to a tri-diagonal matrix, we have:
+\begin{itemize}
+  \item  Step 1: \[
+A(2,1)=A(2,1) / A(1,1)
+        \] \[
+A(2,2) = A(2,2) - A(2,1) A(1,2)
+        \]
+  \item  Step $k$: \[
+A(k+1,k)=A(k+1,k) / A(k k)
+        \] \[
+        A(k+1,k+1) = A(k+1,k+1) - A(k+1,k)A(k,k+1)
+        \]
+\end{itemize}
+This leads to Algorithm \ref{2-11-tri}
+
+\begin{remark}
+Note that the resulting matrix is also tri-diagonal.
+\end{remark}
+
+        	\begin{algorithm}[h!]
+	\caption{LU Decomposition for Tri-Diagonal Matrix}
+    \label{2-11-tri}
+	\begin{algorithmic}[1]
+      \For{$k=1:n-1$}
+      \State $A(k+1,k) = A(k+1,k) / A(k, k)$
+      \State $A(k+1,k+1)= A(k+1,k+1) - A(k+1,k) A(k,k+1)$
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+    \begin{theorem}
+      The computation complexity for Algorithm \ref{2-11-tri} is $\sum_{k=1}^{n-1} 3 = 3(n-1)\sim O(n)$.
+    \end{theorem}
+    \begin{theorem}
+In general, for a banded matrix with band width $p$, the computation cost is $O(np^2)$.
+    \end{theorem}
+    \begin{example}
+The discrete Laplacian matrix in 1-D is a banded matrix with $p=1$ (tri-diagonal).
+    \end{example}
+\begin{example}
+  \label{2-11-2d}
+  The discrete Laplacian in 2-D on a grid is: \[
+    A_1 \otimes I + I \otimes A_{2} \in\RR^{N \times N},
+  \] where $N = n^2$, $A_{1},A_{2}\in\RR^{n \times n}$ are the 1-D discrete Laplacian matrix for each dimension, it is a banded matrix with $p=n$.
+\end{example}
+\begin{remark}
+If we applied GE to example \ref{2-11-2d}, it would be $O(Np^2) = O(N^2)$, which is significantly lower than $O(N^3)$.
+\end{remark}
+Our goal is to improve this cost to $O(N)$.
+\subsection{LU on Spare Matrix}
+\begin{definition}\index{spare matrix}
+  A \vocab{sparse matrix} is a matrix with many zero entries.
+\end{definition}
+
+\begin{remark}
+Banded matrices with small bandwith can be considered to be sparse.
+\end{remark}
+Sparse matrices arise from many numerical solutions of PDE, as differential operators are local, making many of the entries zero. Sometimes, we can exploit the structure of sparse matrix to speed up LU decomposition. However, LU does not always work well.
+\begin{example}
+  \label{2-11-per}
+Consider $ \begin{bmatrix}
+  5&4&3&2\\
+  4&4&&\\
+  3&&3&\\
+  2&&&2
+\end{bmatrix}$. Note that this is sparse. However, when we divide the first row, we will modify the lower sub matrix, making the final result a dense matrix. Thus it would be the same as applying LU to a general dense matrix, as the sparse structure is destroyed.
+\end{example}
+Now, we should ask, can we keep as many zeros as possible in LU? The answer is yes, by re-ordering both the equations and the unknowns, i.e. permute the matrix.
+\begin{example}
+  If we consider the matrix in \ref{2-11-per}, we could permute it so we get: \[
+\begin{bmatrix}
+  2&&&2\\
+  &3&&3\\
+  &&4&4\\
+  2&3&4&5
+\end{bmatrix}
+\]
+If we perform LU on this matrix, the sparse structure is preserved.
+\end{example}
+Now we must ask, how should we re-order to allow LU to produce the minimum number of \vocab{fill-in's}? This is a very difficult topic to answer, and was an active research topic. To answer this, we use graph theory. This is beyond the scope of this course.
+
+\end{document}

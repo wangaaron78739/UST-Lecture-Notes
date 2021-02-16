@@ -109,7 +109,7 @@ x_1\\ x_2
   \end{enumerate}
 
   As such, LU Decomposition is unstable unless $A(k,k) $ is large.
-\begin{definition}
+\begin{definition}\index{pivot entry}
   We call $A(k,k)$ at step $k$ a \vocab{pivot entry}.
 \end{definition}
 
@@ -257,7 +257,7 @@ Full pivoting is more stable than row pivoting but it is computationally more ex
 
   \subsection{LU Decomposition on SPD Matrices}
 
-  \begin{definition}
+  \begin{definition}\index{symmetric positive definite (SPD)}
     $A \in\RR^{n \times n}$ is \vocab{symmetric positive definite (SPD)} if it is:
     \begin{itemize}
 \item Symmetric: $A = A^{T}$
@@ -306,7 +306,7 @@ a_{21} &a_{22}&&\vdots \\
 \vdots &\vdots&\ddots& \vdots\\
 a_{n1} &a_{n2}&&a_{nn} \\
 \end{bmatrix}
-\quad L = L = \begin{bmatrix}
+\quad L = \begin{bmatrix}
 \ell_{11} &&& \\
 \ell_{21} &\ell_{22}&& \\
 \vdots &\vdots&\ddots& \\

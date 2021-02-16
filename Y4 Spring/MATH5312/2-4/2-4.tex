@@ -56,7 +56,7 @@ Replacing the algorithm with BLAS, we have:
       \For{ $k=1:n-1$}
       \State $A(k+1:n,k)=A(k+1:n,k) / A(k,k)$
       \State $A(k+1:n,k+1:n)=A(k+1:n,k+1:n) - A(k+1:n,k)A(k,k+1:n)$
-      \State $b(k+1:n,1)= b(k+1:n,1) - b(k.1)A(k+1:n,k)$
+      \State $b(k+1:n,1)= b(k+1:n,1) - b(k)A(k+1:n,k)$
       \EndFor
       \For{ $k=n:-1:1$}
       \State $b(k) = b(k) - A(k,k+1:n)b(k+1:n)$

@@ -1,0 +1,246 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 16th, 2021}
+\subsection{Basic Iterative Method}
+In this chapter, we will introduce iterative methods. There will be a lot of overlap with MATH5311. For iterative methods, we make use of the fact that matrix vector products are fast for sparse matrices.
+
+\begin{remark}
+If the matrix is sparse, then the matrix vector product is on the order of non-zero entries.
+\end{remark}
+\begin{example}
+For the Discrete Laplacian in 2D, the matrix vector product is $O(N)$.
+\end{example}
+We will solve $Ax = b$ by stationary iterative methods. Given $x_{k}\in\RR^{n}$, we want to improve the quality of $x_{k}$ using: \[
+x_{k+1} = Gx_{k} + f, \quad k\in 0,1,2 \ldots
+\] where $G\in\RR^{n\times n}$ and $f\in\RR^{n}$ are stationary matrices and vectors.
+\begin{definition}\index{stationary matrix}
+ $G$ is a \vocab{stationary matrix}, as it does not depend on $k$.
+\end{definition}
+\subsection{Jacobi Iteration}
+\begin{itemize}
+  \item $(y)_{i}$ denotes the $i$-th component of a vector $y$
+        \item $\xi_{i}^{(k)}$ denotes the $i$-th component of $x_{k}$
+        \item $\xi_{i}$ denotes the $i$-th component of $x$ (true solution)
+        \item $\xi_{i}$ denotes the $i$-th component of $b$
+\end{itemize}
+The idea of the Jacobi iteration is, given $x_{k}$, we obtain $x_{k+1} $ by solving the $i$-th unknown from the $i$-th equation.
+More precisely, we are solving: \[
+(Ax-b)_{i} = 0,
+\] with $\xi_{j}$, $j\neq i$, fixed to be $\xi_{j}^{(k)}$, for $i=1, \ldots , n$. As such, we have:
+\begin{align*}
+  &(Ax-b)_{i} = 0 \\
+  &\iff a_{ii} \xi_{i} ^{(k+1)} + \sum_{j\neq i} a_{ij} \xi_{j}^{(k) } = \beta_{i} \\
+    & \iff \xi_{i}^{(k+1)} = (\beta_{i} - \sum_{j\neq i} a_{ij} \xi_{j}^{(k) }) / a_{ii}
+  .\end{align*}
+This can be expressed as Algorithm \ref{2-16-jac1}.
+        \begin{algorithm}[h!]
+	\caption{Element Wise Jacobi Iteration}
+    \label{2-16-jac1}
+	\begin{algorithmic}[1]
+      \For{ $k=0,1,2, \ldots$}
+      \For{ $i=1, \ldots , n$}
+      \State $\xi_{i}^{(k+1)} = (\beta_{i} - \sum_{j\neq i} a_{ij} \xi_{j}^{(k) }) / a_{ii}$
+      \EndFor
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+    In order to perform this effeciently, we reformulate this in matrix notation to make use of BLAS. Let $A=D-E-F$, where:
+    \[
+A = \begin{bmatrix} d_1 &  & *\\ & \ddots & \\ * & & d_n \end{bmatrix} =  \begin{bmatrix} d_1 &  & 0\\ & \ddots & \\ 0 & & d_n \end{bmatrix}  -  \begin{bmatrix} 0 &  & 0\\ & \ddots & \\ -* & & 0 \end{bmatrix}  -  \begin{bmatrix} 0 &  & -*\\ & \ddots & \\ 0 & & 0 \end{bmatrix}  = D-E-F
+    \]
+    Thus, we have Algorithm \ref{2-16-jac2}, which is in stationary form.
+        \begin{algorithm}[h!]
+	\caption{Jacobi Iteration in Matrix Form}
+    \label{2-16-jac2}
+	\begin{algorithmic}[1]
+      \For{ $k=0,1,2, \ldots$}
+      \State $x_{k+1} = D^{-1}(b+(E+F)x_{k})$
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+    \begin{remark}
+      Some other equivalent forms of the Jacobi Iteration are: \[
+x_{k+1} = D^{-1}(E+F)x_{k} + D^{-1} b
+\] \[
+x_{k+1} = D^{-1}(D-A)x_{k} + D^{-1} b
+\] \[
+x_{k+1} = (I-D^{-1} A) x_{k} + D^{-1} b
+\]
+    \end{remark}
+\subsection{Review on Norms}
+\subsubsection{Vector Norms}
+\index{norm}
+\begin{definition}
+  A (vector) \vocab{norm} on $R^{n}$ is a function $\|\cdot\| : \RR^{n}\to \RR$ that satisfies:
+  \begin{enumerate}
+    \item $\| x\| \geq 0\quad \forall x \in\RR^{n}$ and $\|x\|= 0 \iff x = 0$.
+    \item $\|\alpha x\|= |\alpha| \|x\| \quad \forall \alpha \in\RR$ and $x \in\RR^{n}$.
+          \item $\|x+y\| \leq \|x\|+ \|y\| \quad \forall x,y \in\RR^{n}$ (\vocab{triangle inequality}).
+  \end{enumerate}
+  This defines a \vocab{metric } on $\RR^{n}$.
+\end{definition}
+\begin{definition}\index{$p$ norm}
+  A $p$-norm on $\RR^{n}$ is defined as: \[
+          \|x\|_{p} = \left(\sum_{i=1}^n|x_{1}|^{p}\right)^{1 / p}
+  \]
+\end{definition}
+
+\begin{example}[Spedial $p$ Norm]
+  Here are a few common norms on $\RR^{n}$.
+  \begin{itemize}
+    \item \vocab{ $p$-norm } $(p\geq1)$: \[
+          \]
+    \item \vocab{Euclidean norm} ($p=2$) \[
+          \|x\|_{2} = \left(\sum_{i=1}^n|x_{1}|^{2}\right)^{1 / 2}
+          \]
+    \item \vocab{1-norm} ($p=1$) \[
+          \|x\|_{1} = \sum_{i=1}^n|x_{1}|
+          \]
+    \item \vocab{$\infty$-norm} ($p=\infty$) \[
+          \|x\|_{\infty} = \max_{i=1}^n|x_{1}|
+          \]
+  \end{itemize}
+\end{example}
+\begin{theorem}[\vocab{Holder's Inequality}] \[
+|x^{T} y| \leq \|x\|_{p} \|y\|_{q}
+  \] if $\frac{1}{p} + \frac{1}{q} = 1$, with $p,q \geq 1$.
+  \index{Holder's inequality}
+\end{theorem}
+
+\begin{theorem}[\vocab{Cauchy-Schwartz Inequality}]
+  \[
+|\langle u,v\rangle| \leq \| u\| \|v\|,\quad \forall u,v \in\RR^{n} \]
+  \index{Cauchy-Schwartz inequality}
+\end{theorem}
+\begin{example}[Weighted Norm]
+  Let $A\in\RR^{n\times n}$ be a symmetric positive definite matrix. Then: \[
+\|x\|_{A} = (x^{T} A x)^{1 / 2}
+  \] is a norm, called the \vocab{weighted norm}. \index{weighted norm}
+\end{example}
+
+From functional analysis, because $\RR^{n}$ is finite dimensional, any two norms are equivalent. More formally.
+\begin{theorem}[Norm equivalence of $\RR^{n}$]
+  Given $\|\cdot\|_{a}$ and $\|\cdot\|_{b}$, $\exists C_1,C_2 >0$ independent of $x$, s.t. \[
+    C_1\|x\|_{b} \leq \|x\|_{a} \leq C_2 \|b\| \forall x \in\RR^{n}
+  \]
+  \label{2-16-conv}
+\end{theorem}
+Consequently, from Theorem \ref{2-16-conv}, the convergence of vectors in $\RR^{n}$ under any norm is the same. Thus, we can analyze the convergence under any norm.
+
+\begin{remark}
+Theorem \ref{2-16-conv} does not hold for infinte dimensional space. However, for numerical analysis, we always work with finite dimensional space.
+\end{remark}
+\begin{example}[Equivalence of $1$-norm and other $p$-norms]
+  \[
+    \|x\|_{2}\leq \|x\|_{1} \leq \sqrt{n} \|x\|_{2} \quad \forall x\in\RR^{n}
+  \] \[
+    \|x\|_{\infty}\leq \|x\|_{1} \leq n \|x\|_{\infty} \quad \forall x\in\RR^{n}
+  \]
+\end{example}
+\subsubsection{Matrix Norm}
+Let $\|\cdot\|$ be a norm on $\RR^{n}$. Let $A\in\RR^{n \times n}$ be a matrix.
+\begin{definition}\index{matrix norm}
+  \label{2-16-matnorm}
+  The \vocab{norm of $A$ induced by the vector norm $\| \cdot\|$} is: \[
+\|A\| = \sup_{x\in\RR^{n}, x\neq 0}\frac{\|Ax\|}{\|x\|} = \max_{\|x\|=1}\|Ax\|
+  \]
+\end{definition}
+\begin{remark}
+The second equality in \ref{2-16-matnorm} is due to the scaling property of $A$ and because the norm is continuous. However, this might not be the case in infinite-dimensional spaces.
+\end{remark}
+We can check that $\|A\|$ is a matrix, i.e.:
+\begin{itemize}
+    \item $\| A\| \geq 0\quad \forall A \in\RR^{n \times n}$ and $\|A\|= 0 \iff A = 0$.
+    \item $\|\alpha A\|= |\alpha| \|A\| \quad \forall \alpha \in\RR$ and $A \in\RR^{n \times n}$.
+          \item $\|A+B\| \leq \|A\|+ \|B\| \quad \forall A,B\in\RR^{n\times n}$ (\vocab{triangle inequality}).
+\end{itemize}
+In addition, since it is an \vocab{operator norm} that is induced, it has some consistency properties, namely
+\begin{itemize}
+\item $\|AB\| \leq \|A\| \|B\|\quad \forall A,B \in\RR^{n\times n}$
+        \item $\|Ax\|\leq \|A\|\|x\|\quad \forall A \in\RR^{n\times n}, x\in\RR^{n}$
+\end{itemize}
+\begin{example}[matrix 2-norm] \[
+\| A\|_{2} = \max_{\|x\|_{2}=1} \|Ax\|_{2} = \left(\max_{\|x\|_{x=1}}\|Ax\|_{2}^{2}\right)^{ \frac{1}{2} } = \left(\max_{x^{T}x=1}x^{T}A^{T}Ax\right)^{\frac{1}{2}}
+\] \[
+ = (\text{maximum eivenvale of }A^{T}A)^{\frac{1}{2}}
+\]which is the maximum \vocab{singular value} of $A$.
+  \label{2-16-sin}
+\end{example}
+\begin{remark}
+The last equality in Example \ref{2-16-sin} can be shown by taking the eigenvalue decomposition of $A$.
+\end{remark}
+\begin{theorem}
+  \[
+    \|A\|_{1}= \max_{1\leq j \leq n}\|a_{j}\|_{1}, \quad\text{where }A = \begin{bmatrix}
+a_1 &a_2&\ldots&a_{n}
+    \end{bmatrix} , a_{j}\in\RR^{n}
+ , \] i.e. the maximum column 1-norm (column sum).
+\end{theorem}
+\begin{proof}
+\begin{itemize}
+  \item $\forall x \in\RR^{n}$ with $\|\|_{1 = 1}$, we have: \[
+        \|Ax\|_{1} = \|\sum_{j=1}^n x_{j}a_{j}\|_{1} \leq \sum_{j=1}^n |x_{j}| \|a_{j}\|_{1} \leq \max_{1\leq j\leq n} \|a_{j}\|_{1} \sum_{j=1}^n |x_{j}| = \max_{1\leq j\leq n} \|a_{j}\|_{1}
+        \]
+        Taking the max over all $x: \|x\|_{1}=1$, we obtain: \[
+\|A\|_{1} \leq \max_{1\leq j\leq n} \|a_{j}\|_{1}
+        \]
+  \item Let $j_{0} = \arg\max_{1\leq j\leq n} \|a_{j}\|_{1}$. Consider $x=e_{j_{0}}$. Then $\|x\|_{1}=1$ and $Ax=Ae_{j_{0}}= a_{j_{0}}$. Thus: \[
+\|Ax\|_{1}= \|a_{j_{0}}\|_{1} = \max_{1\leq j\leq n} \|a_{j}\|_{1}
+        \] Therefore: \[
+        \|A\|_{1}\geq \|Ax\|_{1} =\max_{1\leq j\leq n} \|a_{j}\|_{1} \]
+\end{itemize}
+\end{proof}
+\begin{remark}
+This means that for the matrix 1-norm, the maximum is attained at the image of one of the standard unit vector. This is true, since the 1-ball is a convex polytope.
+\end{remark}
+\begin{theorem}
+  \[
+    \|A\|_{\infty}= \max_{1\leq i \leq n}\|a^{(i)}\|_{\infty}, \quad\text{where }A = \begin{bmatrix}
+(a^{(1)})^{T}\\
+\vdots
+(a^{(n)})^{T}\\
+    \end{bmatrix} , a^{(i)}\in\RR^{n}
+ , \] i.e. the maximum row 1-norm (maximum row sum).
+\end{theorem}
+\begin{proof}
+  (omitted).
+\end{proof}
+\begin{definition}\index{spectral radius}
+  The \vocab{spectral radius} of a matrix $A$ is defined as: \[
+    \rho(A) = \max \{|\lambda_{i}| : \lambda_{i} \text{ is an eigenvalue of }A
+    \}\]
+\end{definition}
+\begin{theorem}
+  Let $A\in\RR^{n\times n}$. Then:
+  \begin{enumerate}
+\item $\|A\|\geq \rho(A)$ for any matrix norm induced by $\|\cdot\|$.
+    \item For any $\epsilon>0$, we can find a vector norm $\|\cdot\|$, s.t. the induced matrix norm satsfies: \[
+          \|A\|\leq \rho(A)+\epsilon
+          \]
+          \item
+  From (1) and (2), we have: \[
+          \rho(A) = \inf \|A\|
+          \]
+    \item If $A$ is diagonalizable, there exists a matrix operator norm s.t. \[
+          \rho(A) = \|A\|
+          \]
+          \item In particular, when $A$ is symmetric, $\rho(A) = \|A\|_{2}$.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  \begin{enumerate}
+    \item Let $\lambda_{0},x_{0}$ be an eigenpair of $A$ satisfying $|\lambda_{0}| = \rho(A)$. Assume that $\|x_0\|=1$. Then, for any vector norm $\|\cdot\|$, its induced operator norm satisfies: \[
+          \|A\|\geq \|Ax_{0}\| = \|\lambda_{0}x\| = |\lambda_{0}| \|x_{0}\| = \rho(A)
+          \]
+  \end{enumerate}
+
+\end{proof}
+\begin{remark}
+We have to modify for the case of complex eigenvalues
+\end{remark}
+
+
+\end{document}
