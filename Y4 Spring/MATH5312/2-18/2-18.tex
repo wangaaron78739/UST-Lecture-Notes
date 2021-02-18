@@ -1,0 +1,119 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 18th, 2021}
+\subsection{Spectral Radius Cont.}
+\begin{corollary}
+  Let $A \in \RR^{n\times n}$. Then: \[
+    \lim_{k \to \infty} A^{k} = 0 \iff \rho(A) < 1
+  \]
+\end{corollary}
+\begin{proof}
+\begin{itemize}
+  \item ``$\implies$'' Assume $\lim_{k \to \infty} A^{k}=0$. Let $\lambda$ be the eigenvalue of $A$ s.t. $\rho(A) = |\lambda|$. For any $k$,, then $A^{k}$ is an eigenvalue of $A^{k}$. We have: \[
+(\rho(A))^{k} = |\lambda|^{k} = |\lambda^{k}| \leq \rho(A^{k}) \leq \|A^{k}\|
+        \] for any operator norm. Thus: \[
+\lim_{k \to \infty} (\rho(A))^{k} \leq \lim_{k \to \infty} \|A^{k}\| = 0 \implies \rho(A) < 1
+        \]
+  \item ``$\impliedby$'' Assume $\rho(A) < 1$. Choose $\epsilon = \frac{1}{2}(1-\rho(A))>0$. Thus there exists $\|\cdot\|_{\epsilon}$ s.t.: \[
+\|A\|_{\epsilon} \leq \rho(A)+\epsilon = \rho(A) + \frac{1}{2}(1-\rho(A)) = \frac{1}{2} + \frac{1}{2}\rho(A) < 1
+        \]Then: \[
+        \|A^{k}\|_{\epsilon} \leq (\|A\|_{\epsilon})^{k} \to 0 \text{ as }k\to \infty
+        \implies \lim_{kn \to \infty} \|A^{k}\|_{\epsilon} = 0
+        \]Since norms are continuous functions for finite dimension, we have:\[
+        \|\lim_{k \to \infty} A^{k}\| = 0 \to \lim_{k \to \infty} A^{k}=0
+        \]
+\end{itemize}
+\end{proof}
+
+\subsection{Convergence of Jacobi Iteration}
+Recall that the Jacobi iteration can be written in the stationary iteration form: \[
+x_{k+1} = G x_{k} + f
+\] where $G = I-D^{-1}A$, $f = D^{-1} b$. Let $x_{*}$ be the solution of $Ax=b$. i.e. ( $Ax_{*} = b$). Then:
+\begin{align*}
+  Dx_{*}-b &= (D-A)x_{*}\\
+  Dx_{*} &= (D-A)x_{*}+b \\
+  x_{*}&= D^{-1}(D-A)x_{*} + D^{-1} b \\
+  x_{*}&= Gx_{*} + f
+  .\end{align*}
+Taking the difference, we have: \[
+(x_{k+1}-x_{*}) = G(x_{k}-x_{*})
+\] Now, taking the norms on both sides, we have: \begin{align*}
+                                                   \|x_{k+1} - x_{*}\| &= \|G(x_{k}-x_{*})\| \\
+&\leq \|G\|\|x_{k}-x_{*}\|
+                                                   .\end{align*}
+                                                 If $\rho(G)<1$, then we can choose $\epsilon = \frac{1}{2}(1-\rho(G))$ and construct the norm $\|\cdot\|$ (depending on $G$) s.t.  \[
+                                                \|G\|_{\epsilon} \leq \rho(G) + \epsilon = \frac{1}{2} + \frac{1}{2}\rho(G) < 1
+                                                 \]
+                                                 Then: \[
+                                                   \|x_{k+1}- x_{*}\|_{\epsilon}\leq \|G\|_{\epsilon}\|x_{k}-x_{*}\|_{\epsilon} = \rho \|x_{k}- x_{*}\|_{\epsilon}, \quad \forall k.
+                                                 \] As a result, we have: \[
+\|x_{k}-x_{*}\|_{\epsilon}\leq \rho^{k}\|x_{0}-x_{*}\|_{\epsilon}\to 0 \text{ as }k\to +\infty
+,\] i.e. $x_{k}\to x_{*}$.
+
+In addition, the convergence rate is ``linear'', because: \[
+\frac{\|x_{k}-x_{*}\|}{\|x_{k-1}-x_{*}\|}\leq \rho < 1
+\]
+In order to obtain a $\tilde{\epsilon}$-precision solution, i.e.: \begin{align*}
+&                                                                    \|x_{k}-x_{*}\|_{\epsilon}\leq \rho^{k}\|x_{0}-x_{*}\|_{\epsilon}< \tilde{\epsilon}\\
+                                                                    &\iff \rho^{k}\leq \frac{\tilde{\epsilon}}{\|x_{0}-x_{*}\|_{\epsilon}}\\
+    &\iff k\geq \frac{\log\left(\frac{\|x_{0}-x_{*}\|_{\epsilon}}{\tilde{\epsilon}} \right)}{\log(1 / \rho)} \sim O(1 / \log \rho ^{-1})
+                                                                    .\end{align*}
+\begin{remark}\index{convergence factor}
+  Note that $\rho$ can be arbitrarily close to $\rho(G)$. Thus, $\rho$ is called the \vocab{convergence factor}.
+\end{remark}
+\begin{remark}
+  If $\rho \approx \rho(G)= 1-O(1 / n^{\alpha})$, where $\alpha > 0$, then: \[
+    \log \rho^{-1}\sim O(n^{\alpha})
+  \] meaning we require $k\sim O(n^{\alpha}\cdot\log \tilde{\epsilon}^{-1})$. Usually $\tilde{\epsilon}^{-1}$ can be treated as a constant.
+\end{remark}
+
+\subsection{Computation Cost of Jacobi Iteration}
+Note that the Jacobi iteration only uses matrix-vector product (and $O(n)$ operations for calculating $D^{-1}$). Thus: \[
+  \text{computational cost per step:}
+\begin{cases}
+  O(n^2)& \text{ for general $A$ } \\
+  O(m+n)&\text{ for sparse $A$ with $m$ non-zero entries}
+\end{cases}
+\]
+Thus the total computational cost is: \[
+O(m+n)\times O(n^{\alpha}\cdot \log \tilde{\epsilon}^{-1}) = O((m+n)n^{\alpha}\cdot \log \tilde{\epsilon}^{-1})
+\]
+
+  Recall that the Laplacian equation in 1D is: \[
+\begin{cases}
+  -u_{x x} = f& x \in(0,1)\\
+  u(0)=u(1)=0
+\end{cases}
+\] Using central difference, we have $Ax = b$, where: \[
+  A = \begin{bmatrix}
+    2&-1&&&\\
+    -1&2&\ddots&&\\
+    &\ddots&\ddots&\ddots&\\
+    &&\ddots&\ddots&-1\\
+    &&&-1&2\\
+  \end{bmatrix}
+\]We have $Au = \lambda u$, i.e. \[
+  \begin{cases}
+  -u_{j-1}+2u_{j}-u_{j+1} =\lambda u_{j} & j=1 , \ldots , n\\
+  u_{0}=u_{n+1}=0&
+  \end{cases}
+\]
+Recall that this is a discrete difference eq. whose solutions are given by: \[
+u_{j} = c_1 \alpha_{1}^{j} + c_2\alpha_{2}^{j}
+\] where $c_1, c_2$ are constants, $\alpha_{1},\alpha_{2}$ are roots of \[-1 +2\alpha -\alpha^2=\lambda \alpha.\] i.e. $\alpha_{1}+\alpha_{2}=2-\lambda$ and $\alpha_{1}\alpha_{2}=1$. Because $u_{0}=u_{n+1}=0$, we have: \[
+\begin{cases}
+  c_1+c_2 = u_{0}=0\\
+  c_1\alpha_{1}^{n+1} + c_2\alpha_{2}^{n+1}= u_{n+1}=0
+\end{cases}.\]
+\begin{align*}
+  \det\left(\begin{bmatrix}
+      1&1\\
+      \alpha_{1}^{n+1}& \alpha_{2}^{n+1}
+    \end{bmatrix}\right)=0 &\iff \alpha_{1}^{n+1} = \alpha_{2}^{n+1}\\
+       &\iff \left(\frac{\alpha_{1}}{\alpha_{2}} \right)^{n+1}=1\\
+       &\iff \frac{\alpha_{1}}{\alpha_{2}} = e^{i \cdot \frac{2\pi}{n+1}\cdot k },~ k=0,1, \ldots, n
+  .\end{align*}
+\end{document}

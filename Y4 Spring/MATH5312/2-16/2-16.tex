@@ -214,7 +214,7 @@ This means that for the matrix 1-norm, the maximum is attained at the image of o
     \}\]
 \end{definition}
 \begin{theorem}
-  Let $A\in\RR^{n\times n}$. Then:
+  Let $A\in\CC^{n\times n}$. Then:
   \begin{enumerate}
 \item $\|A\|\geq \rho(A)$ for any matrix norm induced by $\|\cdot\|$.
     \item For any $\epsilon>0$, we can find a vector norm $\|\cdot\|$, s.t. the induced matrix norm satsfies: \[
@@ -235,11 +235,77 @@ This means that for the matrix 1-norm, the maximum is attained at the image of o
     \item Let $\lambda_{0},x_{0}$ be an eigenpair of $A$ satisfying $|\lambda_{0}| = \rho(A)$. Assume that $\|x_0\|=1$. Then, for any vector norm $\|\cdot\|$, its induced operator norm satisfies: \[
           \|A\|\geq \|Ax_{0}\| = \|\lambda_{0}x\| = |\lambda_{0}| \|x_{0}\| = \rho(A)
           \]
+    \item We use a construction proof by finding such vector norm. Let \[
+A = X \begin{bmatrix}
+      \lambda_{1}& \delta_{1}&&& &\\
+      & \lambda_{2} & \delta_{2}&&& \\
+      & & \ddots & \ddots &&\\
+      & &  & \lambda_{n-1} &\delta_{n-1}&\\
+      &&&&& \lambda_{n}  \\
+    \end{bmatrix}
+          \] be the Jordan decomposition, where: $\delta_{i} \in \{ 0,1\}$, and $\lambda_{i}$ are eigenvalues of $A$.
+
+          Given $\epsilon > 0$, we define: \[
+          \|x\|_{\epsilon} = \|(X D_{\epsilon})^{-1} x\|_{\infty}, \quad \text{with }D_{\epsilon} = \begin{bmatrix}
+1&&&& \\
+&\epsilon&&& \\
+&&\epsilon^2&& \\
+&&&\ddots& \\
+&&&&\epsilon^{n-1} \\
+          \end{bmatrix}.
+          \] We can check that $\|\cdot\|_{\epsilon}$ is a norm on $\CC^{n}$. So: \[
+\|A\|_{\epsilon} = \max_{\|x\|_{\epsilon}=1} \|Ax\|_{\rho} = \max_{\|(XD_{\epsilon})^{-1} x\|_{\infty}=1} \|(XD_{\epsilon})^{-1}Ax\|_{\infty}
+          \]Let $y=(XD_{\epsilon})^{-1} x$, we have: \[
+          \|A\|_{\epsilon} = \max_{\|y\|_{\infty}=1} \|(XD_{\epsilon})^{-1} A (XD_{\epsilon})y\|_{\infty} = \|(XD_{\epsilon})^{-1}A(XD_{\epsilon})\|_{\infty}
+          \] Note that we have: \[
+          (XD_{\epsilon})^{-1} A (XD_{\epsilon}) = D_{\epsilon}^{-1} X^{-1} A X D_{\epsilon} = D_{\epsilon} \begin{bmatrix}
+      \lambda_{1}& \delta_{1}&&& &\\
+      & \lambda_{2} & \delta_{2}&&& \\
+      & & \ddots & \ddots &&\\
+      & &  & \lambda_{n-1} &\delta_{n-1}&\\
+      &&&&& \lambda_{n}  \\
+          \end{bmatrix}D_{\epsilon}
+          \] \[
+          = \begin{bmatrix}
+      \lambda_{1}&\epsilon \delta_{1}&&& &\\
+      & \lambda_{2} &\epsilon \delta_{2}&&& \\
+      & & \ddots & \ddots &&\\
+      & &  & \lambda_{n-1} &\epsilon\delta_{n-1}&\\
+      &&&&& \lambda_{n}  \\
+          \end{bmatrix}
+          \]
+          Thus, since the infinity norm is the maximum row sum, we have: \[
+          \|A\|_{\epsilon} \leq \max_{1\leq i\leq n} (|\lambda_{i}| +\epsilon) \leq \rho(A) +\epsilon
+          \]
+          \item By part 2, if $A$ is diagonalizable, $\delta_{i} = 0$ for all $i$. Then $\|A\|_{\epsilon} = \max_{i} |\lambda_{i}| = \rho(A)$.
+          If $A = A^{T}$, then $\delta_{i} = 0$ for all $i$, $\lambda_{i}$ are real, and $X$ is unitary. Thus: \[
+          A^{T}A = X^{-1} \begin{bmatrix}
+\lambda_{1}^2&&& \\
+&\lambda_{2}^2&& \\
+&&\ddots& \\
+&&&a\lambda_{n}^2 \\
+
+          \end{bmatrix}
+          \]
+          \[
+          \rho(A) = (\rho(A^{T}A))^{\frac{1}{2}} = \|A\|_{2}
+          \]
   \end{enumerate}
 
 \end{proof}
 \begin{remark}
-We have to modify for the case of complex eigenvalues
+  1. and 2. imply \[
+\rho(A) = \inf \{\|A\|: \|\cdot\| \text{ is an operator norm }\}
+  \]
+  In particular
+  \begin{itemize}
+    \item If $A$ diagonalizable, then minimum is attainable, meaning:  \[
+\rho(A) = \min \{\|A\|: \|\cdot\| \text{ is an operator norm }\}
+          \]
+    \item If $A$ is symmetric: \[
+\rho(A) = \|A\|_{2} = \min \{\|A\|: \|\cdot\| \text{ is an operator norm }\}
+          \]
+  \end{itemize}
 \end{remark}
 
 
