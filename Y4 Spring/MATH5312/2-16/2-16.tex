@@ -259,19 +259,19 @@ A = X \begin{bmatrix}
           \|A\|_{\epsilon} = \max_{\|y\|_{\infty}=1} \|(XD_{\epsilon})^{-1} A (XD_{\epsilon})y\|_{\infty} = \|(XD_{\epsilon})^{-1}A(XD_{\epsilon})\|_{\infty}
           \] Note that we have: \[
           (XD_{\epsilon})^{-1} A (XD_{\epsilon}) = D_{\epsilon}^{-1} X^{-1} A X D_{\epsilon} = D_{\epsilon} \begin{bmatrix}
-      \lambda_{1}& \delta_{1}&&& &\\
-      & \lambda_{2} & \delta_{2}&&& \\
+      \lambda_{1}& \delta_{1}&&& \\
+      & \lambda_{2} & \delta_{2}&& \\
       & & \ddots & \ddots &&\\
-      & &  & \lambda_{n-1} &\delta_{n-1}&\\
-      &&&&& \lambda_{n}  \\
+      & &  & \lambda_{n-1} &\delta_{n-1}\\
+      &&&& \lambda_{n}  \\
           \end{bmatrix}D_{\epsilon}
           \] \[
           = \begin{bmatrix}
-      \lambda_{1}&\epsilon \delta_{1}&&& &\\
-      & \lambda_{2} &\epsilon \delta_{2}&&& \\
+      \lambda_{1}&\epsilon \delta_{1}&&& \\
+      & \lambda_{2} &\epsilon \delta_{2}&& \\
       & & \ddots & \ddots &&\\
-      & &  & \lambda_{n-1} &\epsilon\delta_{n-1}&\\
-      &&&&& \lambda_{n}  \\
+      & &  & \lambda_{n-1} &\epsilon\delta_{n-1}\\
+      &&&& \lambda_{n}  \\
           \end{bmatrix}
           \]
           Thus, since the infinity norm is the maximum row sum, we have: \[

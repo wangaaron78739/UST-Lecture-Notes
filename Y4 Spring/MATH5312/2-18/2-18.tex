@@ -69,6 +69,9 @@ In order to obtain a $\tilde{\epsilon}$-precision solution, i.e.: \begin{align*}
     \log \rho^{-1}\sim O(n^{\alpha})
   \] meaning we require $k\sim O(n^{\alpha}\cdot\log \tilde{\epsilon}^{-1})$. Usually $\tilde{\epsilon}^{-1}$ can be treated as a constant.
 \end{remark}
+\begin{corollary}
+Jacobi converges to $x_{*}$ for any $x_{0}$ if and only if $\rho(G) < 1$.
+\end{corollary}
 
 \subsection{Computation Cost of Jacobi Iteration}
 Note that the Jacobi iteration only uses matrix-vector product (and $O(n)$ operations for calculating $D^{-1}$). Thus: \[
@@ -82,6 +85,7 @@ Thus the total computational cost is: \[
 O(m+n)\times O(n^{\alpha}\cdot \log \tilde{\epsilon}^{-1}) = O((m+n)n^{\alpha}\cdot \log \tilde{\epsilon}^{-1})
 \]
 
+\subsection{Jacobi Iteration for 1D Discrete Laplacian}
   Recall that the Laplacian equation in 1D is: \[
 \begin{cases}
   -u_{x x} = f& x \in(0,1)\\
@@ -116,4 +120,36 @@ u_{j} = c_1 \alpha_{1}^{j} + c_2\alpha_{2}^{j}
        &\iff \left(\frac{\alpha_{1}}{\alpha_{2}} \right)^{n+1}=1\\
        &\iff \frac{\alpha_{1}}{\alpha_{2}} = e^{i \cdot \frac{2\pi}{n+1}\cdot k },~ k=0,1, \ldots, n
   .\end{align*}
+Since, $\alpha_{1}\alpha_{2}=1$, we have:
+\begin{align*}
+  &\implies 1 = \alpha_{2}^2 \frac{\alpha_{1}}{\alpha_{2}} = \alpha_{2}^2 e^{i \frac{2\pi}{n+1}k}\\
+ &\implies \begin{cases}
+   \alpha_{2}& = e^{-i \frac{\pi}{n+1}k}  \\
+   \alpha_{1}& = e^{i \frac{\pi}{n+1}k}  \\
+ \end{cases}, k=0,1, .. , n
+  .\end{align*}
+Thus: \[
+  \alpha_{1} +\alpha_{2} = 2-\lambda \implies \lambda = 2-(\alpha_{1}+\alpha_{2}) = 2-2\text{Re}(e^{i \frac{\pi}{n+1}k}) = 2(1-\cos\left( \frac{\pi}{n+1}k \right))
+\]
+However, there are $n+1$ values of $k$, but there are only $n$ eigenvalues of $A$. When $k=0$, $\alpha_{1}=\alpha_{2}=1$. However, in this case, we have: \[
+  u_{j}=c_{1}\alpha_{1}^{j}+c_{2}\alpha_{2}^{j} \implies c_1+c_2=0
+\] which is a contradiction since $c_1+c_2=0 \implies u = 0$.  Thus when $k=1,2, \ldots,n$, we can find the corresponding $u$ (left as homework).\\
+
+Thus, the eigenvalues of $A$ are: \[
+  \lambda_{k} = 2(1-\cos\left(\frac{\pi}{n+1}k\right)), \quad k = 1,2, \ldots , n
+\] Consequently: \[
+  \rho(G) = \max_{k=1,2, \ldots, n} |1- \frac{1}{2}\lambda_{k}| = \max_{k=1,2, \ldots , n} |\cos\left(\frac{\pi}{n+1}k\right)| = \cos \left( \frac{\pi}{n+1}\right) < 1
+\] Thus the Jacobi converges, and: \[
+  \|x_{k}-x_{*}\|_{2} \leq \|G\|_{g} \|x_{k-1}- x_{*}\|_{2} = \rho(G) \|x_{k-1}-x_{*}\|_{2}
+\] Thus, \[
+\rho = \rho(G) = \cos \frac{\pi}{n+1} = 1-2\sin^2 \frac{\pi}{2(n+1)} = 1-O(\frac{1}{n^2})
+\] This gives us $\alpha = 2$. \\
+
+As such, the number of iteration for $\|x_{k}-x_{*}\|_{2}\leq \tilde{\epsilon}$ is: \[
+  k\sim O(n^2\cdot \log\tilde{\epsilon}^{-1})
+\]
+Since we only need matrix product, we only need $O(n)$ FLOPs per iteration, meaning that the total FLOPs needed is: \[
+O(n^3\cdot \log\tilde{\epsilon}^{-1})
+\]
+As a comparison, Gaussian Elimination needs $O(n)$. Thus, the Jacobi iteration (in this version), is not efficient.
 \end{document}

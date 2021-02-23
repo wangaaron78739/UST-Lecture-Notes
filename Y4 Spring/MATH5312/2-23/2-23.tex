@@ -1,0 +1,165 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 23rd, 2021}
+\subsection{Jacobi for 2D Discrete Laplacian}
+For the 2D Laplacian, we have: \[
+  \begin{cases}
+    -u_{x x }-u_{y y} = f & (x,u) \in\Omega = (0,1)^2 \\
+    u(x,y) = 0 & \text{ on }\partial \Omega
+  \end{cases}
+\] By central difference: \[
+A_{2} x = b, x \in\RR^{N} \quad A_{2} \in\RR^{N \times N}
+\] with $N = n^2$ and: \[
+  A_{2}= A\otimes I + I\otimes A
+\], where $A$ is the 1D discrete Laplacian.
+\begin{definition}[\vocab{Kronecker Product (Tensor Product)}]
+  \[
+B\otimes C = \begin{bmatrix}
+b_{11} C & b_{12} C & \ldots & b_{1q}C \\
+\vdots & & & \vdots\\
+b_{p1} C & b_{p2} C & \ldots & b_{pq}C \\
+\end{bmatrix}  \]
+\end{definition}
+\begin{theorem}
+  \[
+    (A\otimes B)(C\otimes D) = (AC) \otimes (CD)
+  \]
+\end{theorem}
+\begin{lemma}
+The eigenvalues of $A_2$ are $\lambda_{i}+\lambda_{j}$, where $\lambda_{i},\lambda_{j}$ are eigenvalues of $A$ and $1\leq i,j \leq n$.
+\end{lemma}
+\begin{proof}
+  Let $(\lambda_{i},u_{i})$ be eigenpairs of $A$. Then: \[
+A_{2}(u_{i}\otimes u_{j}) = (A\otimes I)(u_{i}\otimes u_{j}) + (I \otimes A) (u_{i}\otimes u_{j})
+\]
+\begin{align*}
+  A_{2}(u_{i}\otimes u_{j}) &= (A\otimes I)(u_{i}\otimes u_{j}) + (I \otimes A) (u_{i}\otimes u_{j}) \\
+                            &= Au_{i} \otimes u_{j} + u_{j} \otimes Au_{j} \\
+                            &=\lambda_{i} u_{i} \otimes u_{j} + u_{i}\otimes (\lambda_{j}u_{j}) \\
+  &= (\lambda_{i}+\lambda_{j}) (u_{i}\otimes u_{j})
+  .\end{align*}
+\end{proof}
+Thus:
+\begin{align*}
+  G_{2} &= I - D_{2}^{-1} A_{2}\\
+  &= I - \frac{1}{4} A_2
+  .\end{align*}
+Meaning that the eigenvalues of $G_{2}$ are:
+\begin{align*}
+  1-\frac{1}{2}(\lambda_{i}+\lambda_{j}) &= 1- \frac{1}{4}\left(4-2\cos \frac{i\pi}{n+1} -2\cos\frac{j\pi}{n+1} \right) \\
+  &= \frac{1}{2} \left(\cos \frac{i\pi}{n+1}+\cos \frac{j\pi}{n+1}  \right)
+    .\end{align*}
+  Thus: \[
+    \rho(G_2) = \max_{1\leq i,j \leq n} \left|\frac{1}{2} \left(\cos \frac{i\pi}{n+1}+\cos \frac{j\pi}{n+1}  \right)\right| = \cos \frac{\pi}{n+1} < 1
+  \] Because $G_{2}$ is symmetric, $\|G_{2}\|_{2} = \rho(G_{2})$: \[
+\|x_{k}-x_{*}\|_{2}\leq \rho(G_{2})\cdot \|x_{k-1}-x_{*}\|_{2}
+\] Similar to before, we have: \[
+1-O\left(\frac{1}{n^2}\right)= 1-O\left(\frac{1}{N}\right)
+\]
+This gives us $\alpha = 1$, meaning that:
+\begin{itemize}
+\item number of iterations needed: $O(N \log \tilde{\epsilon}^{-1})$
+\item number of FLOPs needed per iterations: $O(N)$, which is the number of non-zero entries
+\end{itemize}
+Thus the total computation cost is $O(N^2 \cdot \log\tilde{\epsilon}^{-1})$. This is the same order as Gaussian Elimination, since $\tilde{\epsilon}$ is usually a constant.
+
+\begin{remark}
+More examples of Jacobi Iteration include the strictly/irreducibly diagonally dominant matrix, which have been covered in MAT5311.
+\end{remark}
+
+\subsection{Jacobi for SPD Matrices}
+\begin{theorem}
+Let $A\in\RR^{n \times n}$ be SPD. Then Jacobi converges to $x_{*}$ for any $x_{0}$ if and only if $2D-A$ is SPD too.
+\end{theorem}
+\begin{proof}
+  Recall that Jacobi converges to $x_{*}$ for any $x_{0}$ if and only if $\rho(G)< 1$.
+  \begin{itemize}
+    \item Assume Jacobi converges, then: \[
+          \rho(I-D^{-1} A) < 1 \iff \rho(I-D^{-\frac{1}{w}} A D^{-\frac{1}{2}}) < 1
+          \] because $D^{\frac{1}{2}}(I-D^{-1}A)D^{-\frac{1}{2}}$ is similar, thus meaning they share the same eigenvalue and thus spectral radius. Let $\lambda$ be an eigenvalue of $I-D^{-\frac{1}{2}}A D^{-\frac{1}{2}}$. Then $|\lambda|<1$ and $1+\lambda$ is an eigenvalue of $2I -D^{-\frac{1}{2}}A D^{-\frac{1}{2}}$. \\
+
+          Since A is symmetric, $\lambda$ is real, meaning that $1+\lambda$ is positive, thus meaning $2I-D^{-\frac{1}{2}}A D^{-\frac{1}{2}}$ is SPD. \\
+
+          Consider: \[
+D^{\frac{1}{2}}(2I-D^{-\frac{1}{2}}A D^{-\frac{1}{2}})D^{\frac{1}{2}} = 2D - A
+          \] which is also SPD, since they are similar.
+    \item The reverse is very similar, just in reverse. Assume $2D-A$ is SPD. We have:
+          \begin{align*}
+          2D - A \text{ is SPD }&\implies 2I-D^{-\frac{1}{2}}A D^{-\frac{1}{2}}\text{ is SPD }\\
+          &\implies 1+\lambda, \text{ where $\lambda$ is an eigenvalue of $I-D^{-\frac{1}{2}}A D^{-\frac{1}{2}}$.}
+            .\end{align*}
+          We also have:
+          \begin{align*}
+            A \text{ is SPD }&\implies D^{-\frac{1}{2}}A D^{-\frac{1}{2}} = I-(I-D^{-\frac{1}{2}}A D^{-\frac{1}{2}}) \text{ is SPD }\\
+                             & \implies 1-\lambda > 0 \\
+            & \implies \lambda> -1
+              .\end{align*} where $\lambda$ is an eigenvalue of $I - D^{-\frac{1}{2}}A D^{-\frac{1}{2}}$.
+          As such, we have: \[
+          -1<\lambda<1 \implies |\lambda| < 1 \implies \rho(I-D^{-1} A)<1
+          \]
+  \end{itemize}
+\end{proof}
+\begin{example}
+  Consider the 1D Laplacian: \[
+\begin{cases}
+  A \text{ is SPD}\\
+  2D - A = 4I-A \text{ is SPD }
+\end{cases}\implies \text{Jacobi converges}
+  \]
+\end{example}
+\subsection{Lower Bound of Jacobi Convergence Rate} We have: \[
+\frac{\|x_{k}- x_{*}\|}{\|x_{k-1}-x_{*}\|}  \leq \rho(G)+\epsilon
+\] for an arbitrarily small $\epsilon$, or $\epsilon = 0$ if $G$ is symmetric.
+This is a worse-case, i.e. an upper bound. However, this factor is asymptotically optimal, meaning: \[
+  \lim_{k \to \infty} \frac{\|x_{k}-x_{*}\|}{\|x_{k-1}-x_{*}\|}  \geq \rho(G)
+\]
+As such, convergence factor  $\rho$ is \vocab{tight}.\\
+
+Let us demonstrate this when $G$ is symmetric first.
+\begin{remark}
+For nonsymmetric matrices, this is also true, we will prove later.
+\end{remark}
+$|\lambda_{1}|> |\lambda_{2}|$ where $\lambda_{1},\lambda_{2}$ are the largest and 2nd largest eigenvalue of $G$ in absolute value.
+
+Let $G = U \begin{bmatrix}
+  \lambda_{1} && \\
+  & \ddots & \\
+  && \lambda_{n}
+\end{bmatrix}U^{T}$ be the eigenvalue decomposition of $G$, where $U = \begin{bmatrix}
+u_{1}&u_{2}&\ldots& u_{2}
+\end{bmatrix}$ is unitary. \\
+
+Let $x_{k}- x_{*}= z_{k}$. Then: \[
+z_{k} = G^{k} z_{0} = \left(U \begin{bmatrix}
+  \lambda_{1} && \\
+  & \ddots & \\
+  && \lambda_{n}
+\end{bmatrix}U^{T}\right)z_{0} =  U \begin{bmatrix}
+  \lambda_{1}^{k} && \\
+  & \ddots & \\
+  && \lambda_{n}^{k}
+\end{bmatrix}U^{T}z_{0}.
+\] Denote $U^{T}z_{0}= \begin{bmatrix}
+\alpha_{1} \\ \alpha_{2} \\ \vdots \\ \alpha_{n}
+\end{bmatrix}$. Thus we have:
+\begin{align*}
+  \|z_{k}\|_{2} &= \|\begin{bmatrix}
+  \lambda_{1}^{k} && \\
+  & \ddots & \\
+  && \lambda_{n}^{k}
+\end{bmatrix}\begin{bmatrix}
+\alpha_{1} \\ \alpha_{2} \\ \vdots \\ \alpha_{n}
+\end{bmatrix}
+  \|\\ &= \left(\sum_{i=1}^n \lambda_{i}^{2k}\alpha_{i}^2\right)^{1 /2}\\
+                &= |\lambda_{1}|^{k}\left(\sum_{i=1}^n \left(\frac{\lambda_{i}}{\lambda_{1}} \right)^{2k}\alpha_{i}^2\right)^{1 /2}
+  .\end{align*}
+Thus, we have:
+\begin{align*}
+\lim_{k \to \infty} \frac{\|z_{k}\|_{2}}{\|z_{k-1}\|_{2}} &= |\lambda_{1}| \lim_{k \to \infty} \frac{\left(\sum_{i=1}^n \left(\frac{\lambda_{i}}{\lambda_{1}} \right)^{2k}\alpha_{i}^2\right)^{ 1 / 2 }}{\left(\sum_{i=1}^n \left(\frac{\lambda_{i}}{\lambda_{1}} \right)^{2(k-1)}\alpha_{i}^2\right)^{1 /2}}
+  \\ &= |\lambda_{1}| \lim_{k \to \infty} \frac{\alpha_{1}^2 + \left(\frac{\lambda_{2}}{\lambda_{1}} \right)^{2k}\alpha_{2}^2+\ldots}{\alpha_{1}^2 + \left(\frac{\lambda_{2}}{\lambda_{1}} \right)^{2(k-1)}\alpha_{2}^2+\ldots}
+  \\ &= |\lambda_{1}| \\ &= \rho(G)
+  .\end{align*}
+\end{document}
