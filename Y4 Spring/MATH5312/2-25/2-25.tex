@@ -1,0 +1,169 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{February 25th, 2021}
+\subsection{Gauss-Seidel Iteration}\index{Gauss-Seidel Iteration}
+Recall that in Jacobi, $\xi_{i}^{(k+1)}$ are updated parallely in Algorithm \ref{2-16-jac1}.
+
+\vocab{Gauss-Seidel} is just modifying Jacobi to be updated ``successively''. When we modify $\xi_{i}^{(k+1)}$ we can use $\xi_{1}^{(k+1)} ,\ldots \xi_{i-1}^{(k+1)}$. This gives us Algorithm \ref{2-25-ga}.
+        \begin{algorithm}[h!]
+	\caption{Gauss-Seidel Iteration}
+    \label{2-25-ga}
+	\begin{algorithmic}[1]
+      \For{ $k=0,1,2, \ldots$}
+      \For{ $i=1, \ldots , n$}
+      \State $\xi_{i}^{(k+1)} = (\beta_{i} - \sum_{j> i} a_{ij} \xi_{j}^{(k) } - \sum_{j< i} a_{ij} \xi_{j}^{(k+1) } ) / a_{ii}$
+      \EndFor
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+
+    In the matrix reformulation, recalling that $A=D-E-F$, where $E$ is lower triangular and $F$ is upper triangular, we have: \[
+    \]
+    \begin{align*}
+     & x_{k+1} = D^{-1}(b+F x_{k}+E x_{k+1}) \\
+      &\iff (D-E)x_{k+1} = b +F x_{k} \\
+   & \iff x_{k+1} = (D-E)^{-1} F x_{k} + (D-E)^{-1} b \\
+    &  \iff x_{k+1} = \underbrace{(I - (D-E)^{-1} A)}_{G} x_{x} + \underbrace{(D-E)^{-1}}_{f} b
+                     .\end{align*}
+                   which is in the stationary iteration form.\\
+
+                   \begin{remark}
+In the algorithm above, we are updating $\xi_{i}^{(k+1)}$ in regular numerical order (from $1$ to $n$). However, we can use other ordering, such as going from $n$ to $1$ in reverse order. Gauss-Seidel is sensitive to the ordering of updating of unknowns.
+                   \end{remark}
+\subsubsection{Convergence of Gauss-Seidel}
+Since Gauss-Seidel is a stationary iteration, we can use the same framework as the Jacobi iteration, with: \[
+(x_{k}-x_{*}) = G^{k}(x_{0}-x_{*})
+\]
+\begin{theorem}
+Gauss-Seidel converges to $x_{*}$ for any $x_{0}$ if and only if $\rho(G)<1$.
+\end{theorem}
+% \begin{proof}
+% Same as the proof for Jacobi.
+% \end{proof}
+The convergence speed is $\|G\|$, as we have: \[
+\|x_{k+1}-x_{*}\| \leq \|G\|\|x_{k}-x_{*}\|
+\] In particular, we have:  \[
+\|G\| = \begin{cases}
+  \rho(G) & \text{ if $G$ is symmetric and $\|\cdot\|=\|\cdot\|_{2}$ }\\
+  \rho(G)+\epsilon & \text{otherwise}
+\end{cases}
+\]with $\epsilon$ arbitrarily small.
+\begin{theorem}
+Let $A \in\RR^{n \times n}$ be SPD. Then $\rho(G)< 1$.
+\end{theorem}
+\begin{proof}
+  Recall $G=I-(D-E)^{-1} A$. Let $(\lambda,u)$ be an eigenpair of $G$ (note that $\lambda,u$ may be complex). We have:
+  \begin{align*}
+Gu =  \lambda u \\
+    (I-(D-E)^{-1}A u) = \lambda u \\
+    (D-E)^{-1} F u = \lambda u \\
+    Fu = \lambda (D-E)^{-1} u
+    .\end{align*}
+  Since $A$ is symmetric, we have: \[
+A=A^{T} \implies F = E^{T}
+.\] Thus, we have:
+\begin{align*}
+  \lambda(D-E) u &= E^{T} u \\
+&\lambda u^{*} (D-E)u= u^{*}E^{T} u
+                                 .\end{align*}
+                               by  left-multiplying both side by $u^{*}=\overline{u}^{T}$  \\
+
+                               Let us set $u^{*} E^{T} u = \alpha +i \beta \in \CC$ and $u^{*}D u = \delta \in \RR$, since $D$ is real and symmetric. Then, we have:
+                               \[
+u^{*}E^{T} u = (u^{*}E^{T} u)^{T} = u^{T} E (u^{*})^{T} = \overline{u^{*}} \overline{E} \overline{u} = \overline{u^{*}E u} = \alpha - i \beta
+\]
+Since $A$ is SPD,  $D$ is also SPD, giving us $\lambda = u^{*}D u > 0$. \\
+
+Thus  \[
+\lambda(\delta - (\alpha+i\beta)) = \alpha-i\beta \implies \lambda = \frac{\alpha-i\beta}{(\delta-\alpha)-i\beta}
+\]Giving us: \[
+|\lambda|^2 = \frac{(\alpha^2+\beta^2)}{(\delta-\alpha)^2+\beta^2}
+\]
+
+Because: \[
+(\delta-\alpha)^2+\beta^2 = \delta^2+\alpha^2+\beta^2 - 2\alpha\delta = (\alpha^2+\beta^2)+\underbrace{\delta}_{>0}(\delta-2\alpha)
+\] we need to check the sign of $\delta-2\alpha$. \\
+
+Since $A $ is SPD, $u^{*}Au>0 \implies u^{*}(D-E-E^{T})u = \delta -(\alpha+i\beta) - (\alpha - i\beta) = \delta -2\alpha > 0 $. As such: \[
+(\delta - \alpha)^2 +\beta^2 > \alpha^2 +\beta^2 \implies |\lambda|^2 < 1
+\]
+\end{proof}
+
+\begin{remark}
+This is more general than Jacobi, which is convergent if and only if $2D-A$ is SPD.
+\end{remark}
+\begin{example}
+  Recall that the 1D discrete Laplacian is SPD, meaning that Gauss-Seidel converges. Similarly for the 2D case.
+\end{example}
+\begin{example}
+  Gauss-Seidel converges for irriducible diagonally dominant matrices. This is used for laplacian on irregular domains.
+\end{example}
+\subsection{Acceleration of G-S / and Jacobi (SOR)}\index{SOR iteration}
+
+Here we try to accelerate Gauss-Seidel and Jacobi by considering momentum acceleration. We can consider the iteration of $x_{k}$ to $x_{k+1}$ as a movement by the Gauss-Seidel iteration. The idea of SOR is to consider the momentum of the movement until some stage. \\
+
+For Gauss-Seidel, the components are:
+\begin{itemize}
+\item  $x_{k}:$ $ \xi_{i}^{(k)}$
+\item  $x_{k+1}:$ $ \xi_{i}^{(k+1)} = (\beta_{i} - \sum_{j> i} a_{ij} \xi_{j}^{(k) } - \sum_{j< i} a_{ij} \xi_{j}^{(k+1) } ) / a_{ii}$
+\end{itemize}
+To consider the momentum, we would have:
+  \begin{align*}
+ \xi_{i}^{(k+1)} &= \xi_{i}^{(k)} +\omega (\xi_{i}^{(k+1)}- \xi_{i}^{(k)})\\
+  &= \xi_{i}^{(k)} +\omega \left((\beta_{i} - \sum_{j> i} a_{ij} \xi_{j}^{(k) } - \sum_{j< i} a_{ij} \xi_{j}^{(k+1) } ) / a_{ii}- \xi_{i}^{(k)}\right)
+    .\end{align*} for some $\omega > 1$, giving us the Algorithm \ref{2-25-sor}.
+
+        \begin{algorithm}[h!]
+	\caption{SOR Iteration}
+    \label{2-25-sor}
+	\begin{algorithmic}[1]
+      \For{ $k=0,1,2, \ldots$}
+      \For{ $i=1, \ldots , n$}
+      \State $\xi_{i}^{(k+1)} = \xi_{i}^{(k)} +\omega \left[(\beta_{i} - \sum_{j> i} a_{ij} \xi_{j}^{(k) } - \sum_{j< i} a_{ij} \xi_{j}^{(k+1) } ) / a_{ii}- \xi_{i}^{(k)}\right]$
+      \EndFor
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+
+    In the matrix reformulation, we have: \[
+x_{k+1} = x_{k} + \omega \left[D^{-1}(b+F x_{k}+ E x_{k+1})- x_{k}\right]
+\] Expressing this in its stationary form, we have: \[
+x_{k+1} = \underbrace{(D-\omega E)^{-1} \left((1-\omega)D+\omega F\right)}_{G_{\omega}} x_{k} + \underbrace{\omega (D-\omega E)^{-1}}_{f_{\omega}} b
+\]
+Now the question is finding a suitable $\omega$.
+
+\subsubsection{Convergence of SOR}
+
+\begin{theorem}
+If $\omega \not\in(0,2)$, then $\rho(G_{\omega})>1$.
+\end{theorem}
+\begin{proof}
+  We have:
+  \[
+    \det(G_{\omega}) = \det((D-\omega E)^{-1}) \cdot \det((1-\omega)D +\omega F)
+  \]
+\begin{itemize}
+        \item
+  Since $D-\omega E$ is lower triangular, $(D-\omega E)^{-1}$ is also lower triangular. Thus, $\det((D-\omega E)^{-1})$ is the product of its diagonals, which are the inverse of the diagonal of $D-\omega E$ which are $\frac{1}{a_{i i}}$. As such, we have: \[
+    \det ((D-\omega E)^{-1}) = \prod_{i=1}^n a_{ii}^{-1}
+        \]
+  \item Since $(1-\omega)D +\omega F$ is upper triangular, we have: \[
+        \det ((1-\omega)D +\omega F) = \prod_{i=1}^n (1-\omega)~a_{ii}
+        \]
+\end{itemize}
+Thus, we have: \[
+  \det (G_{\omega}) = \prod_{i=1}^n (1-\omega)~a_{ii} \cdot a_{ii}^{-1} = (1-\omega)^{n} = \prod_{i=1}^n \lambda_{i}
+\]
+This gives us:
+\begin{align*}
+  & |1-\omega|^{n} = | \lambda_{1}|| \lambda_{2}|\ldots| \lambda_{n}| \leq (\rho(G_{\omega}))^{n} \\
+  \implies & |1-\omega| \leq \rho(G_{\omega})
+  .\end{align*}
+\end{proof}
+\begin{corollary}
+In order for SOR to converge, we must have $\omega < 2$.
+\end{corollary}
+\end{document}

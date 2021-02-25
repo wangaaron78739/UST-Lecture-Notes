@@ -157,9 +157,57 @@ z_{k} = G^{k} z_{0} = \left(U \begin{bmatrix}
                 &= |\lambda_{1}|^{k}\left(\sum_{i=1}^n \left(\frac{\lambda_{i}}{\lambda_{1}} \right)^{2k}\alpha_{i}^2\right)^{1 /2}
   .\end{align*}
 Thus, we have:
+\begin{itemize}
+  \item $\lim_{k \to \infty} \frac{\|z_{k}\|_{2}}{\|z_{k-1}\|_{2}} = \rho(G)$
+        \begin{proof}
 \begin{align*}
 \lim_{k \to \infty} \frac{\|z_{k}\|_{2}}{\|z_{k-1}\|_{2}} &= |\lambda_{1}| \lim_{k \to \infty} \frac{\left(\sum_{i=1}^n \left(\frac{\lambda_{i}}{\lambda_{1}} \right)^{2k}\alpha_{i}^2\right)^{ 1 / 2 }}{\left(\sum_{i=1}^n \left(\frac{\lambda_{i}}{\lambda_{1}} \right)^{2(k-1)}\alpha_{i}^2\right)^{1 /2}}
   \\ &= |\lambda_{1}| \lim_{k \to \infty} \frac{\alpha_{1}^2 + \left(\frac{\lambda_{2}}{\lambda_{1}} \right)^{2k}\alpha_{2}^2+\ldots}{\alpha_{1}^2 + \left(\frac{\lambda_{2}}{\lambda_{1}} \right)^{2(k-1)}\alpha_{2}^2+\ldots}
   \\ &= |\lambda_{1}| \\ &= \rho(G)
   .\end{align*}
+        \end{proof}
+        \item $|\langle z_{k}, u_{j}\rangle|  = |\lambda_{j}^{k}\alpha_{j}| = |\lambda_{j}|^{k}|\langle z_{0},u_{j}\rangle|$, meaning that the convergence speed of error projected onto $u_{j}$ is $|\lambda_{j}|$.
+        \begin{remark}
+This means that different error components have different convergence speed.
+        \end{remark}
+  \item The error converges to the same direction as $u_{1}$.
+\begin{proof}
+  \begin{align*}
+\lim_{k \to \infty} \frac{|\langle z_{k},u_{j}\rangle|}{\|z_{k}\|_{2}} &= \lim_{k \to \infty} \frac{|\lambda_{j}|^{k}|\langle z_{0},u_{j}\rangle|}{|\lambda_{1}|^{k}\left(\sum_{i=1}^n \left(\frac{\lambda_{i}}{\lambda_{1}} \right)^{2k}\alpha_{i}^2\right)^{1 /2}} \\ &= \lim_{k \to \infty} \frac{|\lambda_{j}|^{k}}{|\lambda_{1}|^{k}} \cdot \frac{|\alpha_{1}|}{|\alpha_{1}|}\\  &= \lim_{k \to \infty} \left| \frac{\lambda_{j}}{\lambda_{1}}  \right|\\ &= \begin{cases}
+    1& j=1 \\
+    0& j\neq 0
+  \end{cases}
+    .\end{align*}
+\end{proof}
+
+\end{itemize}
+\begin{example}
+  Let's consider the 1D discrete Laplacian:
+  \[
+  A = \begin{bmatrix}
+    2&-1&&&\\
+    -1&2&\ddots&&\\
+    &\ddots&\ddots&\ddots&\\
+    &&\ddots&\ddots&-1\\
+    &&&-1&2\\
+  \end{bmatrix}, \quad G = I-\frac{1}{2}A
+\] Recall that the eigenvalues of $A$ are : \[
+\lambda_{j}(A) = 2\left(1-\cos \frac{j\pi}{n+1} \right), \quad j=1,2 \ldots,n
+\]
+meaning that the eigenvalues of $G$ aer: \[
+\lambda_{j}(G) = 1-\frac{1}{2}\lambda_{j}(A) = \cos \frac{j\pi}{n+1}, \quad j=1,2 \ldots,n
+\]
+Let $u_{j}$ be the eigenvectors of $A$ (and of $G$, since it is a shift of $A$). Let the error be \[
+  z_{k} = x_{k}-x_{*} = \sum_{j=1}^n \alpha_{j}^{(k)}u_{j}
+\] Then the convergence speed of $\alpha_{j}^{(k)}$ is $\lambda_{j}(G)$. As such, we have:
+\begin{itemize}
+\item
+        If $j$ is close to $1$ or $n$, then $|\lambda_{j}(G)|$ is close to 1, meaning it has a slower convergence.
+
+      \item If $j$ is close $\frac{n}{2}$, then $|\lambda_{j}(G)|$ is close to 0, meaning it has a faster convergence.
+\end{itemize}
+\end{example}
+\begin{remark}
+To improve Jacobi, in the Multigrid, we use different grids. The main motivation is that the convergence speed of different components depends on the eigenvalues. For components that are difficult to decrease, we project them onto a coarse grid to reduce the error.
+\end{remark}
 \end{document}
