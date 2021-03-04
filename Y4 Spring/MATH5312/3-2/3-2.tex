@@ -122,7 +122,7 @@ There are a few special cases:
   \item $P=D$ (diagonal part of $A$) - Jacobi iteration
 \item Symmetric G-S
 \end{itemize}
-\subsubsection{Projeciton Methods}
+\subsubsection{Projection Methods}
 Let $K$ and $L$ be two $m$-dimensional subspaces in $\RR ^{n}$. Given $x_{0} \in \RR ^{n}$, we obtain a better solution $\tilde{x}$ of $Ax = b$ by: \[
 \begin{cases}
   \text{Find} &\tilde{x}\in x_{0}+K \\
@@ -155,5 +155,16 @@ If we choose  $K = L = \text{span}\{ e_{i}\}$
             b-A(x_{0}+ \delta_{i})\perp L_{i}
 \end{cases}
         \]
-        If we have $K_{i}=L_{i}=\text{span}\{ e_{i}\} $ we have the Jacobi iteration.
+        If we have $K_{i}=L_{i}=\text{span}\{ e_{i}\} $ we have the Jacobi iteration.\\
+
+We can have several other choices of $K$ and $L$:
+\begin{description}
+  \item[Multigrid Method:] $K=L=\text{span}\{e_{1}\} \ldots \text{span}\{e_{n}\}$ on fine grid.
+
+        Then we do $\text{span}\{e_{1}\} \ldots \text{span}\{e_{n / 2}\}$ on the coarse grid, etc.
+\item[Domain Decomposition:]  We first partition $\Omega$ into overlapping spaces into $\Omega_{1}, \Omega_{2}$, and then we set $K=L=\text{span}\{e_{i}, i\in \Omega_{1}\}$, and then $\text{span}\{e_{i}, i \in \Omega _{2}\}$.
+\end{description}
+        \begin{remark}
+          For both the methods mentioned above, $K$ and $L$ are fixed, making the iterative methods fixed.
+        \end{remark}
 \end{document}
