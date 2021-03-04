@@ -166,4 +166,24 @@ This gives us:
 \begin{corollary}
 In order for SOR to converge, we must have $\omega < 2$.
 \end{corollary}
+\begin{itemize}
+\item If $\omega = 1$, we have Gauss Seidel
+  \item If $\omega  \in (0,1)$, we have successive under relaxation
+        \item If $\omega \in (1,2)$ we have successive over relaxation (SOR).
+\end{itemize}
+\begin{theorem}
+If $A$ is SPD, then $\rho (G_{\omega })<1$ for all $\omega \in (0,2)$.
+\end{theorem}
+\begin{proof}
+Similar to Gauss-Seidel.
+\end{proof}
+How do we pick the optimal $\omega $? Roughly speaking, with the optimal $\omega $:
+\begin{itemize}
+\item $\rho (G_{\omega_{\text{opt}}})\sim \rho (G_{1})^2$. Where $G_{1}$ is the iteration matrix in G-S.
+        \begin{remark}
+This means that SOR is roughly two times faster than G-S, since it is the square.
+        \end{remark}
+        \item $\rho (G_{1})\sim (\rho(G_{\text{Jacobi}}))^2$.
+\end{itemize}
+
 \end{document}
