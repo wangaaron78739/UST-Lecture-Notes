@@ -156,7 +156,7 @@ Thus the optimal 1D projection method is given in Algorithm \ref{3-4-alg}.
 	\begin{algorithmic}[1]
       \For{ $k=0,1,2, \ldots$}
  \State $r_{k}=b-Ax_{k}$
- \State $\alpha _{k} = \|r_{k}\|^2_{2} / \|r_{k}\|_{A}^2$
+ \State $\alpha _{k} = \|r_{k}\|^2_{2} / \|r_{k}\|_{A}^2 = \frac{\iprod{r_{k}}{r_{k}}}{\iprod{Ar_{k}}{r_{k}}} $
  \State $x_{k+1} = x_{k}+\alpha _{k}x_{k}$
       \EndFor
 	\end{algorithmic}
@@ -164,4 +164,30 @@ Thus the optimal 1D projection method is given in Algorithm \ref{3-4-alg}.
   \begin{remark}
 Note that for each iteration, we use 2 matrix-vector products and $O(n)$ operations.
   \end{remark}
+  This can be improved to 1 matrix-vector product. If we have denote $p_{k} = Ar_{k}$, then:
+  \begin{align*}
+    r_{k+1} &= b - Ax_{k+1} \\
+            &= b-A(x_{k}+\alpha_{k}r_{l}) \\
+            &= b-Ax_{k}-\alpha _{k}Ar_{k}\\
+    = r_{k} - \alpha _{k} p_{k}
+    .\end{align*}
+  This gives us Algorithm \ref{3-4-alg2}.
+        \begin{algorithm}[h!]
+	\caption{Optimal 1D Projection Method Improved}
+    \label{3-4-alg}
+	\begin{algorithmic}[1]
+      \State $r_{0}=b-Ax_{0}$
+      \For{ $k=0,1,2, \ldots$}
+      \State $p_{k} = Ar_{k}$
+ \State $\alpha _{k} = \frac{\iprod{r_{k}}{r_{k}}}{\iprod{p_{k}}{r_{k}}} $
+ \State $x_{k+1} = x_{k}+\alpha _{k}x_{k}$
+ \State $r_{k+1} = r_{k}- \alpha _{k}p_{k}$
+      \EndFor
+	\end{algorithmic}
+	\end{algorithm}
+    Note that this is the algorithm Gradient descent for: \[
+\min_{x\in \RR ^{n}} \frac{1}{2} x^{T}Ax-x^{T}b
+\] with the exact line search, i.e.: \[
+x_{k+1} = x_{k} -\alpha _{k}\nabla f(x_{k})
+\] where $\alpha _{k} = \argmin_{\alpha  \in \RR } f(x_{k}-\alpha \nabla f(x_{k}))$. Thus, the algorithm is called: \vocab{steepest descent}.\index{steepest descent}
 \end{document}

@@ -60,22 +60,22 @@ Let $A \in\RR^{n \times n}$ be SPD. Then $\rho(G)< 1$.
 Gu =  \lambda u \\
     (I-(D-E)^{-1}A u) = \lambda u \\
     (D-E)^{-1} F u = \lambda u \\
-    Fu = \lambda (D-E)^{-1} u
+    Fu = \lambda (D-E) u
     .\end{align*}
   Since $A$ is symmetric, we have: \[
 A=A^{T} \implies F = E^{T}
 .\] Thus, we have:
 \begin{align*}
   \lambda(D-E) u &= E^{T} u \\
-&\lambda u^{*} (D-E)u= u^{*}E^{T} u
+\lambda u^{*} (D-E)u&= u^{*}E^{T} u
                                  .\end{align*}
                                by  left-multiplying both side by $u^{*}=\overline{u}^{T}$  \\
 
-                               Let us set $u^{*} E^{T} u = \alpha +i \beta \in \CC$ and $u^{*}D u = \delta \in \RR$, since $D$ is real and symmetric. Then, we have:
+                               Let us set $u^{*} E u = \alpha +i \beta \in \CC$ and $u^{*}D u = \delta \in \RR$, since $D$ is real and symmetric. Then, we have:
                                \[
 u^{*}E^{T} u = (u^{*}E^{T} u)^{T} = u^{T} E (u^{*})^{T} = \overline{u^{*}} \overline{E} \overline{u} = \overline{u^{*}E u} = \alpha - i \beta
 \]
-Since $A$ is SPD,  $D$ is also SPD, giving us $\lambda = u^{*}D u > 0$. \\
+Since $A$ is SPD,  $D$ is also SPD, giving us $u^{*}D u > 0$. \\
 
 Thus  \[
 \lambda(\delta - (\alpha+i\beta)) = \alpha-i\beta \implies \lambda = \frac{\alpha-i\beta}{(\delta-\alpha)-i\beta}

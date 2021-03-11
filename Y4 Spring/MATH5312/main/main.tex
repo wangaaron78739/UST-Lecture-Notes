@@ -34,6 +34,7 @@
 \usepackage{algpseudocode}
 % \usepackage[noend]{algpseudocode}
 \graphicspath{ {../images/} }
+\usepackage{centernot}
 \usepackage[super]{nth}
 \usepackage{subfiles}
 \providecommand{\main}{..}
@@ -175,7 +176,8 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newcommand{\mat}[1]{\mathbf{#1}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\sspan}{\operatorname{span}}
-\newcommand{\argmin}{\operatorname{argmin}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 \newcommand{\iprod}[2]{\left\langle{#1},{#2}\right\rangle }
 
 \newcommand{\PreserveBackslash}[1]{\let\temp=\#1\let\=\temp}
@@ -215,6 +217,9 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \subfile{../2-23/2-23}
 \subfile{../2-25/2-25}
 \subfile{../3-2/3-2}
+\subfile{../3-4/3-4}
+\subfile{../3-9/3-9}
+\subfile{../3-11/3-11}
 \appendix
 \newpage
 \addcontentsline{toc}{section}{Index}
