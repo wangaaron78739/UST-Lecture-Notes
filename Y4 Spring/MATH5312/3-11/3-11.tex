@@ -44,7 +44,7 @@ If $r_{k}=0$, then the algorithm stops, since we have achieved $x_{*}$.
       \includegraphics[width=0.8\textwidth]{../images/3-11-orth.png}
       \caption{Diagram showing Orthogonality between $d_{k}$ and $r_{k}$ }
     \end{figure}
-    \begin{theorem}
+    \begin{theorem}\label{3-11-th}
       Assume $A$ is SPD. Assume $r_{0},r_1,r_2, \ldots ,r_{i-1}\neq 0$. Then:
       \begin{enumerate}
 \item $\iprod{r_{j}}{r_{j}} = 0$ for all $j\leq  i-1$ (meaning $\{r_{0},r_{1}, \ldots , r_{i}\}$ are orthogonal)
@@ -91,6 +91,7 @@ d_{0}&d_{1}& \ldots &d_{i}
 \iprod{x_{*}-x_{k}}{v}_{A}=0 \quad \forall v\in K_{k}
 \] where $K_{k}$ is the Krylov subspace. As a result: \[
 x_{k} = \argmin_{x\in x_{0}+K_{k}}  \|x_{*}-x\|_{A}\]
+Furthermore, if $r_{0},r_{1},r_{2}, \ldots ,r_{k-1}\neq 0$, then $\operatorname{dim}(K_{k})=k$. Therefore, either GC stops early with $x_{k}=x_{*}$, or $x_{n} = x_{*}$
 \end{theorem}
 \begin{definition}[\vocab{Krylov Subspace}]\index{Krylov subspace}
   \[
@@ -103,7 +104,32 @@ x_{k} = \argmin_{x\in x_{0}+K_{k}}  \|x_{*}-x\|_{A}\]
   \caption{Pictoral Representation of Theorem \ref{3-11-k}}
 \end{figure}
 \begin{proof}
-
+  Using Theorem \ref{3-11-th}, we have:
+  \begin{align*}
+    r_{1} &= b-Ax_{1} = b-A(x_{0}+\alpha_{0}r_{0}) =r_{0} - \alpha_{0}  (Ar_{0}) \in \sspan \{r_{0}, Ar_{0}\}\subset K_{k} \\
+    d_{1} &= r_{1} + \beta _{0}r_{0} \in \sspan \{r_{0}, A r_{0}\}\subset K_{k} \\
+    r_{1} &= b-Ax_{2} = b-A(x_{0}+\alpha_{1}d_{1}) =r_{0} - \alpha_{1}  Ad_{1} \in \sspan \{r_{0}, Ar_{0}, A^2 r_{0}\}\subset K_{k} \\
+    d_{2} &= r_{2} + \beta _{1}r_{1} \in \sspan \{r_{0}, A r_{0}, A^2r_{0}\}\subset K_{k}
+    .\end{align*}
+  Using induction, we get: \[
+    r_{0}, r_{1}, d_{1}, r_{2}, d_{2}, \ldots , r_{k-1}, d_{k-1} \in K_{k} \implies  \sspan \{r_{0},r_{1}, \ldots r_{k-1}\}\subset K_{k}
+  \]
+  \begin{itemize}
+    \item If $r_{i} =0$ for some $i\in \{0,1,2, \ldots  ,k-1\}$, then $r_{k}=0$, and: \[
+          \iprod{r_{k}}{v}=0 \quad  \forall  v \in K_{k} \iff  \iprod{x_{*}-x_{k}}{v}_{A} = 0 \quad  \forall  v \in  K_{k}
+          \]
+    \item If $r_{0}, r_{1}, \ldots  r_{k-1} \neq 0$, then: \[
+          k = \dim (\sspan \{r_{0},r_{1}, \ldots  r_{k+1}\}) \leq  \dim (K_{k}) \leq  k
+          \]
+          \[
+          \implies \dim (K_{k}) = k \text{ and } \{r_{0},r_{1},r_{k-1}\} \text{ is an orthogonal basis of } K_{k}
+          \] because:
+          \begin{align*}
+            &\iprod{r_{k}}{r_{i}} = 0 \quad \forall i = 0, 1, \ldots , k-1\\
+            \implies  & \iprod{r_{k}}{v} \quad  \forall v \in K_{k} \\
+            \implies  & \iprod{x_{*}-x_{k}}{v}_{A} = 0 \quad \forall  v \in K_{k}
+            .\end{align*}
+  \end{itemize}
 \end{proof}
 \begin{corollary}
 If we run CG for $N$ steps, it is equivalent to projecting to $\RR ^{n}$, which is $x_{*}$, thus meaning that CG is optimal.
