@@ -109,13 +109,90 @@ C_{k}(\mu) = \begin{cases}
   &C_{k}(\mu)+C_{k-2}(\mu) = 2 \mu C_{k-1}(\mu)\\
   \implies & C_{k}(\mu) = 2\mu C_{k-1}(\mu)-C_{k-2}(\mu) \in \mathbb{P}_{k}
   .\end{align*}
+This means that: \[
+  \frac{C_{k}(\mu)}{C_{k}(\mu_{0})}\in\mathbb{P}_{k} \text{ and } \frac{C_{k}(\mu)}{C_{k}(\mu_{0})}\bigg\rvert_{\mu = \mu_{0}} = 0.
+\]
+Suppose there exists $q\neq \frac{C_{k}}{C_{k}(\mu_{0})} $ s.t. $q \in\mathbb{P}_{k},\ q(\mu_{0})=0$ and: \[
+\max_{\mu\in[-1,1]}|q(\mu)| < \max_{\mu\in [-1,1]}\left| \frac{C_{k}(\mu)}{C_{k}(\mu_{0})}\right| = \frac{1}{|C_{k}(\mu_{0})|}
+\] then consider: \[
+f(\mu) = \frac{C_{k}(\mu)}{C_{k}(\mu_{0})}- q(\mu) \in\mathbb{P}_{k}
+\] Since:
+\begin{align*}
+  C_{k}\left(\cos \frac{2j\pi}{k} \right) &= \cos\left(k \cdot \arccos \left(\cos \frac{2j\pi}{k} \right)\right) = \cos \left(k \cdot \frac{2j\pi}{k} \right) = 1\\
+  C_{k}\left(\cos \frac{(2j+1)\pi}{k} \right) &= \cos\left(k \cdot \arccos \left(\cos \frac{(2j+1)\pi}{k} \right)\right) = \cos \left(k \cdot \frac{(2j+1)\pi}{k} \right) = -1
+  .\end{align*}
+for any integer $j$ s.t. $0\leq 2j, 2j+1 \leq k$, and since $\cos 0, \cos \frac{\pi}{k}, \cos \frac{2\pi}{k} , \ldots, \cos \frac{k\pi}{k} $ are $k+1$ distinct numbers in $[-1,1]$, WLOG, we assume $C_{k}(\mu_{0})>0$: \[
+f(\mu) \begin{cases}
+\frac{1}{C_{k}(\mu_{0})} - q(\mu) > 0 & \mu = \cos \frac{2j\pi}{k}  \\
+\frac{1}{C_{k}(\mu_{0})} - q(\mu) < 0 & \mu = \cos \frac{(2j+1)\pi}{k}  \\
+\end{cases}
+\] Then $f$ has at least $k$ zeros, each in between $\left(\cos \frac{j\pi}{k}, \cos \frac{(j+1)\pi}{k}  \right)$ for $j = 0, \ldots, k$, and $f(\mu_{0}) = 0$ with $\mu_{0}\not\in [-1,1]$, meaning that $f \in \mathbb{P}_{k}$ has at least $k+1$ distinct zeros. However $f=0$ is a contradiction.
 \end{proof}
+Continuing the convergence of CG, we have:
+\begin{align*}
+  \| x_{k}- x_{*}\|_{A} &\leq \max_{\mu \in[-1,1]}\left|\frac{C_{k}(\mu)}{C_{k}(\mu_{0})} \right|\cdot \|x_{0}-x_{*}\|_{A}\\
+  &= \frac{1}{|C_{k}(\mu_{0})|}\|x_{0}-x_{*}\|_{A}
+    .\end{align*} It remains to give a lower bound of $|C_{k}(\mu_{0})|$, with $\mu_{0}<-1$.\\
 
-
+  Recall \[
+\cosh(\theta) = \frac{e^{\theta}+e^{-\theta}}{2}  \quad \arccosh(x) = \ln (x+\sqrt{x^2-1})
+\] and as such,  \begin{align*}
+                   |C_{k}(\mu_{0})| &= \left|\cosh (k \arccosh(-\mu_{0}))\right| \\
+                                    &= \frac{e^{k \ln (-\mu_{0}+\sqrt{\mu^2_{0}-1})}+e^{-k \ln (-\mu_{0}+\sqrt{\mu^2_{0}-1})}}{2}\\
+                                    &= \frac{1}{2}\left( (\sqrt{\mu_{0}^2-1}-\mu_{0})^{k} +(\sqrt{\mu_{0}^2-1}-\mu_{0})^{-k} \right)\\
+                   &\geq \frac{1}{2} (\sqrt{\mu_{0}-1}-\mu_{0})^{k}
+                   .\end{align*}
+                 Note that: \begin{align*}
+                              \mu_{0} &= -\frac{\lambda_{\max}+\lambda_{\min}}{\lambda_{\max}-\lambda_{\min}}\\
+                                      &= - \frac{\gamma+1}{\gamma-1} , \quad \gamma  = \frac{\lambda_{\max}}{\lambda_{\max}}
+                              .\end{align*}
+                            Which gives us:
+                            \begin{align*}
+                              |C_{k}(\mu_{0})| &\geq \frac{1}{2} (\sqrt{\mu_{0}-1}-\mu_{0})^{k}\\
+                              &=\frac{1}{2}\left(\sqrt{\left(\frac{\gamma+1}{\gamma-1} \right)^2+1}+\frac{\gamma+1}{\gamma-1} \right)^{k}\\
+                              &=\frac{1}{2}\left(\sqrt{ \frac{(\gamma+1)^2-(\gamma-1)^2}{(\gamma-1)^2}  } + \frac{\gamma+1}{\gamma-1} \right)^{k}\\
+                              &=\frac{1}{2}\left(\frac{2\sqrt{\gamma}+\gamma+1}{\gamma-1} \right)^{k}\\
+                              &=\frac{1}{2}\left( \frac{(\sqrt{\gamma+1})^2}{(\sqrt{\gamma-1})(\sqrt{\gamma}+1)}  \right)^{k}\\
+                              &=\frac{1}{2}\left( \frac{\sqrt{\gamma}+1}{\sqrt{\gamma}-1}  \right)^{k}
+                              .\end{align*}
+                            Thus: \[
+                              \|x_{0}-x_{*}\|_{A} \leq 2 \left(\frac{\sqrt{\gamma}+1}{\sqrt{\gamma}-1} \right)
+                            \]
+                            For 3, we want to replace $\lambda_{\max}, \lambda_{\min}$ with $\alpha, \beta$, meaning  we construct a polynomial $q\in\mathbb P_{k}$ and $q(0) = 1$ where: \[
+                              q(\lambda)= \frac{C_{k-s-t}\left(2\frac{\lambda-\alpha}{\beta-\alpha} -1\right)}{C_{k-s-t}\left(-\frac{\beta+\alpha}{\beta-\alpha} \right)} \cdot \prod_{\ell \in \{1, \ldots , s\}\cup \{n-t+1, \ldots n\}}\left(\frac{\lambda_{\ell}-\lambda}{\lambda_{\ell}} \right)
+                            \] Then:
+                            \begin{align*}
+                              \|x_{k}-x_{*}\|_{A} &\leq \min_{p \in } \max_{i = 1}^{n}| p(\lambda_{i})| \|x_{0}-x_{*}\|_{A} \\
+                              &\leq \max_{i = 1}^{n}|q(\lambda_{i})| \|x_{0}-x_{*}\|_{A}
+                              .\end{align*}
+                            It remains to estimate $\max_{i = 0}^{n} |q(\lambda_{i})|$:
+                            \begin{itemize}
+                              \item When $i \in \{ 1, \ldots , s\}\cup \{n-t+1, \ldots , n\}$, $|q(\lambda_{i})|=1$.
+                                    \begin{align*}
+                                      \max_{i=1}^{n}|q(\lambda_{i})| &\leq \max_{i \in \{s+1, \ldots , n-t\}}| q(\lambda_{i})|\\
+                                                                     & \leq \max_{\lambda \in[\alpha,\beta]} |q(\lambda)| \\
+                                      &\leq \max_{\lambda \in [\alpha,\beta]} \left| \frac{C_{k-s-t}\left(2\frac{\lambda-\alpha}{\beta-\alpha} -1\right)}{C_{k-s-t}\left(-\frac{\beta+\alpha}{\beta-\alpha} \right)} \right| \cdot \max_{\lambda \in[\alpha,\beta]} \prod_{\ell \in \{1, \ldots , s\}\cup \{n-t+1, \ldots n\}}\left(\frac{\lambda_{\ell}-\lambda}{\lambda_{\ell}} \right) \\
+                                      &= 2\left(\frac{\sqrt{\beta / \alpha}-1}{\sqrt{\beta / \alpha}+1} \right)^{ k-s-t }\cdot \max_{\lambda \in[\alpha,\beta]} \prod_{\ell \in \{1, \ldots , s\}\cup \{n-t+1, \ldots n\}}\left(\frac{\lambda_{\ell}-\lambda}{\lambda_{\ell}} \right)
+                                    \end{align*}
+                            \end{itemize}
 \end{proof}
-
-
-
-
+For a general SPD $A$ in order to achieve an $\epsilon $-solution, we want $k$ to satisfy:
+\begin{align*}
+  &\|x_{k}-x_{*}\|_{A} \leq  2 \left(\frac{\sqrt{\gamma }-1}{\sqrt{\gamma }+1} \right)^{k} \| x_{0}-x_{*}\|_{A} \leq  \epsilon  \\
+  \implies  & k \geq  \log \left(\frac{2 \| x_{0}-x_{*}\|_{A}}{\epsilon } \right) / \log \left( \frac{\sqrt{\gamma }+1}{\sqrt{\gamma }-1} \right)
+  .\end{align*}
+Note that the numerator can be treated as a constant. Since: \[
+ \log \left( \frac{\sqrt{\gamma }+1}{\sqrt{\gamma }-1} \right) = \log \left(1- \frac{2}{\sqrt{\gamma }-1} \right) = O \left(\frac{1}{\sqrt{\gamma }}\right)
+\] when $\gamma  $ is large. Thus, we have: \[
+k \sim O(\log (1 / \epsilon) \cdot \sqrt{\gamma }) = O(\sqrt{\gamma })
+\] for a constant $\epsilon  $.
+Thus, if $A$ is 2D discrete Laplacian, we have:
+\begin{itemize}
+\item Cholesky: $O(n^2)$
+        \item Jacobi / G-S/Steepest Descent: $O(n^2)$
+        \item CG for exact solution: $O(n^2)$
+        \item CG for $\epsilon$-solution: $O(n^{1.5})$
+\end{itemize}
+Thus, part 3 is used when the most of the eigenvalues of $A$ are clustered with very few outliers. This will be useful in the preconditioning technique later.
 
 \end{document}

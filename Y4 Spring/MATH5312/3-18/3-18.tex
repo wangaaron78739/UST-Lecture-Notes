@@ -1,0 +1,20 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March 18th, 2021}
+\subsection{Preconditioned with Projection Methods}
+For one dimensional projection, we have steepest descent + preconditioning. Here we search for $d_{k}$ on $\{ d : \|d\|_{A} = \beta \}$. We obtain $d_{k}$ by: \[
+\min _{d_{k}} \|x_{*}-(x_{k}+\alpha d_{k})\|^2_{A} \quad \text{s.t } \|d_{k}\|_{A} = \beta
+\] How ever, this is unrealistic because $d_{k}$ would depend on $x_{*}$. Instead, we approximate it by searching $d_{k}$ on $ \{d: \|d\|_{2} =\beta \}$. So, $d_k$ is obtained by:
+\begin{itemize}
+  \item Fixing $\alpha  > 0$ and small
+  \item Solving approximately (since we are consider the ellipsoid under $\|\cdot \|_{2}$): \[
+\min _{d_{k}} \|x_{*}-(x_{k}+\alpha d_{k})\|^2_{2} \quad \text{s.t } \|d_{k}\|_{2} = \beta
+        \]
+\end{itemize}
+When the condition number of $A$ is big, the set $\{d : \|d\|_{2} = \beta \}$ is very flat in $A$-inner product space. To improve it, we search for $d$ on $\S_{p}=\{ d : \|d\|_{p} = \beta \}$, where $p$ is such that $S_{p}$ is rounder than $S_{2}$.
+
+
+\end{document}
