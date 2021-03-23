@@ -1,0 +1,160 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March 23rd, 2021}
+\subsection{Convergence of Preconditioned Steepest Descent}
+We have: \begin{align*}
+           \|x_{k+1}-x_{*}\|_{A} &= \min_{x\in x_{k}+\sspan \{P^{-1}r_{k}\}} \|x-x_{*}\|_{A}\\
+                                 &= \min_{\alpha\in\RR}\|x_{k}+\alpha P^{-1}(b-Ax_{k})-x_{*}\|_{A}\\
+                                 &= \min_{\alpha\in\RR}\|x_{k}-\alpha P^{-1}A(x_{k}-x_{*})-x_{*}\|_{A}\\
+                                 &= \min_{\alpha\in\RR} \|(I-\alpha P^{-1} A)(x_{k}-x_{*})\|_{A}\\
+                                 &= \min_{p\in\mathbb{P}_{1}, p(0)=1} \|p(P^{-1}A)(x_{k}-x_{*})\|_{A}\\
+           &\leq \min_{p\in\mathbb{P}_{1}, p(0)=1} \|p(P^{-1}A)\|_{A}\cdot\|x_{k}-x_{*}\|_{A}
+           .\end{align*}
+         As we have proven before, we have:
+         \begin{align*}
+           \|p(P^{-1} A)\|_{A} &= \|A^{-\frac{1}{2}} p(P^{-1} A) A^{-\frac{1}{2}}\|_{2} \\
+                               &=\|p(A^{\frac{1}{2}}P^{-1}A^{\frac{1}{2}})\|_{2}\\
+                               &=\max_{i = 1, \ldots , n}\left|p(\lambda_{i}(A^{\frac{1}{2}}P^{-1} A^{ \frac{1}{2} }))\right|
+           .\end{align*}
+         Since: \[
+\{\lambda_{i}(AB): i \in 1 , \ldots , n\} \cup \{0\} = \{\lambda_{i} (BA): i \in 1, \ldots , n\}\cup \{0\}
+         \] i.e. the non-zero eigenvalues of $AB$ are the same as $BA$, we have:
+         \begin{align*}
+           \|p(P^{-1} A)\|_{A} &=\max_{i = 1, \ldots , n}\left|\lambda_{i}(A^{\frac{1}{2}}P^{-1} A^{ \frac{1}{2} })\right|\\
+           &=\max_{i = 1, \ldots,n}\left|p(\lambda_{i}(P^{-1} A))\right|
+           .\end{align*}
+         As such, we have:
+         \begin{align*}
+           \|x_{k+1}-x_{*}\|_{A} &\leq \min_{p\in\mathbb{P}_{1}, p(0)=1} \|p(P^{-1}A)\|_{A}\cdot\|x_{k}-x_{*}\|_{A}\\
+           &\leq \min_{p\in\mathbb{P}_{1}, p(0)=1} \max_{i = 1, \ldots,n}\left|p(\lambda_{i}(P^{-1} A))\right|\cdot\|x_{k}-x_{*}\|_{A}\\
+           &\leq \left(\frac{\gamma(P^{-1}A)-1}{\gamma(P^{-1}A)+1} \right)\|x_{k}-x_{*}\|_{A}
+           .\end{align*}
+         Where $\gamma(P^{-1}A) = \frac{\lambda_{\max}(P^{-1}A)}{\lambda_{\min}(P^{-1}A)} $
+\begin{remark}
+The analysis is similar to the steepest descent, but just with $kP^{-1} A$ instead of $A$.
+\end{remark}
+By a change of variable: \[
+  \tilde{r_{k}} = P^{-\frac{1}{2}} r_{k}, \quad \tilde{x_{k}}=P^{\frac{1}{2}}x_{k}, \quad \tilde{A} = P^{-\frac{1}{2}}AP^{- \frac{1}{2}}, \tilde{b} = P^{ - \frac{1}{2} } b
+\] if we apply steepest descent to $\tilde{A}\tilde{x}= \tilde{b}$, we have: \begin{align*}
+                                                                               \tilde{r_{k}}= \tilde{b}-\tilde{A}\tilde{r_{k}}&= P^{-\frac{1}{2}} b-P^{- \frac{1}{2}}A P^{- \frac{1}{2}}P^{- \frac{1}{2}}x_{k}\\
+                        &=P^{ - \frac{1}{2} } (b-AP^{-1}x_{k})\\
+                                                                               &=P^{-\frac{1}{2}}r_{k}
+                                                                               .\end{align*}
+ \begin{align*}
+   \tilde{\alpha_{k}}&= \frac{\iprod{\tilde{r_{k}}}{\tilde{r}_{k}}}{\iprod{A\tilde{r_{k}}}{\tilde{r_{k}}}}\\
+   &=\frac{\iprod{P^{-\frac{1}{2}}r_{k}}{P^{ - \frac{1}{2} }r_{k}}}{\iprod{P^{ - \frac{1}{2} }A P^{-\frac{1}{2}}P^{-\frac{1}{2}}r_{k}}{P^{-\frac{1}{2}}r_{k}}}\\
+   &=\frac{\iprod{P^{-1}r_{k}}{r_{k}}}{\iprod{AP^{-1}r_{k}}{P^{-1}r_{k}}}\\
+   &= \frac{\iprod{r_{k}}{d_{k}}}{\iprod{Ad_{k}}{d_{k}}}  = \alpha_{k}
+   .\end{align*}
+ Thus, we have:
+ \begin{align*}
+   \tilde{x_{k+1}}&= \tilde{x_{k}}+\alpha_{k}\tilde{r_{k}}\\
+   P^{\frac{1}{2}}x_{k+1} &= P^{\frac{1}{2}}x_{k}+\alpha_{k}P^{-\frac{1}{2}}r_{k}\\
+   &=P^{\frac{1}{2}}(x_{k}+\alpha_{k}P^{-1}r_{k})\\
+   \iff x_{k+1}&=  x_{k}+\alpha_{k}P^{-1}r_{k} = x_{k}+\alpha_{k}d_{k}
+   .\end{align*}
+ \begin{remark}
+   This means that solving the steepest descent for $\tilde{A}\tilde{x}=\tilde{b}$, we have the preconditioned steepest descent for $Ax=b$ with preconditioner $P$.
+ \end{remark}
+ Thus the convergence of Preconditioned Steepest Descent depends on: \[
+   \gamma(\tilde{A}) = \gamma(P^{-1} A)
+ \]
+
+\subsection{Finding a Good Preconditioner $P$}
+A good preconditioner should satisfy:
+\begin{itemize}
+\item $P$ should be SPD (otherwise the norm constraint will not be satisfied)
+  \item  The solution of $Pd = r$ should be easy to compute.
+\item $P^{-1}A$ should have a small condition number (or, roughly, $P^{-1}A\approx I$ since $I$ has the smallest condition number). This gives us $P\approx A$.
+        \begin{remark}
+If $P = A$, then $Pd = r$ is not easy to solve, thus we need to strike a balance.
+        \end{remark}
+\end{itemize}
+
+\begin{example}
+We can choose $P=D$, the diagonal of $A$.
+\end{example}
+
+\subsection{Preconditioned CG (PCG)}
+PCG is the most popular algorithm for SPD matrix. In standard CG, we choose: \[
+  K = \sspan \{r_{k}, d_{k-1}\}
+\] similarly, in PCG, we choose: \[
+  K = \sspan \{P ^{-1} r_{k}, d_{k-1}\}.
+\]
+\begin{remark}
+ $d_{k-1}$ is the momentum component ($x_{k}-x_{k-1}$), thus we still keep the same.
+\end{remark}
+
+Thus, we have: \[
+  \begin{cases}
+    d_{k}= P^{-1} r_{k}+\beta_{k}d_{k-1}& \text{ where $\beta_{k} = - \frac{\iprod{P^{-1}r_{k}}{Ad_{k-1}}}{\iprod{Ad_{k-1}}{d_{k-1}}} $ }\\
+    x_{k+1} = x_{k}+\alpha_{k}d_{k} &\text{ where $\alpha_{k}= \frac{\iprod{d_{k}}{r_{k}}}{\iprod{Ad_{k}}{d_{k}}} $ }
+  \end{cases}
+\]
+\begin{remark}
+The analysis is the same, except $r_{k}$ is replace by $P^{-1}r_{k}$.
+\end{remark}
+This gives us Algorithm \ref{alg:pcg}.
+\begin{algorithm}[h!]
+  \caption{Preconditioned Conjugate Gradient (PCG)}\label{alg:pcg}
+  \begin{algorithmic}[1]
+   \For{$k=0,1, \ldots$ }
+   \State $r_{k}=b-Ax_{k}$
+   \State $\beta_{k}= - \frac{\iprod{P^{-1}r_{k}}{Ad_{k-1}}}{\iprod{Ad_{k-1}}{d_{k-1}}} $
+   \State $d_{k}=P^{-1}r_{k}+\beta_{k}d_{k-1}$
+   \State $\alpha_{k}= \frac{\iprod{d_{k}}{r_{k}}}{\iprod{Ad_{k}}{d_{k}}} $
+   \State $x_{k+1}=x_{k}+\alpha_{k}d_{k}$
+   \EndFor
+  \end{algorithmic}
+\end{algorithm}
+
+We can once again introduce intermediate variable to improve the computational cost, giving us Algorithm \ref{alg:pcg2} by letting $p_{k}=Ad_{k}$, $s_{k} = P^{-1}r_{k}$. Thus, we have: \[
+  r_{k+1} = b-Ax_{k+1} = b-A(x_{k}+\alpha_{k}d_{k}) = r_{k}-\alpha_{k} p_{k}
+\]
+\begin{algorithm}[h!]
+  \caption{Improved Preconditioned Conjugate Gradient (PCG)}\label{alg:pcg2}
+  \begin{algorithmic}[1]
+    \State $r_{0}= b-Ax_{0}$
+    \State $p_{-1}=0$
+    \State $d_{-1}=0$
+   \For{$k=0,1, \ldots$ }
+   \State Solve $s_{k}$ from $Ps_{k}=r_{k}$
+   \State $\beta_{k}= - \frac{\iprod{s_{k}}{p_{k-1}}}{\iprod{p_{k-1}}{d_{k-1}}} $
+   \State $d_{k}=s_{k}+\beta_{k}d_{k-1}$
+   \State $p_{k}=Ad_{k}$
+   \State $\alpha_{k}= \frac{\iprod{d_{k}}{r_{k}}}{\iprod{p_{k}}{d_{k}}} $
+   \State $x_{k+1}=x_{k}+\alpha_{k}d_{k}$
+   \State $r_{k+1}=r_{k}-\alpha_{k}p_{k}$
+   \EndFor
+  \end{algorithmic}
+\end{algorithm}
+This has computational cost:
+\begin{itemize}
+\item 1 mat-vec product of $A$
+        \item Solve 1 linear equation of $P$
+        \item Operations of $O(n)$
+\end{itemize}
+
+
+\subsection{Convergence of PCG}
+By change of variable: \[
+  \tilde{r_{k}} = P^{-\frac{1}{2}}r_{k},\ \tilde{b} = P^{-\frac{1}{2}}b,\ \tilde{x_{k}}= P^{\frac{1}{2}x_{k}},\ \tilde{A} = P^{-\frac{1}{2}}AP^{-\frac{1}{2}},\ \tilde{d_{k}} = P^{\frac{1}{2}}d_{k},\ \tilde{x}= P^{\frac{1}{2}}x
+\]
+we will see that: \[
+\text{CG for solving }\tilde{A}\tilde{x}=\tilde{b}\iff\text{PCG for solving }Ax=b \text{ with preconditioner }P
+\]
+Moreover:
+\begin{align*}
+&\tilde{x_{k+1}} = \argmin_{\tilde{x}\in\tilde{x_{0}}+K_{k}} \|\tilde{x}-\tilde{x_{*}}\|_{\tilde{A}} \quad\text{where $K_{k} = \sspan \{\tilde{r_{0}},P^{-\frac{1}{2}}A P^{-\frac{1}{2}}\tilde{r_{0}}, \ldots\}$  }\\
+  \iff &x_{k+1} = \argmin_{x \in x_{0}+K_{P,k}} \|x-x_{*}\|_{A} \quad\text{where $K_{P,k}= \sspan \{ r_{0}, P^{-1} A r_{0}, \ldots\}$}
+  .\end{align*}
+Thus the convergence is: \begin{align*}
+                           \|x_{*}-x_{k}\|_{A} &\leq\min_{p \in\mathbb{P}_{k}, p(0)=1} \|p(P^{-1}A)\|_{A} \|x_{*}-x_{0}\|_{A}\\
+                           &= \min_{p\in\mathbb{P}_{k}, p(0)=1} \max_{i = 1 , \ldots , n}|p(\lambda_{i}(P^{-1}A))| \cdot \|x_{*}-x_{0}\|_{A}
+                           .\end{align*}
+
+
+\end{document}

@@ -14,7 +14,75 @@ For one dimensional projection, we have steepest descent + preconditioning. Here
 \min _{d_{k}} \|x_{*}-(x_{k}+\alpha d_{k})\|^2_{2} \quad \text{s.t } \|d_{k}\|_{2} = \beta
         \]
 \end{itemize}
-When the condition number of $A$ is big, the set $\{d : \|d\|_{2} = \beta \}$ is very flat in $A$-inner product space. To improve it, we search for $d$ on $\S_{p}=\{ d : \|d\|_{p} = \beta \}$, where $p$ is such that $S_{p}$ is rounder than $S_{2}$.
+When the condition number of $A$ is big, the set $\{d : \|d\|_{2} = \beta \}$ is very flat in $A$-inner product space. To improve it, we search for $d$ on $\S_{P}=\{ d : \|d\|_{P} = \beta \}$, where $P$ is such that $S_{P}$ is rounder than $S_{2}$. Where \[
+\|x\|_{P} = x^{T}Px
+\]
 
+With this, we have: \[
+  d_{k} = \argmin_{d_{k}\in S_{p}}\|(x_{k}+\alpha d_{k})-x_{*}\|_{A}^2
+\]
+for small $\alpha >0$.
+\begin{remark}
+  The main idea is we change the metric from $2$-norm to $P$ norm, and we take a rough approximation by restricting it to $S_{P}$ .
+\end{remark}
+We have:
+\begin{align*}
+  \|(x_{k}+\alpha d_{k})-x_{*}\|^2_{A} &= \|x_{k}-x_{*}\|_{A}^2 + 2\alpha  \iprod{d_{k}}{x_{k}-x_{*}}_{A} +\alpha ^2 \|d_{k}\|_{A}^2\\
+  &\approx \|x_{k}-x_{*}\|_{A}^2 + 2\alpha  \iprod{d_{k}}{x_{k}-x_{*}}_{A}
+  .\end{align*}
+Thus: \[
+\min _{d_{k}\in S_{P}} \|(x_{k}+\alpha d_{k})+x_{*}\|^2_{A} \iff \min_{d_{k}\in S_{P}}\iprod{d_{k}}{x_{k}-x_{*}}_{A}
+\]Note that this is because $\alpha\gtrsim 0 $ is close to zero.\\
+
+We have: \begin{align*}
+           \iprod{d_{k}}{x_{k}-x_{*}}_{A} &= \iprod{d_{k}}{Ax_{k}-b} \\
+                                          &=\iprod{d_{k}}{-r_{k}}\\
+                                          &=\iprod{d_{k}}{-P^{-1}r_{k}}_{P}\\
+           &\geq  \|d_{k}\|_{P}\|P^{-1}r_{k}\|_{P} \quad (\text{by Cauchy-Schwarz})\\
+             &= \beta  \|P^{-1}r_{k}\|_{P}
+           .\end{align*}
+         The lower bound is attained when $d_{k}$ is in the opposite direction of $-P^{-1}r_{k}$. Thus, we choose: \[
+d_{k} = P^{-1} r_{k}
+\] since only the direction of $d_{k}$ matters. By calculation, we have: \begin{align*}
+                                                                           \alpha _{k} = \argmin_{\alpha  \in \RR }\|(x_{k}+\alpha d_{k})-x_{*}\|^2_{A}\\
+                                                                           &=\frac{\iprod{r_{k}}{d_{k}}}{\iprod{Ad_{k}}{d_{k}}}
+                                                                           .\end{align*}
+                                                                         This gives us Algorithm \ref{alg:3-18}.
+                                                                         \begin{algorithm}[h!]
+                                                                           \caption{Preconditioned Steepest Descent}\label{alg:3-18}
+                                                                           \begin{algorithmic}[1]
+                                                                            \For{$k=0,1, \ldots $}
+                                                                            \State $r_{k}=b-Ax_{k}$
+                                                                            \State Solve $d_{k}$ from $Pd_{k}=r_{k}$
+                                                                            \State $\alpha _{k} = \frac{\iprod{r_{k}}{d_{k}}}{\iprod{Ad_{k}}{d_{k}}} $
+                                                                            \State $x_{k+1}= x_{k}+\alpha _{k}d_{k}$
+                                                                            \EndFor
+                                                                           \end{algorithmic}
+                                                                         \end{algorithm}
+\begin{remark}
+  If we choose $P=I$ then we get the non-preconditioned steepest descent.
+\end{remark}
+  For each iteration, we need to perform:
+\begin{itemize}
+  \item 2 mat-vec products of $A$
+        \item solve 1 system of linear equation of $P$
+        \item operations of $O(n)$
+\end{itemize}
+We can improve this to using only 1 mat-vec product of $A$ by introducing a new variable $p_{k} = Ad_{k}$, since: \[
+r_{k+1} = b-Ax_{k+1} = b - A(x_{k}+\alpha_{k} d_{k}) = r_{k}-\alpha_{k}p_{k}
+\]This can be seen in Algorithm \ref{alg:3-182}.
+\begin{algorithm}[h!]
+  \caption{Improved Preconditioned Steepest Descent}\label{alg:3-182}
+  \begin{algorithmic}[1]
+   \State $r_{0} = b-Ax_{0}$
+   \For{$k=0,1, \ldots $ }
+   \State Solve $d_{k}$ from $Pd_{k}=r_{k}$
+   \State $p_{k}=Ad_{k}$
+  \State $\alpha _{k} = \frac{\iprod{r_{k}}{d_{k}}}{\iprod{Ad_{k}}{d_{k}}} $
+  \State $x_{k+1}= x_{k}+\alpha _{k}d_{k}$
+  \State $r_{k+1}=r_{k}-\alpha_{k}p_{k}$
+   \EndFor
+  \end{algorithmic}
+\end{algorithm}
 
 \end{document}
