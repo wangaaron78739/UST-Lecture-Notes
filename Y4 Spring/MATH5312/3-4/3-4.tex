@@ -157,7 +157,7 @@ Thus the optimal 1D projection method is given in Algorithm \ref{3-4-alg}.
       \For{ $k=0,1,2, \ldots$}
  \State $r_{k}=b-Ax_{k}$
  \State $\alpha _{k} = \|r_{k}\|^2_{2} / \|r_{k}\|_{A}^2 = \frac{\iprod{r_{k}}{r_{k}}}{\iprod{Ar_{k}}{r_{k}}} $
- \State $x_{k+1} = x_{k}+\alpha _{k}x_{k}$
+ \State $x_{k+1} = x_{k}+\alpha _{k}r_{k}$
       \EndFor
 	\end{algorithmic}
 	\end{algorithm}
@@ -174,7 +174,7 @@ Note that for each iteration, we use 2 matrix-vector products and $O(n)$ operati
   This gives us Algorithm \ref{3-4-alg2}.
         \begin{algorithm}[h!]
 	\caption{Optimal 1D Projection Method Improved}
-    \label{3-4-alg}
+    \label{3-4-alg2}
 	\begin{algorithmic}[1]
       \State $r_{0}=b-Ax_{0}$
       \For{ $k=0,1,2, \ldots$}

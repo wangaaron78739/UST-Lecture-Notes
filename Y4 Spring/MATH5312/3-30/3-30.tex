@@ -1,0 +1,92 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March 30th, 2021}
+\subsection{Advanced Iterative Methods II}
+In this chapter, we consider: \[
+  Ax = b
+\] where $A\in \RR ^{n\times  n}$ is non-singular (no SPD constraint on $A$).
+\subsection{GMRES (Generalized Minimum Residual Method)}
+Recall that in the projection methods, we find: \[
+\tilde{x} \in x_{0} +K \text{ s.t. } b-A\tilde{x}\perp L
+\] where $K$ and $L$ are two subspaces of $\RR ^{n}$ with the same dimension (in order to have $\tilde{x}$ be well-defined). \\
+
+When $A$ is SPD, we can choose $K=L$, so that: \[
+\tilde{x} = \argmin_{x\in x_{0}+K}\|x-x_{*}\|_{A}^2
+\]
+However, when $A$ is just a general non-singular matrix, we cannot follow this framework, as $\|A \|_{A}^2=x^{T}Ax$ is not a norm on $\RR ^{n}$. Thus, we will not choose $K=L$. Instead, we choose $L=AK$. Doing so, the projection method becomes: \[
+  \begin{cases}
+    \tilde{x}\in  x_{0}+K \\
+    b-A\tilde{x} \perp AK
+  \end{cases} \iff  \tilde{x} = \argmin_{x\in x_{0}+K}\|b-Ax\|_{2}^2
+\]
+\begin{proof}
+  Let $Ax=y$. We have: \begin{align*}
+           &\tilde{x} = \argmin_{x\in x_{0}+K}\|b-Ax\|_{2}^2\\
+           \iff& A\tilde{x} = \argmin_{y\in Ax_{0}+AK}\|b-y\|_{2}^2\\
+                         \iff &\begin{cases}
+                           b-A\tilde{x}\perp AK\\
+                           \tilde{x}=x_{0}+K
+                         \end{cases}
+           \end{align*}
+\end{proof}
+In GMRES, given $x_{0}$, we generate $x_{k}$ by projection with: \[
+K = K_{k} = \sspan \{r_{0}, Ar_{0}, A^2r_{0}, \ldots , A^{k-1}r_{0} \}
+\]
+So: \[
+x_{k}=\argmin_{x\in x_{0}+K_{k}} \|b-Ax\|_{2}^2
+\]
+Let $V_{k}$ be a basis of $K_{k}$. Then $W_{k} = AV_{k}$ is a basis of $AK_{k}$. Then the minimization becomes:
+
+\begin{align*}
+  \min _{x\in x_{0}+K_{k}}\|b-Ax\|_{2}^2 \iff&  \min _{y\in \RR ^{k}} \|b-A(x_{0}+V_{k}y)\|_{2}^2\\
+  \iff&  \min_{y\in \RR ^{k}} \|r_{0}-AV_{k}y\|_{2}^2
+  .\end{align*}
+\begin{remark}
+If $\dim(K_{k})\neq k$ then the residue is 0, meaning we have already obtained the solution.
+\end{remark}
+This is a typical least squares problem whose solution is given by: \[
+V_{k}^{T}A^{T}AV_{k}y = V_{k}^{T}A^{T}r_{0}
+\]
+\begin{proof}
+  \begin{align*}
+\min_{y\in \RR ^{k}} \|r_{0}-AV_{k}y\|_{2}^2 \iff&  \begin{cases}
+  \min_{z} \|r_{0}-z\|^2_{2}\\
+  \text{s.t. }z\in \text{Ran}(AV_{k})
+\end{cases}\\
+   \iff  & r_{0}-AV_{k}y \perp \text{Ran}(AV_{k})\\
+   \iff  & \iprod{r_{0}-AV_{k}y}{AV_{k}u} = 0 \quad \forall  u \in \RR ^{k}\\
+   \iff  & V_{k}^{T}A^{T}(r_{0}-AV_{k}y) = 0
+    .\end{align*}
+\end{proof}
+However, we have two concerns if we solve $V_{k}^{T}A^{T}AV_{k}y=V_{k}^{T}A^{T}r_{0}$ directly to obtain $x_{k}=x_{0}+V_{k}y$:
+\begin{enumerate}
+\item The condition number of $V_{k}^{T}A^{T}AV_{k}$ is the square of the condition number of $AV_{k}$. Thus, we lose some numerical stability.
+        \begin{remark}
+Originally, we just need to solve the overdetermined linear system in $ \min_{y\in \RR ^{k}} \|r_{0}-AV_{k}y\|_{2}^2$. But if we want to solve $V_{k}^{T}A^{T}AV_{k}y=V_{k}^{T}A^{T}r_{0}$, then we are turning it into a square linear system.
+        \end{remark}
+\item The computation is not recursive, as we don't use $x_{k-1}$ to obtain $x_{k}$. Therefore the computation per iteration is expensive (cost per step is $O(k^{3})$ to solve).
+\end{enumerate}
+As such, we need to consider how to solve a general least squares problem.
+
+\subsection{QR Decomposition}
+Let $A\in \RR ^{m \times  n}$ with $m\geq n$ satisfying $\text{rank}(A) = n$, i.e. it is a tall, full rank matrix. Then we have the following decomposition $A=QR$:
+\begin{description}
+  \item[Economic QR:] where \begin{align*}
+                              Q&\in \RR^{m \times  n} \text{ satisfying } Q^{T}Q = I\\
+                              R &\in \RR ^{n\times n} \text{is upper triangular with non-zero diagonals}
+                              .\end{align*}
+  \item[Full QR:] where\begin{align*}
+                              Q&\in \RR^{m \times  m} \text{ satisfying } Q^{T}Q = I\\
+                              R &\in \RR ^{m\times n} \text{is upper triangular with non-zero diagonals}
+                              .\end{align*}
+\end{description}
+\begin{remark}
+ $Q$ in the economic QR is the first $n$ columns of $Q$ in the full QR. Similarly, $R$ in the economic QR is the first $n$ rows of $R$ in the full QR.
+\end{remark}
+
+
+
+\end{document}

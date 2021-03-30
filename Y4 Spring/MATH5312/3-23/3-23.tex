@@ -156,5 +156,49 @@ Thus the convergence is: \begin{align*}
                            &= \min_{p\in\mathbb{P}_{k}, p(0)=1} \max_{i = 1 , \ldots , n}|p(\lambda_{i}(P^{-1}A))| \cdot \|x_{*}-x_{0}\|_{A}
                            .\end{align*}
 
+                         Therefore, all of the convergence results for standard CG can be applied:
+                         \begin{itemize}
+            \item $x_{k}=x_{*}$ for all $k \geq  s$, where $s$ is the number of distinct eigenvalues of $P^{-1} A$.
+    \item $\|x_{k}-x_{*}\|_{A} \leq  2 \left(\frac{\sqrt{\gamma }-1}{\sqrt{\gamma }+1} \right)^{ k  } \|x_{0}-x_{*}\|_{A}$, where $\gamma  = \frac{\lambda _{\max }(P^{-1} A)}{\lambda _{\min }(P^{-1} A)} $
+                           \item If $\lambda _{i}$ are eigenvalues of $P^{-1} A$ satisfying: \[
+                                 0 \leq  \lambda _{1} \leq  \ldots  \leq  \lambda _{s} \leq  \alpha  \leq  \lambda _{s+1} \leq  \ldots  \leq  \lambda _{n-t}\leq  \beta  \leq  \lambda _{n-t+1} \leq  \ldots \leq  \lambda _{n}
+                                 \]
+                                 then: \[
+\|x_{k}-x_{*}\|_{A} \leq  2 \left(\frac{\sqrt{\beta  /\alpha }-1}{\sqrt{\beta  / \alpha }+1} \right)^{k-s-t} \cdot \max_{\lambda \in [\alpha,\beta]}\left( \prod_{i \in \{1, \ldots  , n\}\cup \{n-t+1, \ldots  , n\}} \frac{|\lambda -\lambda _{i}|}{|\lambda _{i}|}\right) \cdot \|x_{0}-x_{*}\|_{A}
+                                 \]
+                         \end{itemize}
+\begin{corollary}
+  If all eigenvalues of $P^{-1} A$ satisfies: \[
+    0 \leq  \lambda _{1} \leq  \ldots  \leq \lambda _{s} \leq 1-\delta  \leq \lambda _{s+1} \leq \ldots \leq \lambda _{n-t}\leq  1+\lambda \leq \ldots \leq \lambda _{n}
+  \]
+  then: \[
+\|x_{k}-x_{*}\|_{A} \leq 2 \delta ^{k-s-t}\left(\frac{1+\delta }{\lambda _{\min }} \right)^{s}
+  \]
+\end{corollary}
+\begin{proof}
+  For any $\lambda _{j}> 1+\delta $, we have:
+  \[
+\max_{\lambda  \in  [1-\delta, 1+\delta]} \frac{|\lambda -\lambda _{j}|}{|\lambda _{j}|} \leq  1
+  \]
+  For any $0<\lambda _{j}\leq 1-\delta $, we have: \[
+\max_{\lambda  \in  [1-\delta, 1+\delta]} \frac{|\lambda -\lambda _{j}|}{|\lambda _{j}|} = \frac{|(1+\delta)-\lambda _{j}|}{|\lambda _{j}|} \leq \frac{1+\delta }{\lambda _{\min }}
+  \]
+  In addition, assuming $\delta >0$, we have:
+  \[
+    \frac{\sqrt{\frac{1+\delta }{1-\delta }}-1}{\sqrt{\frac{1+\delta }{1-\delta }}+1} =
+    \frac{\sqrt{\frac{1+\delta }{1-\delta }}-1}{\sqrt{\frac{1+\delta }{1-\delta }}+1}
+    \frac{\sqrt{\frac{1+\delta }{1-\delta }}-1}{\sqrt{\frac{1+\delta }{1-\delta }}+1} =
+    \frac{\left(\sqrt{\frac{1+\delta }{1-\delta }}-1\right)^2}{\frac{1+\delta }{1-\delta }+1}
+    = \frac{\frac{2}{1-\delta }-2\sqrt{\frac{1+\delta }{1-\delta  } }}{\frac{2\delta }{1-\delta } }= \frac{1-\sqrt{(1+\delta)(1-\delta)}}{\delta }  \leq\delta
+  \]
+ \begin{remark}
+The last inequality uses taylor expansion of $\sqrt{(1+\delta)(1-\delta)}$.
+ \end{remark}
+ With this, we can directly plug into the equation before.
+\end{proof}
+
+If the assumption in the corollary is satisfied, then: \[
+2\delta ^{k-s-t}\left(\frac{1+\delta }{\lambda _{\min }} \right)^{s}\leq  \epsilon
+\] is sufficient for an $\epsilon $-solution.
 
 \end{document}

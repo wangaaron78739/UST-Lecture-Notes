@@ -1,0 +1,190 @@
+\documentclass[../main/main.tex]{subfiles}
+
+
+\begin{document}
+
+\section{March 25th, 2021}
+\subsection{Circulant Preconditioners}
+\begin{definition}Let \[
+S = \begin{bmatrix}
+  0&&&1\\
+  1&\ddots&&\\
+  &\ddots&\ddots&\\
+  &&1&0\\
+\end{bmatrix}
+\in \RR ^{n\times n} \text{ be a shift matrix , i.e. }S \begin{bmatrix}
+x_1\\x_{2}\\ \vdots  \\ x_{n}
+\end{bmatrix}  = \begin{bmatrix}
+x_{n}\\ x_{1}\\ \vdots \\ x_{n-1}
+\end{bmatrix}
+  \]
+  Then a matrix $C$ is called a \vocab{circulant matrix} if: \[
+C = \begin{bmatrix}
+c&Sc&S^2& \ldots & S^{n-1}c
+\end{bmatrix} =
+ \begin{bmatrix}
+  c_{0}&c_{n-1}&\ldots &c_{1}\\
+  c_{1}&c_{0}&\ddots&\vdots\\
+  \vdots&\ddots&\ddots&c_{n-1}\\
+  c_{n-1}&c_{n-2}&\ldots &c_{0}\\
+\end{bmatrix}
+\text{ for some }c = \begin{bmatrix}
+c_{0}\\c_{1}\\ \vdots\\c_{n-1}
+\end{bmatrix}
+  \]
+
+\end{definition}
+\begin{theorem}
+  $C = F^{*}\Lambda F$, where $F = \frac{1}{\sqrt{n}}[\omega^{j k}]_{j=0, k=0}^{n-1, n-1}$ is the discrete Fourier transform, and: \[
+    \Lambda = \text{diag}(Fc)\] Then:
+   \[ Cx = F^{*} \Lambda F x = F^{*}(Fc \circ Fx) \]
+\end{theorem}
+\begin{proof}
+  Consider the $k$-th column of $F^{*}$, $k=0,1, \ldots , n-1$: \[
+f_{k} = \frac{1}{\sqrt{n}}[\overline{\omega} ^{j k}]_{j=0}^{n-1} = \frac{1}{\sqrt{n}} [\omega^{-j k}]_{j=0}^{n-1}
+\] Then:
+\begin{align*}
+  [Cf_{k}]_{\ell }&= e_{\ell }^{*}Cf_{k}\\
+                  &= e_{\ell }^{*}\left(\frac{1}{\sqrt{n}}\sum_{j=0}^{n-1}\omega ^{- j k} S^{j}c\right)\\
+                  &=\frac{1}{\sqrt{n}}\sum_{j=0}^{n-1}\omega^{- j k}( e_{\ell }^{*}S^{j}c)\\
+                  &=\frac{1}{\sqrt{n}}\sum_{j=0}^{n-1}\omega^{- j k}C_{(\ell -1-j)\text{ mod } n}
+  .\end{align*}
+Let $\tilde{j}=(\ell -1-j)\text{ mod  n}$, i.e. $j=(\ell-1-\tilde{j})\text{ mod }n$ we have: \begin{align*}
+                                                      [Cf_{k}]_{\ell }&=\frac{1}{\sqrt{n}}\sum_{\tilde{j}=0}^{n-1}C_{\tilde{j}} \omega ^{(\tilde{j}+1-\ell)k}\\
+                                                                                               &=\frac{1}{\sqrt{n}}\left(\sum_{\tilde{j}=0}^{n-1}C_{\tilde{j}}\omega ^{\tilde{j}k}\right)\omega ^{-(\ell-1)k}\\
+                                                                                               &=(Fc)_{k}e^{*}_{\ell }f_{k} = (Fc)_{k}\cdot (f_{k})_{\ell }
+                                                                                                 .\end{align*}
+                                                                                               Therefore: \[
+Cf_{k}=(Fc)_{k}\cdot f_{k}
+\]
+giving us: \[
+CF^{*} = F^{*}\Lambda
+\]
+Finally: \[
+  C = F^{*}\Lambda F
+\]
+\end{proof}
+With this theorem, now solving: \[
+Cd = r \iff  F^{*}\Lambda  F d = r \iff  d = F^{*}\Lambda ^{-1}F r \iff d = F^{*}(Fr / Fc)
+\]
+Where $Fr / Fc$ is entrywise division.\\
+
+Thus, we:
+\begin{itemize}
+  \item Compute $Fr$ and $Fc$ by FFT in $O(n \log  n)$.
+        \item Compute $Fr / Fc$ in $O(n)$
+        \item Compute $F^{*}(Fr / Fc)$ by Inverse FFT in $O(n \log n)$
+\end{itemize}
+Thus the total computational cost is $O(n \log n)$.
+
+\subsubsection{Circulant Preconditioner for $1-D$ Discrete Laplacian}
+Consider: \[
+A = \begin{bmatrix}
+  2&-1&&\\
+  -1&2&\ddots&\\
+  &-1&\ddots&-1\\
+  &&-1&2
+\end{bmatrix}
+\in \RR ^{n \times  n}
+\]
+This is almost circulant. Thus, let is consider: \[
+ \begin{bmatrix}
+  2&-1&&-1\\
+  -1&2&\ddots&\\
+  &-1&\ddots&-1\\
+  -1&&-1&2
+\end{bmatrix}+\alpha  I
+\] where $\alpha $ is small. Then $P$ is SPD and circulant. We use it as the preconditioner for CG for $Ax = b$.
+
+For the convergence, we need to get the eigenvalues of $P^{-1}A$. We expect that most of the eigenvalues are clustered around 1.\\
+
+Since: \[
+A = P-\alpha  I + E
+\] where $E = \begin{bmatrix}
+0&\ldots &\ldots &1\\
+\vdots&\ddots&&\vdots\\
+\vdots&&\ddots&\vdots\\
+1&\ldots &\ldots &0\\
+\end{bmatrix}$, we have: \[
+A^{-1}P = A^{-1}(A+\alpha I-E) =(I+\alpha A^{-1})-A^{-1} E
+\]
+whose eigenvalues are the same as: \[
+  \underbrace{(I+\alpha A^{-1})}_{B}-\underbrace{A^{-\frac{1}{2}}E A^{-\frac{1}{2}}}_{L}
+\]
+\begin{itemize}
+  \item Let $\lambda _{i}(B)$ be eigenvalues of $B = I + \alpha A^{-1}$, then: \[
+        1\leq  \lambda _{1}(B)\leq  \lambda _{n}(B)\leq  3
+        \]
+        \begin{proof}
+          By direct calculation, we have: \[
+            \lambda _{j}(A)=2\left(1-\cos \frac{j\pi }{n+1} \right), \quad  j = 1 , \ldots  , n
+          \]
+          So the eigenvalues of $B$ are \[
+            \lambda _{j}(B)=1+\alpha \left(1-\cos \frac{j\pi }{n+1} \right)^{-1}, \quad  j = 1 , \ldots  , n
+          \]
+  We have: \begin{align*}
+\lambda _{1}(B)&\geq  1 \\
+             \lambda _{n}(B)&\leq  1+\alpha \left(1-\cos \frac{n\pi }{n+1} \right)^{-1}\\
+               &\leq  1+\alpha  \cdot  O(n^2)\\
+             &\leq 3 \quad \text{ by choosing $\alpha =O(n^{-2})$}
+             .\end{align*}
+        \end{proof}
+           \begin{remark}
+             Instead of 3, we can choose any number arbitrarily close to 1 by tuning alpha.
+\end{remark}
+  \item Estimate eigenvalues of $B$. We have: $D = B-A$. Clearly \[
+\text{rank}(L) = 2
+        \] as $\text{rank}(E)=2$ and $A$ is a full rank matrix.
+        \begin{theorem}[Cauchy Interlacing Theorem]
+          Let $N \in \RR ^{n \times  n}$, $M \in  \RR ^{m \times  m}$ with $m \leq  n$ be two symmetric matrices satisfying: \[
+M = P^{T} N P,
+\] where $P\in \RR ^{n\times  m}$ is a matrix satisfying $P^{T}P = I$, i.e. $P$ is orthogonal. Then: \[
+  \lambda _{j} (N) \leq  \lambda _{j}(M) \leq \lambda _{n-m+j}(N), \quad \forall j = 1, \ldots  , m
+\] where $\lambda _{j}(\cdot)$ is the $j$-th smallest eigenvalue.
+        \end{theorem}
+        \begin{proof}
+Will be covered in the eigenvalue decomposition chapter.
+        \end{proof}
+      \begin{remark}
+        Essentially, the Cauchy Interlacing Theorem says that:
+        \begin{itemize}
+\item the $j$-th smallest eigenvalue of $N$ is smaller than that of $M$
+                \item the $j$-th largest eigenvalue of $N$ is larger than that of $M$ (by letting $j=m-j$)
+        \end{itemize}
+      \end{remark}
+        Choose $P$ to be the orthogonal basis of $\text{ker}(L)$. Thus: \[
+        P \in \RR ^{n \times  (n-2)}
+        \] Consider $P^{T} B P = P^{T} D P$. Applying the Cauchy Interlacing Theorem, we have:
+        \begin{align*}
+        % \lambda _{1} (D) &\leq \lambda _{1}(P^{T}DP) = \lambda _{1}(P^{T}BP)\leq \lambda _{3}(B)\\
+        % \lambda _{n-2} (B) &\leq \lambda _{n-2}(P^{T}BP) = \lambda _{n-2}(P^{T}DP)\leq \lambda _{n}(D)\\
+        &\lambda _{1} (B) \leq \lambda _{1}(P^{T}BP) = \lambda _{1}(P^{T}DP)\leq \lambda _{3}(B)\\
+        &\lambda _{n-2} (D) \leq \lambda _{n-2}(P^{T}DP) = \lambda _{n-2}(P^{T}BP)\leq \lambda _{n}(B)\\
+          \implies &1\leq  \lambda _{1}(B)\leq \lambda _{3}(D)\leq \lambda _{n-2}(D)\leq \lambda _{n}(B) \leq 3
+          .\end{align*}
+        Since $\lambda _{i}(D)=\lambda _{i}(A^{-1}P)$, as $D$ is similar to $A^{-1}P$, we have: \[
+1\leq \lambda _{3}(A^{-1}P)\leq \lambda _{n-2}(A^{-1}P)\leq 3
+        \]
+        This means that most of the eigenvalues of $A^{-1}P$ are between 1 and 3.
+  \item Since eigenvalues of $P^{-1}A$ are the inverse of the eigenvalue of $A^{-1}P$ (since they are inverse to each other) and all eigenvalues are positive (since they are the product of SPD matrices), we have $ \lambda _{i}(P^{-1} A) = (\lambda _{n-i+1}(A^{-1}P))^{-1}$, giving us:  \[\frac{1}{3}\leq \lambda _{3}(P^{-1} A) \leq  \lambda _{n-2}(P^{-1}A)\leq 1
+        \]
+        In other words, except $\lambda _{1}, \lambda _{2}, \lambda _{n-1}, \lambda _{n}$, all eigenvalues of $P^{-1}A$ are in $[\frac{1}{3},1]$.
+  \item It remains to estimate  $\lambda _{1}(P^{-1} A)$. We have: \[
+\lambda _{n}(A^{-1}P) = \|A^{-1}P\|_{2}\leq \|D\|_{2}= \|B-L\|_{2}\leq  \|B\|_{2}+\|L\|_{2}
+        \]
+        Because $\|B\|_{2}\leq 3$ and $\|L\|_{2} = \|A^{-1}E\|_{2} \leq  \|A^{-1}\|_{2}\|E\|_{2}$.
+        Note that the smallest eigenvalue of $A^{-1} = O(n^{-2})$, meaning $\|A^{-1}\|_{2} = O(n^2)$. In addition, $\|E\|_{2}\leq \|E\|_{F}=2$. Thus, $\|L\|_{2}\leq Cn^2$. As such, we have: \begin{align*}
+                                                                                                                                                                                                &\lambda _{n}(A^{-1}P)\leq  Cn^2 \text{ for some }C >0\\
+                                                                                                                                                                                                \implies &\lambda _{1}(P^{-1}A) \sim O(n^{-2}) .\end{align*}
+        Which is the same order as $\lambda _{1}(A)$.
+
+        As such, in order to achieve an $\epsilon $-solution (with $\epsilon $ being a constant independent of $n$), we have: \[
+k\sim O(\log n)
+        \]
+        The cost per iteration is $O(n\log n)$ (since we need to use FFT). All together, the computation cost of PCG is $O(n\log^2n)$, which is optimal up to a log factor.
+\end{itemize}
+\begin{remark}
+PCG is the state of the art of iterative methods to solve linear systems for SPD $A$.
+\end{remark}
+
+\end{document}
