@@ -1,0 +1,212 @@
+\documentclass[12pt]{article}
+\usepackage[usenames,svgnames,dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{textcomp}
+\usepackage[hyphens,spaces,obeyspaces]{url}
+\usepackage{listings}
+\lstset{language=C++,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{blue}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    commentstyle=\color{green}\ttfamily,
+    morecomment=[l][\color{magenta}]{\#}
+}
+
+\usepackage{bm}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{mathtools}
+
+\usepackage{cancel}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{multicol}
+\usepackage{enumerate}
+\usepackage{enumitem}
+%\setlist{nolistsep}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% \usepackage[noend]{algpseudocode}
+\graphicspath{ {../images/} }
+\usepackage[super]{nth}
+\usepackage{subfiles}
+\providecommand{\main}{..}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=blue,
+    linkbordercolor=blue,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\usepackage{makeidx}
+\makeindex
+
+\usepackage{thmtools}
+\usepackage[framemethod=TikZ]{mdframed}
+
+\theoremstyle{definition}
+\mdfdefinestyle{mdbluebox}{%
+    roundcorner = 10pt,
+    linewidth=1pt,
+    skipabove=12pt,
+    innerbottommargin=9pt,
+    skipbelow=2pt,
+    nobreak=true,
+    linecolor=blue,
+    backgroundcolor=TealBlue!5,
+}
+\declaretheoremstyle[
+    headfont=\sffamily\bfseries\color{MidnightBlue},
+    mdframed={style=mdbluebox},
+    headpunct={\\[3pt]},
+    postheadspace={0pt}
+]{thmbluebox}
+
+\mdfdefinestyle{mdredbox}{%
+    linewidth=0.5pt,
+    skipabove=12pt,
+    frametitleaboveskip=5pt,
+    frametitlebelowskip=0pt,
+    skipbelow=2pt,
+    frametitlefont=\bfseries,
+    innertopmargin=4pt,
+    innerbottommargin=8pt,
+    nobreak=true,
+    linecolor=RawSienna,
+    backgroundcolor=Salmon!5,
+}
+\declaretheoremstyle[
+    headfont=\bfseries\color{RawSienna},
+    mdframed={style=mdredbox},
+    headpunct={\\[3pt]},
+    postheadspace={0pt},
+]{thmredbox}
+
+\mdfdefinestyle{mdblackbox}{%
+    linewidth=0.5pt,
+    skipabove=12pt,
+    frametitleaboveskip=5pt,
+    frametitlebelowskip=0pt,
+    skipbelow=2pt,
+    frametitlefont=\bfseries,
+    innertopmargin=4pt,
+    innerbottommargin=8pt,
+    nobreak=true,
+    linecolor=black,
+    backgroundcolor=RedViolet!5!gray!5,
+}
+\declaretheoremstyle[
+    mdframed={style=mdblackbox},
+    headpunct={\\[3pt]},
+    postheadspace={0pt},
+]{thmblackbox}
+\declaretheorem[%
+style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
+\declaretheorem[style=thmbluebox,name=Lemma,sibling=theorem]{lemma}
+\declaretheorem[style=thmbluebox,name=Proposition,sibling=theorem]{proposition}
+\declaretheorem[style=thmbluebox,name=Corollary,sibling=theorem]{corollary}
+\declaretheorem[style=thmredbox,name=Example,sibling=theorem]{example}
+\declaretheorem[style=thmblackbox,name=Algorithm,sibling=theorem]{algo}
+
+\mdfdefinestyle{mdgreenbox}{%
+    skipabove=8pt,
+    linewidth=2pt,
+    rightline=false,
+    leftline=true,
+    topline=false,
+    bottomline=false,
+    linecolor=ForestGreen,
+    backgroundcolor=ForestGreen!5,
+}
+\declaretheoremstyle[
+    headfont=\bfseries\sffamily\color{ForestGreen!70!black},
+    bodyfont=\normalfont,
+    spaceabove=2pt,
+    spacebelow=1pt,
+    mdframed={style=mdgreenbox},
+    headpunct={ --- },
+]{thmgreenbox}
+
+%\mdfdefinestyle{mdblackbox}{%
+%	skipabove=8pt,
+%	linewidth=3pt,
+%	rightline=false,
+%	leftline=true,
+%	topline=false,
+%	bottomline=false,
+%	linecolor=black,
+%	backgroundcolor=RedViolet!5!gray!5,
+%}
+%\declaretheoremstyle[
+%	headfont=\bfseries,
+%	bodyfont=\normalfont\small,
+%	spaceabove=0pt,
+%	spacebelow=0pt,
+%	mdframed={style=mdblackbox}
+%]{thmblackbox}
+
+\theoremstyle{theorem}
+\declaretheorem[name=Remark,sibling=theorem,style=thmgreenbox]{remark}
+
+\theoremstyle{definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{fact}[theorem]{Fact}
+
+\newcommand{\vocab}[1]{\textbf{\color{blue} #1}}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\x}{\bm{x}}
+\newcommand{\y}{\bm{y}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\#1\let\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+
+\newcommand{\bful}[1]{\underline{\textbf{#1}}}
+
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markright{#1}} 
+\newcommand\Ccancel[2][black]{\renewcommand\CancelColor{\color{#1}}\cancel{#2}}
+
+\fancyhf{}
+\rhead{\fancyplain{}{MATH5311 Notes}}
+\lhead{\fancyplain{}{\rightmark }} 
+\cfoot{\fancyplain{}{\thepage}}
+
+\title{
+{\LARGE MATH3423 - Statistical Inference} \\
+\textbf{\large Taught by Yu Chi Wai}\\
+\textbf{\large Notes by Aaron Wang}
+}
+
+\date{}
+
+\begin{document}
+\maketitle\thispagestyle{fancy}
+\tableofcontents
+\newpage
+\subfile{../9-6/9-6}
+\appendix
+\newpage
+\addcontentsline{toc}{section}{Index}
+\printindex
+\end{document}
+

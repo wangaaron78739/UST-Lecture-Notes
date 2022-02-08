@@ -1,0 +1,37 @@
+
+
+\documentclass[../main/main.tex]{subfiles}
+\begin{document}
+
+\section{September 7th}
+\subsection{Contraction Mapping Theorem}
+
+\begin{example}
+	Let \(U\) be convex and closed in \(\R^{n}\), Let \(f \in \C^{1}(U, \R^{n})\) be s.t. \(\|\frac{\partial f_i}{\partial x_i}\|\)
+\end{example}
+
+\subsection{Solving Nonlinear Equations}
+We want to solve \(f(x) = 0\), where \(f: \R^{n} \to \R^{n}\).\\
+
+Idea: find a contraction mapping s.t.: \[
+	f(x) = 0 \iff T(x) = x
+\]
+\begin{example}
+	$f(x) = x^2 - a = 0$. we have:
+	\begin{align}
+		T(x) = \frac{1}{2}\left(x + \frac{4}{x}\right). f(x) = 0 \iff Tx = x \\
+		T'(x) = \frac{1}{2} - \frac{a}{x^2} \implies T'(\sqrt{a}) = 0        \\
+		\implies T
+	\end{align}
+\end{example}
+
+
+\subsection{Gradient Descent Method}
+Find $x_n = \argmin_{x \in \R^{n}}f(x) $. We have: \[
+	x_{n+1} = x_n - \gamma \nabla f(x_n) = T(x_n), \quad T(x) = x- \gamma \nabla f(x) = x
+\]
+At $x_{*}, \ \nabla(x_*) = 0 \iff T(x) = x_*$.
+
+\end{document}
+
+

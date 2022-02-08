@@ -1,0 +1,126 @@
+\documentclass[../main/main.tex]{subfiles}
+
+\begin{document}
+
+\section{February 8th, 2022}
+\subsection{Overview of the Course}
+
+Considering $S_n = \sum\limits_{i=1}^{n} X$, for regular CLT we assume that we have:
+
+\begin{itemize}
+	\item Second moment condition
+	\item In $\R$
+	\item Independence
+\end{itemize}
+
+In this course, we will extend CLT to remove these three conditions.
+
+\subsubsection{Stable Law}
+First, we will remove the second moment condition, leading to the \vocab{stable law, infinitely divisible distribution}.\\
+
+If the second moment exists, then there is a normalization that allows the limiting distribution go to a gaussian distribution. However, if we don't have the second moment, it depends on the tail of the distribution, giving us a class of distributions. We will be able to show that this
+No matter if it is a triangular array or a sequence of random variable.\\
+
+This part will take 3-4 lectures.
+
+
+\subsubsection{Functional Limiting Theorem}
+In the previous case, we only concerned variables in $\R$. Now we will extend them to get the weak convergence of random functions.\\
+
+This can be useful for looking at empirical distributions in statistics. For example if we have: \[
+	X \sim F, \text{ with $F$ unknown}
+\]
+If $X_1 , \ldots , X_n ~ F$ i.i.d., we can use the empirical distribution: \[
+	F_n(t) = \frac{1}{n} \sum\limits_{i=1}^{n} \mathbb{1}(X_i \leq t)
+\]
+We want to compare this distribution with the original distribution, which we can use the Kologoromov Statistics \[
+	\sqrt{n}\sup_t | F_n (t) - F(t)|
+\]
+Note that $\sqrt{n}(F_n(t)-F(t))$ is a random function with $f \in \R$.
+
+To do this, we need to prove the weak convergence of the whole stochastic process. With that, we would have the weak convergence of the random function. Later we will show that \(\sqrt{n}(F_n(t)-F(t))\) converges to the Brownian bridge.\\
+
+Reference:
+\begin{itemize}
+	\item Convergence of Probability Measure \(\to\) Billingsley Chapter 2
+\end{itemize}
+
+This part will also be quite short.
+
+
+\subsubsection{Martingale and it's Limiting Theorem}
+
+Roughly speaking, a martingale can be thought of the sum of a random variable. We do not need independence. Here we will introduce martingale differences, and this part will take up the majority of the course.\\
+
+Reference:
+\begin{itemize}
+	\item Durrett Chapter 5
+	\item Hall and Heyde \(\to\) Martingale Limit Theory and its Application
+\end{itemize}
+
+\subsubsection{Concentration (if time permits)}
+
+
+Reference:
+\begin{itemize}
+	\item R. Vershynin \(\to\) High-dimensional probability
+\end{itemize}
+
+
+\subsection{Heavy Tail Limiting (Poisson) Convergence}
+
+let $N(s,t)$ be the number of arrivals at a bank during $[s,t]$. Suppose:
+
+\begin{enumerate}[label=(\roman*)]
+	\item  The number in disjoint intervals are independent
+	\item The distribution of $N(s,t)$ only depends on $t-s$
+	\item $\Pr(N(0,h)=1) = \lambda h + o(h)$, and
+	\item $\Pr(N(0,h)\geq 2) = o(h)$
+\end{enumerate}
+
+\begin{theorem}
+	If (i) - (iv) hold, then $N(0,t)$ has a poisson distribution with mean $\lambda t$.
+\end{theorem}
+
+\begin{definition}[Poisson process with rate $\lambda$]
+	A family of random variables $N_t, t \geq 0$, satisfying:
+	\begin{enumerate}
+		\item If $0=$
+	\end{enumerate}
+\end{definition}
+
+
+\subsection{Stable Law}
+
+We have: \[
+	X_1, X_2, \ldots X_n \text{ i.i.d.} \quad S_n = \sum\limits_{i=1}^{n} X_i
+\]
+
+If $\E X_i = \mu$ and $\Var X_i = \sigma^2$, we have: \[
+	\frac{S_{n}-n \mu}{\sqrt{n} \sigma} \implies N(0,1)
+\]
+Now, if $\E X^2_i = \infty$, do we have $a_n, b_n, Y$ s.t.: \[
+	\frac{S_n - b_n}{a_n} \implies Y \quad \text{($Y$ nondegenerate)}
+\]
+
+Let us start with a simple case where everything about $X_i$ is known.
+
+\begin{example}Consider \( X_1, X_2, \ldots  \text{i.i.d.} \) \[
+		\Pr(X_1 > x) = \Pr(X_1 < -x) = \frac{x^{-\alpha}}{2}, \text{ for } x \geq_1, 0<\alpha<2
+	\]
+	Density $f(x) = \alpha \frac{|x|^{-\alpha-1}}{2}$, $|x|>1$
+	Note that this is:
+	\begin{itemize}
+		\item symmetric (indicates $b_n=0$)
+		\item $\E X^2_1 = 2 \int\limits_{1}^{\infty}x \Pr(|x_1|>x) dx = \int\limits_{1}^{\infty}x^{-\alpha + 1 }dx = \infty$
+	\end{itemize}
+	The solution is: \[
+		\E[e^{is S_n}] = \left[ \underbrace{\E e^{is X_1}}_{\phi(s)} \right]^{n} = [1-(1-\phi(s))]^{n}
+	\]
+	\begin{align*}
+		1-\phi(s) & = \int\limits_{1}^{\infty}(1-e^{ist}) \frac{\alpha}{2|x|^{\alpha+1}} dx + \int\limits_{-\infty}^{-1}(1-e^{isx}) \frac{\alpha}{2|x|^{\alpha+1}}dx \\
+	\end{align*}
+
+\end{example}
+
+\end{document}
