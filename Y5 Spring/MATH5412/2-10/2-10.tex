@@ -3,41 +3,184 @@
 \begin{document}
 
 \section{February 10th, 2022}
-\subsection{Cont.}
+\subsection{Stable Law Continued}
 
-
-Recall from the last time, we found that most of the contribution is from the large points of scale $O(n^{1 / \alpha})$.
-
-Let us define an index set of large points: \[
+Recall from the last time, we concluded that most of the contribution for $S_n$ is from the large points of scale $O(n^{1 / \alpha})$ and that this is of constant order. Let us define an index set of large points: \[
 	I_n(\epsilon) = \{m \leq n: |X_m| > \epsilon n^{1 / \alpha}\}
 \] and define the sums: \[
 	\hat{S}_n(\epsilon) = \sum\limits_{m \in I_n(\epsilon)}X_m = \sum\limits_{m=1}^{n} X_m \mathbbm{1}(|x_m| > \epsilon n^{1 / \alpha})
 \] \[
-	\overline{S}_n(\epsilon) = S_n - \hat{S}_n(\epsilon) = \sum\limits_{m=1}^{n} X_m \mathbbm{1}(|X_m| \leq \epsilon \leq \epsilon ^{1 / \alpha})
+	\overline{S}_n(\epsilon) = S_n - \hat{S}_n(\epsilon) = \sum\limits_{m=1}^{n} X_m \mathbbm{1}(|X_m| \leq \epsilon ^{1 / \alpha})
 \]
-Now we have two task:
+Intuitively speaking $\hat{S}_n(\epsilon)$ represents the sum of large points and $\overline{S}_n(\epsilon)$ represents the sum of small points.
+\begin{remark}
+	Later on, $\epsilon$ will be chosen to be as small as possible. Later we will it to go to zero along with $n$, e.g. $1 / \log n$, since we might exclude relevant points. For now we will consider it fixed.
+\end{remark}
+Now we have two task, to show
+\begin{enumerate}
+	\item Show $\frac{\overline{S}_n(\epsilon)}{n^{1 / \alpha}}$ is small if $\epsilon$ is small.
+	\item Find the limit of $\frac{\hat{S}_n(\epsilon)}{n^{1 / \alpha}}$.
+\end{enumerate}
 
-\begin{itemize}
-	\item Show $\frac{\overline{S}_n(\epsilon)}{n^{1 / \alpha}}$ is small if $\epsilon$ is small
-	\item Find the limit of $\frac{\hat{S}_n(\epsilon)}{n^{1 / \alpha}}$
-\end{itemize}
-
-\begin{proof}
+\begin{proof} of 1.
 	\begin{align*}
-		\E \left[ \frac{\overline{S}_n(\epsilon)}{n ^{1 / \alpha}} \right]^2 & = n^{- \frac{2}{\alpha}} \cdot n \cdot \E \left[ \overline{X_1}(\epsilon) \right]^2, \quad \overline{X_i}(\epsilon) = X_i \mathbbm{1}(|X_i| \leq \epsilon n ^{1 / \alpha}) \\
-		\E[\overline{X_1}(\epsilon)]^2                                       & = \int\limits_{0}^{\infty} 2 y \Pr(|\overline{X}_1(\epsilon)| \geq y ~ dy) \leq \int\limits_{0}^{\epsilon n^{1 / \alpha}}       2 y                                        \\
+		\E \left[\left( \frac{\overline{S}_n(\epsilon)}{n ^{1 / \alpha}} \right)^2  \right] & = n^{- \frac{2}{\alpha}} \cdot n \cdot \E\left[\left( \overline{X_1}(\epsilon) \right)^2\right], \quad \overline{X_i}(\epsilon) = X_i \mathbbm{1}(|X_i| \leq \epsilon n ^{1 / \alpha})                                                              \\
+		\E\left[\left( \overline{X_1}(\epsilon) \right)^2\right]                            & = \int\limits_{0}^{\infty} 2 y \Pr(|\overline{X}_1(\epsilon)| > y) ~ dy                                                                                                                                                                             \\
+		                                                                                    & \leq \int\limits_{0}^{\epsilon n^{1 / \alpha}}       2 y \Pr(|X_1 | > y) dy                                                                                                                                                                         \\
+		                                                                                    & = \int\limits_{0}^{1} 2y  ~dy + \int\limits_{1}^{\epsilon n ^{ 1 / \alpha}}\cdot 2y y^{-\alpha}             dy                                                                   \leq \frac{2 \epsilon^{2-\alpha}}{2-\alpha} n^{\frac{2}{\alpha}-1}
 	\end{align*}
-	Later we choose $\epsilon = \epsilon \to 0$ as $n \to \infty$.
+	This gives us: \[
+		\E \left[\left( \frac{\overline{S}_n(\epsilon)}{n ^{1 / \alpha}} \right)^2  \right] \leq\frac{2 \epsilon^{2-\alpha}}{2-\alpha} , \quad 0<\alpha< 2
+	\]
+	Later we choose $\epsilon = \epsilon_n \downarrow 0$ as $n \to \infty$.
 \end{proof}
 
-\begin{proof}
-	Proof of (2).
+\begin{proof} of 2.\\
+
+	Note that $\hat{S}_n(\epsilon)$ is a sum of a random number of r.v. We will find the characteristic function using the total law of expectation:
 	\begin{align*}
-		\E \exp \left( it \frac{\hat{S_n}(\epsilon)}{n^{1 / \alpha}} \right) = \sum\limits_{m=0}^{n} \E \left[ \exp \left( it \frac{\hat{S_n}(\epsilon)}{n^{1 / \alpha}} \right) \bigg| |I_n(\epsilon)| = m \right] \Pr(|I_n(\epsilon)| = m)
+		\E \left[ \exp \left( it \frac{\hat{S_n}(\epsilon)}{n^{1 / \alpha}} \right)  \right]= \sum\limits_{m=0}^{n} \E \left[ \exp \left( it \frac{\hat{S_n}(\epsilon)}{n^{1 / \alpha}} \right) \bigg| |I_n(\epsilon)| = m \right] \Pr(|I_n(\epsilon)| = m)
 	\end{align*}
-	We will use two facts:
+	Now, we need to find these two terms. We will start with finding $\Pr(|I_n(\epsilon)| = m)$. We will use two facts:
 	\begin{enumerate}
-		\item $|I_n(\epsilon)|$ is $\text{Bin} \left( n , \frac{\epsilon^{-\alpha}}{n} \right)\sim \text{Poisson}(\epsilon^{-\alpha}).$ $\Pr(|X_n|>\epsilon n^{\frac{1}{\alpha}}) = \epsilon^{-\alpha} \frac{1}{n}$.
+		\item $|I_n(\epsilon)|  = \sum\limits_{m=1}^{n}\ind(|X_m|>\epsilon n ^{1 / \alpha})$ is $\text{Bin} \left( n , \frac{\epsilon^{-\alpha}}{n} \right)\sim \text{Poisson}(\epsilon^{-\alpha})$, giving us\\ $\Pr(|X_n|>\epsilon n^{\frac{1}{\alpha}}) = \epsilon^{-\alpha} \frac{1}{n}$.
+		\item The conditional distribution of $\hat{S}_n(\epsilon)\bigg\vert |I_n(\epsilon)|=m$ equals the distribution of the sum of $m$ i.i.d. r.v. with c.d.f. $F_{\epsilon}$ defined as: \[
+			      1-F_{\epsilon}(x) = \Pr \left( \frac{X_1}{n^{1 / \alpha}} > x \bigg\vert \frac{|X_1|}{n^{1 / \alpha}}>\epsilon\right).
+		      \]
+		      i.e. $F_{\epsilon}$ is the conditional distribution of $\frac{X_1}{n^{1 / \alpha}}$ given $\frac{|X_1|}{n^{1 / \alpha}}>\epsilon$.
+		      \begin{proof}
+			      \begin{align*}
+				      \Pr(\hat{S_n}(\epsilon)\in B \big| |I_n(\epsilon)| = m) & =  \frac{\Pr(\hat{S_n}(\epsilon)\in B , |I_n(\epsilon)| = m)}{\Pr(|I_n(\epsilon)| = m)}                                                                                                                                                                  \\
+				                                                              & = \frac{\binom{n}{m}\Pr \left( \sum\limits_{i=1}^{m}X_i \in B, |X_1| > \epsilon n^{1 / \alpha},\ldots, |X_m| > \epsilon n^{1 / \alpha}  \right)}{\binom{n}{m}\Pr \left(|X_1| > \epsilon n^{1 / \alpha},\ldots, |X_m| > \epsilon n^{1 / \alpha}  \right)} \\
+			      \end{align*}
+		      \end{proof}
+	\end{enumerate}
+	\vspace*{-1em}
+	For our distribution, we have: \[
+		1- F_{\epsilon}(x) = \frac{x^{-\alpha}}{2 \epsilon^{-\alpha}}, \quad x \geq \epsilon.
+	\]
+	i.e. $F_{\epsilon}$ is the c.d.f. of $\epsilon X_1$, meaning that the characteristic function of $F_{\epsilon}$ is $\varphi(\epsilon t)$. Consequently:
+	\begin{align*}
+		\E \left[ \exp \left\{it \hat{S}_n(n^{1 / \alpha})\right\} \right] & = \sum\limits_{m=0}^{n} \binom{n}{m} \left( \frac{\epsilon^{-\alpha}}{n} \right)^{m} \left( 1- \frac{\epsilon^{-\alpha}}{n} \right)^{n-m}[\varphi(\epsilon t)]^{m} \\
+		                                                                   & \to  \sum\limits_{m=0}^{\infty} \exp(-\epsilon^{-\alpha}) \cdot (-\epsilon^{-\alpha})^{m} \frac{[\varphi(\epsilon t)]^{m}}{m!}
+		= \exp \left\{
+		-\epsilon^{-\alpha}(1-\varphi(\epsilon t))                   \right\}
+	\end{align*}
+	using Poisson approximation for binomial and DCT.\\
+
+	Recall earlier that we have an approximation for $1-\varphi(\epsilon t) = C_{\alpha}\epsilon^{\alpha}|t|^{\alpha}$ if $\epsilon \to 0$, giving us: \[
+		\E \left[ \exp \left\{it \hat{S}_n(n^{1 / \alpha})\right\} \right] = \exp(-C_{\alpha}|t|^{\alpha}),
+	\] which is the same as Solution 1. Note that we need to choose $\epsilon = \epsilon_n \downarrow 0$. For more details see Lemma 3.7.1 of \cite{Dur19}.
+\end{proof}
+
+From this solution, we can see that only the tail part matters. Now, we will try to generalize this solution.
+
+\begin{definition}[\vocab{slowly varying function}]
+	$L:\R \to \R$ is a slowly varying function if it satisfies: \[
+		\lim\limits_{x\to+\infty} \frac{L(tx)}{L(x)}=1,
+	\] for any fixed $t > 0$.
+\end{definition}
+\begin{example}
+	$\log x$, $\log \log x$, $\log \sqrt{x}$ are slowly varying functions, but any power function $x^{t}$ is not.
+\end{example}
+
+\begin{theorem}[\vocab{stable law}]\label{210:th1}
+	Suppose $X_{1}, X_2\ldots$ are i.i.d. with distribution satisfying:
+	\begin{enumerate}[label=(\roman*)]
+		\item $\lim\limits_{x\to+\infty} \Pr(X_1 > x) / \Pr(|X_1| > x) = \theta \in [0,1]$ (tails may not be significant)
+		\item $\Pr(|X_1| > x) = x^{-\alpha} L(x),\ \alpha<2$, and $L$ is slowly varying (general total tail)
+	\end{enumerate}
+	Let $S_n = \sum\limits_{i=1}^{n}X_i$, $a_n = \inf \{x: \Pr(|X_1|>x)\leq \frac{1}{n}\}$, $b_n= n \E \left[ X_1 \ind(|X_1|\leq a_n) \right]$, then as $n \to \infty$: \[
+		\frac{S_n - b_n}{a_n}\implies Y,
+	\] for a non-degenerate r.v. $Y$.
+\end{theorem}
+
+\begin{remark}
+	$\theta$ in Theorem \ref{210:th1} indicates the relative heaviness between the right and left tail. If $\theta $ close to 1, the right tail is dominant, if $\theta \approx \frac{1}{2}$ then both tails are roughly equal.
+\end{remark}
+We want to choose $a_n$ s.t. $\Pr\left(\frac{X_1}{a_n}\in(\alpha,\beta)\right)\sim \frac{1}{n}$ since $\frac{S_n}{a_n}=\sum\limits_{i=1}^{n} \frac{X_1}{a_n}$, and we want the number of large points to be a constant order random variable. A natural choice is $\Pr(|X_1| \geq a_n) \sim \frac{1}{n}$, which gives us the quantile of $\frac{1}{n}$, i.e. $a_n = \inf \{x: \Pr(|X_1|>x)\leq \frac{1}{n}\}$.
+\begin{remark}
+	We could have used $ca_n$ for any constant $c$. In this case, we just choose $c=1$.
+\end{remark}
+
+For choosing $b_n$, we can choose $b_n= n \E \left[ X_1 \ind(|X_1|\leq ca_n) \right]$ for any constant as well. This is because $b_n = n \E [ \underbrace{X_1}_{a_n} \underbrace{\ind(|X_1|\leq ca_n)}_{\Pr(\cdot)\sim 1 / n}] \sim a_n$, meaning that the limit would differ by a constant factor.
+
+\begin{remark}
+	The reason why we can truncate to of order $a_n$ instead of something much larger say $a^2_n$ is because with high probability there are no such points.
+\end{remark}
+
+\subsection{Proof of Stable Law}
+
+\begin{claim}
+	\[
+		n\Pr(|X_1| > \alpha_n) \to 1, \quad n \to \infty
+	\]
+\end{claim}
+\begin{proof} omitted.
+\end{proof}
+For the tail behavior, we get:
+\begin{align*}
+	     & n\Pr(|X_1| > x\alpha_n) \to \theta x^{-\alpha}, \quad n \to \infty, x > 0                                         \\
+	\sim & n\Pr(|X_1| > \alpha_n)\cdot \theta = n(x a_n)^{\alpha} L(x a_n) \cdot \theta                                      \\
+	\sim & n(x a_n)^{\alpha} L(a_n) \cdot \theta = n x^{-\alpha} \Pr(|X_1| > a_n) \cdot \theta \sim x^{-\alpha} \cdot \theta
+\end{align*}
+meaning that a constant in front of $a_n$ does not affect the convergence.\\
+
+This also tells us that if we use compute the counting measure: \[
+	N_n((x,\infty)) = \sum\limits_{m=1}^{n} \ind \left(\frac{X_m}{a_n} > x \right) \implies \Poi(\theta x^{-\alpha}).
+\] More generally $N_n(A)$ converges to a Poisson point process $N(A)$ with mean measure \[
+	\E N(A) = \mu(A) = \int\limits_{A \cap (0,\infty)}\theta \alpha |x|^{-(\alpha+1)} dx + \int\limits_{A \cap (-\infty, 0)} (1-\theta) \alpha |x|^{-(\alpha+1)}dx.
+\]
+
+Now we will decompose the points into large and small parts. Let us define index set: \[
+	I_n(\epsilon) = \{m \leq n: |X_m| > \epsilon a_n\}
+\] and define the following:
+\begin{align*}
+	\hat{S}_n(\epsilon)      & = \sum\limits_{m \in I_n(\epsilon)}X_m \quad \text{(sum of large points)}                                                                          \\
+	\overline{\mu}(\epsilon) & = \E [X_m \ind(|X_n|\leq \epsilon a_n)] = \E \overline{X_m}(\epsilon)                                                                              \\
+	\hat{\mu}(\epsilon)      & = \E [X_m \ind(\epsilon a_n < |X_n|\leq  a_n)]                                                                                                     \\
+	\overline{S}_n(\epsilon) & = (S_n - b_n) - (\hat{S}_n(\epsilon) - n \hat{\mu}(\epsilon))                                                                                      \\
+	                         & = \sum\limits_{m=1}^{n} \left( \overline{X_m}(\epsilon) - \overline{\mu}(\epsilon) \right)                \, \text{(centered sum of small points)}
+\end{align*}
+\[
+\]
+\begin{remark}
+	Unlike the special case, we need to subtract by $b_n$, since it is no long symmetric.
+\end{remark}
+\begin{remark}
+	Note from the definition of $b_n$, we truncate $\hat{\mu}(\epsilon)$ instead of going to infinity.
+\end{remark}
+
+Now we have once again have two tasks:
+
+\begin{enumerate}
+	\item Show $\frac{\overline{S}_n(\epsilon)}{a_n}$ is small if $\epsilon$ is small.
+	\item Find the limit of $\frac{\hat{S}_n(\epsilon) - n \hat{\mu}(\epsilon)}{a_n}$.
+\end{enumerate}
+
+\begin{proof} of 1.
+	\begin{align*}
+		\E \left[ \left( \frac{\overline{S}_n(\epsilon)}{a_n} \right)^2 \right] & \leq n \E \left[ \left( \frac{\overline{X_1}(\epsilon)}{a_n} \right)^2 \right]                                                                    \\
+		                                                                        & \leq \int\limits_{0}^{\epsilon} 2 y \Pr(|\overline{X}_1(\epsilon)| > ya_n) ~ dy                                                                   \\
+		                                                                        & = \underbrace{n \Pr(|X_1|>a_n)}_{\to 1}\int\limits_{0}^{\epsilon} 2 y \underbrace{\frac{\Pr(|X_1| \geq ya_n)}{\Pr(|X_1|>a_n)}}_{ y^{-\alpha}}  dy \\
+		                                                                        & \to \int\limits_{0}^{\epsilon} 2y y^{-\alpha}dy                  = \frac{2}{2-\alpha} \epsilon^{2-\alpha} \to 0 \text{ if }\epsilon \to 0
+	\end{align*}
+\end{proof}
+
+\begin{proof} of 2.\\
+	Let us first consider trying to compute the characteristic function of $\frac{S_n}{a_n}$, since we can add the constant part later. We have the following:
+
+	\begin{enumerate}[label=(\roman*)]
+		\item $|I_n(\epsilon)| \to \Poi(\epsilon^{-\alpha})$
+		\item Given $|I_n(\epsilon)|=m$, $\frac{\hat{S_n}(\epsilon)}{a_n}$ has the same distribution as the sum of $m$ i.i.d. r.v. with c.d.f. $F_{\epsilon}$, which is again the conditional distribution of $\frac{X_1}{a_n}$ given $\frac{|X_1|}{a_n} \geq \epsilon$. This time, we need to distinguish the left and right tails:
+		      \begin{align*}
+			      1-F_n^{\epsilon}(x) & = \Pr \left( \frac{X_1}{a_n} > x \bigg\vert \frac{|X_1|}{a_n}>\epsilon\right) \to \theta \frac{x^{-\alpha}}{\epsilon^{-\alpha}}        \\
+			      F_n^{\epsilon}(-x)  & = \Pr \left( \frac{X_1}{a_n} <- x \bigg\vert \frac{|X_1|}{a_n}>\epsilon\right) \to (1-\theta) \frac{|x|^{-\alpha}}{\epsilon^{-\alpha}}
+		      \end{align*}
+		      Let $\Psi_n^{\epsilon}(t) \to \Psi^{\epsilon}(t)$ be the c.f. of $F_n^{\epsilon}$: \[
+			      \Psi_n^{\epsilon}(t) \to \Psi^{\epsilon}(t) = \int\limits_{\epsilon}^{\infty}e^{itx}\theta \epsilon^{\alpha} \alpha x^{-(\alpha+1)}dx + \int\limits_{-\infty}^{-\epsilon} e^{itx} (1-\theta)\epsilon^{\alpha}|x|^{-(\theta+1)}dx
+		      \] Note that these tails only hold when $|x|>\epsilon$, as the density would be zero otherwise.
+		      This will be continued next lecture.
 	\end{enumerate}
 \end{proof}
 
