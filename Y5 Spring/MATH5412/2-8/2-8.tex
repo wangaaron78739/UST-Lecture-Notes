@@ -27,9 +27,8 @@ The stable law is not like Gaussian, which is universal in a sense, since as lon
 
 In the last course, besides considering $S_n$, we also discussed the sum of triangular array for a given sequence of random variable. In this case, the limiting distribution might not be Gaussian, with a typical example being Poisson convergence.
 
-\begin{example}[Poisson Convergence for Rare Events]
-	Let $Y_{n,m} \sim \Be(p_n)$ where $p = p_n = \frac{c}{n}$ with $Y_{n,m}$ i.i.d. $1 \leq m \leq n$. Define $X_{n,m} = Y_{n,m} - p$.
-	Then the limiting distribution of $S_n = \sum\limits_{m=1}^{n}X_{n,m}$ approaches $\Poi(c)$.
+\begin{example}[Poisson Convergence for Rare Events]\label{2-8-p1}
+	Let $Y_{n,m} \sim \Be(p_n)$ where $p = p_n = \frac{c}{n}$ with $Y_{n,m}$ i.i.d. $1 \leq m \leq n$. Then the limiting distribution of $S_n = \sum\limits_{m=1}^{n}Y_{n,m}$ approaches $\Poi(c)$.
 \end{example}
 
 If we have a sum of triangular arrays where we the second moment does not exist, the possible limiting distribution is called the \vocab{infinitely divisible distribution}. It will contain the stable law as a special case.
@@ -79,59 +78,178 @@ If time permits, we will also cover something called \vocab{martingale concentra
 
 
 \subsection{Heavy Tail Limiting (Poisson) Convergence}
+\index{Possion convergence}
 
-let $N(s,t)$ be the number of arrivals at a bank during $[s,t]$. Suppose:
+Before introducing the stable law, we will quickly review the heavy tail limiting convergence from the last part of MATH5411. Heuristically, the stable law and the heavy tail convergence are very related.
 
-\begin{enumerate}[label=(\roman*)]
-	\item  The number in disjoint intervals are independent
-	\item The distribution of $N(s,t)$ only depends on $t-s$
-	\item $\Pr(N(0,h)=1) = \lambda h + o(h)$, and
-	\item $\Pr(N(0,h)\geq 2) = o(h)$
-\end{enumerate}
+As with Example \ref{2-8-p1}, we consider a triangular array, $Y_{n,1}, \ldots , Y_{n,n}\sim\Be(p)$ i.i.d. with $p=p_n = \frac{\lambda}{n}$. We have \[
+	\sum\limits_{m=1}^{n}Y_{n , m } \implies \Poi(\lambda) .
+\]
+After that, we did a generalization to not require the elements in the triangular array to be i.i.d.
+\begin{theorem}[Poisson Convergence for non i.i.d. Bernoulli Random Variables]
+	For each $n$, let $X_{n,m},~ 1 \leq m \leq n$ be independent r.v. with $\Pr(X_{n,m}=1)=1-\Pr(X_{n,m}=0)= \beta_{n,m}$. If $\sum\limits_{m=1}^{n} \beta_{n,m} \to \lambda$ and $\max\limits_{m} \beta_{n,m} \to 0$,
+	then, $S_n = \sum\limits_{m=1}^{n}X_{n,m} \implies \Poi(\lambda)$.
+\end{theorem}
+\begin{remark}
+	This is similar to Lindeberg's condition for CLT.
+\end{remark}
 
-\begin{theorem}
-	If (i) - (iv) hold, then $N(0,t)$ has a poisson distribution with mean $\lambda t$.
+After this, we can extend to non-Bernoulli random variables, being able to take any non-negative integer value, as long as it is ``almost'' Bernoulli.
+
+\begin{theorem}[Poisson Convergence for non-Bernoulli Random Variables]
+	For each $n$, let $X_{n,m},~ 1 \leq m \leq n$ be independent r.v. with $\Pr(X_{n,m}=1)= \beta_{n,m}$ and $\Pr(X_{n,m} \geq 2)= \epsilon_{n,m}$. If $\sum\limits_{m=1}^{n} \beta_{n,m} \to \lambda$, $\max\limits_{m} \beta_{n,m} \to 0$ and \(\sum\limits_{m=1}^{n}\epsilon_{n,m} \to 0\),
+	then, $S_n = \sum\limits_{m=1}^{n}X_{n,m} \implies \Poi(\lambda)$.
 \end{theorem}
 
-\begin{definition}[Poisson process with rate $\lambda$]
-	A family of random variables $N_t, t \geq 0$, satisfying:
+Now with this general result, we are able to solve a mathematical modelling problem.
+
+\begin{example}[Modelling Customer Arrival]\label{28-p2}
+	Suppose we open a bank and we want to know the number of arrivals $N([s,t])$ during a time duration $[s,t]$. To model, this we make the following assumptions:
+	\begin{enumerate}[label=(\roman*)]
+		\item  The number in disjoint intervals are independent
+		\item The distribution of $N(s,t)$ only depends on $t-s$, i.e. it is \vocab{time homogeneous}
+		\item $\Pr(N([0,h])=1) = \lambda h + o(h)$, and
+		\item $\Pr(N([0,h])\geq 2) = o(h)$
+	\end{enumerate}
+\end{example}
+
+\begin{theorem}
+	If (i) - (iv) in Example \ref{28-p2} hold, then $N([0,t])$ has an exact Poisson distribution with mean $\lambda t$.
+\end{theorem}
+
+For this example, what we really care is not the Poisson convergence, rather the consequence of this mathematical modelling problem. For this example, we not only get the distribution for a fixed $t$, we get a stochastic process. If we let $t$ run from $0$ to infinity, we get what is called a \vocab{Poisson point process}.
+
+\begin{definition}[Poisson point process with rate $\lambda$]\label{poisson-point}
+	A family of random variables $N_t = N([0,t]),~ t \geq 0$, satisfying:
 	\begin{enumerate}
-		\item If $0=$
+		\item If $0= t_0 < t_1 < \ldots < t_{n}$ then $N_{t_k}-N_{t_{k-1}} = N([t_{k-1},t_{k}])$ are all independent.
+		\item $N_t - N_s \sim \Poi(\lambda(t-s))$.
 	\end{enumerate}
 \end{definition}
 
+There are also a few other ways to characterize a Poisson point process, such as by the time of arrival. Thus, this process can be characterized by these points if it's counting function satisfy the properties in Definition \ref{poisson-point}. We can also regard a Poisson point process as a random measure, leading to us being able to generalize a Poisson point process on a measure space.
+
+
+\begin{definition}[Poisson point process on a measurable space $(S,\mathscr{S},\mu)$]
+	A random map $m : \mathscr{S} \to \{0,1,\ldots \}$ that for each $\omega$ is a measure on $\mathscr{S}$, and has the following property: \\
+	If $A_1, A_2, \ldots, A_n$ are disjoint with $\mu(A_i) < \infty$ then:
+	\begin{enumerate}
+		\item $m(A_1), \ldots , m(A_n)$ are independent.
+		\item $m(A_i) \Deq \Poi(\mu(A_i))$.
+	\end{enumerate}
+	where $\mu(A) \coloneqq \E[m(A)]$ is the mean measure of $m$.
+\end{definition}
 
 \subsection{Stable Law}
-
-We have: \[
+Now that we have review Poisson point processes, let us move onto stable law. Consider: \[
 	X_1, X_2, \ldots X_n \text{ i.i.d.} \quad S_n = \sum\limits_{i=1}^{n} X_i
 \]
-
 If $\E X_i = \mu$ and $\Var X_i = \sigma^2$, we have: \[
 	\frac{S_{n}-n \mu}{\sqrt{n} \sigma} \implies N(0,1)
 \]
-Now, if $\E X^2_i = \infty$, do we have $a_n, b_n, Y$ s.t.: \[
-	\frac{S_n - b_n}{a_n} \implies Y \quad \text{($Y$ nondegenerate)}
+Now, if $\E X^2_i = \infty$, we want to ask if we have $a_n, b_n, Y$ such that:
+\begin{align}\label{28:eq1}
+	\frac{S_n - b_n}{a_n} \implies Y
+\end{align}
+Where $Y$ is nondegenerate (if it is, then it would be trivial). $a_n$ is basically the typical size of the fluctuation of $S_n$. In the case where the second moment exist, we know that this is of order $\sqrt{n}$. If we don't have the second moment, which are so called \vocab{heavy tailed random variables}, then these variables are more likely to take on large values, meaning that $a_n$ should intuitively be larger than $\sqrt{n}$. How much larger depends on the explicit tail behavior of $X_i$. In a very special case, \label{28:eq1} will be Gaussian, but in most cases it will not.\\
+
+Similar to with the CLT, we eventually want to remove the assumptions about the distribution. However, let us first start with a specific special case where we know the explicit distribution of $X_i$. For this, we will present two solutions, the first does not have anything to do with Poisson point process, the but second will relate it to this heuristic.\\
+
+Consider \( X_1, X_2, \ldots  \text{i.i.d.} \) \[
+	\Pr(X_1 > x) = \Pr(X_1 < -x) = \frac{x^{-\alpha}}{2}, \text{ for } x \geq 1,~ 0<\alpha<2.
 \]
-
-Let us start with a simple case where everything about $X_i$ is known.
-
-\begin{example}Consider \( X_1, X_2, \ldots  \text{i.i.d.} \) \[
-		\Pr(X_1 > x) = \Pr(X_1 < -x) = \frac{x^{-\alpha}}{2}, \text{ for } x \geq_1, 0<\alpha<2
-	\]
-	Density $f(x) = \alpha \frac{|x|^{-\alpha-1}}{2}$, $|x|>1$
-	Note that this is:
+The density function is thus given by: \[
+	f(x) = \alpha \frac{|x|^{-\alpha-1}}{2},\quad |x| > 1
+\]
+Note that this density function is symmetric (indicating $b_n = 0$). In addition, computing the second moment using the tail sum formula, we have: \[
+	\E X^2_1 = 2 \int\limits_{1}^{\infty}x \Pr(|X_1|>x) dx = \int\limits_{1}^{\infty}x^{-\alpha + 1 }dx = \infty
+\] since $\alpha < 2$.
+\begin{remark}
+	Note that if $\alpha = 2$, then $\E X_1^2 = 0$. However, this is a very different case, and as such we do not consider it. In this case, the CLT holds with normalization $\sqrt{n \log n}$. See Theorem 1.12.3 from \cite{Uch11}.
+\end{remark}
+\begin{remark}
+	As mentioned above, since this is symmetric, we can have $b_n=0$. This suggests that we might have non-zero $b_n$ for non-symmetric cases.
+\end{remark}
+\subsubsection*{Solution 1}
+We will try to compute limiting distribution using the Levy's continuity theorem by finding the limit of the characteristic function.
+\begin{theorem}[\vocab{Levy's Continuity Theorem}]
+	Suppose we have:
 	\begin{itemize}
-		\item symmetric (indicates $b_n=0$)
-		\item $\E X^2_1 = 2 \int\limits_{1}^{\infty}x \Pr(|x_1|>x) dx = \int\limits_{1}^{\infty}x^{-\alpha + 1 }dx = \infty$
+		\item a sequence of random variables \(\{X_{n}\}_{n=1}^{\infty }\), not necessarily sharing a common probability space,
+		\item the sequence of corresponding characteristic functions \(\{\varphi _{n}\}_{n=1}^{\infty }\), where\\ \(\varphi _{n}(t)={\E} \left[e^{itX_{n}}\right],\ \forall t\in \mathbb {R} ,\ \forall n\in \mathbb {N} ,\)
 	\end{itemize}
-	The solution is: \[
-		\E[e^{is S_n}] = \left[ \underbrace{\E e^{is X_1}}_{\phi(s)} \right]^{n} = [1-(1-\phi(s))]^{n}
-	\]
-	\begin{align*}
-		1-\phi(s) & = \int\limits_{1}^{\infty}(1-e^{ist}) \frac{\alpha}{2|x|^{\alpha+1}} dx + \int\limits_{-\infty}^{-1}(1-e^{isx}) \frac{\alpha}{2|x|^{\alpha+1}}dx \\
-	\end{align*}
+	If the sequence of characteristic functions converges pointwise to some function $\varphi_n(t) \to \varphi(t)\ \forall t \in \R$, then the following statements are equivalent:
+	\begin{itemize}
+		\item  $X_n \dto X$ for some random variable $X$.
+		\item $\{X_{n}\}_{n=1}^{\infty }$ is tight: $\lim _{x\to \infty }\left(\sup _{n}\operatorname {P} {\big [}\,|X_{n}|>x\,{\big ]}\right)=0$;
+		\item $\varphi(t)$ is the characteristic function of some random variable $X$;
+		\item $\varphi(t)$ is a continuous function of $t$;
+		\item $\varphi(t)$ is continuous at $t=0$.
+	\end{itemize}
+\end{theorem}
+We have: \[
+	\E[e^{is S_n}] = \E[e^{is \sum_{i=1}^{n}X_i}] = \left[\E[e^{is X_1}] \right]^{n}
+\]
+Now we need to choose a normalization such that this does boil down to a characteristic function of a single point mass. In other words, we want this to be of the form $(1+O(\frac{1}{n}))^{n}$. In this case, we choose $\varphi(s)=\E[e^{is X_1}$, such that: \[
+	\E[e^{is S_n}] = \left[\E[e^{is X_1}] \right]^{n} = [1-(1-\varphi(s))]^{n}
+\] such that $1-\varphi(s) \sim O(\frac{1}{n})$. We have:
+\begin{align}\label{28:eq3}
+	1-\varphi(s) & = \E[e^{is X_1}                                                  ]        \nonumber                                                                        \\
+	             & = \int\limits_{1}^{\infty}(1-e^{isx}) \frac{\alpha}{2|x|^{\alpha+1}} dx + \int\limits_{-\infty}^{-1}(1-e^{isx}) \frac{\alpha}{2|x|^{\alpha+1}}dx \nonumber \\
+	             & = \alpha \int\limits_{1}^{\infty} \frac{1-\cos(sx)}{x^{\alpha+1}} dx
+\end{align}
+For the case where $s \geq 0$, with a change of variables, we have:
+\begin{align}\label{28:eq2}
+	1-\varphi(s)  = \alpha \int\limits_{1}^{\infty} \frac{1-\cos(sx)}{x^{\alpha+1}} dx=
+	s^{\alpha} \alpha \int\limits_{s}^{\infty} \frac{1-\cos(u)}{u^{\alpha+1}}du
+\end{align}
+Going back to $\frac{S_n}{a_n} = Y$, with $a_n$ roughly greater than $\sqrt{n}$. Now we absolve $a_n$ into $s$, meaning that $s$ should be really small, eventually going to zero. In the integral on the RHS of Equation \ref{28:eq2}, the singularity at infinity can be ignored, due to the $u^{\alpha+1}$ in the denominator. For the singularity at zero, note that $1-\cos(u)\sim u^2$ when $u$ close to zero, meaning the integrand is almost $u^{1-\alpha}$. Since $\alpha < 2$, this is also integrable. Thus, as $n$ go to infinity, the integral goes to a constant, giving us $1-\varphi(s) = s^{\alpha}C_\alpha$. Choosing $s=\frac{t}{n^{1 / \alpha}}$, with fixed $t \in \R$. This gives us:
+\[
+	\E\left[\exp\left\{it \frac{S_n}{n^{1 / \alpha}}\right\}\right] = \left[1-\frac{1}{n}|t|^{\alpha}C_\alpha\right]^{n} \to e^{-C_{\alpha}|t|^{\alpha}}.
+\] This means that $\frac{S_n}{n^{1 / \alpha}} \to Y$ with characteristic function $e^{-C_{\alpha}|t|^{\alpha}}$. This is one case of a stable law, with a specific example.\\
 
-\end{example}
+Note that in this case, Gaussian is also a special case of the stable law if we choose $\alpha=2$. If we choose $\alpha=1$, we would get Cauchy. In the general case, we do not have a explicit formula for the distribution or density function, so we often just express in terms of the characteristic function. For some asymptotic analysis of the density function, refer to \cite{Nol20}.\\
+
+As expected, this scaling is larger than $\sqrt{n}$ since $\alpha < 2$. This solution is simple because we have the explicit distribution.
+
+\subsubsection*{Solution 2}
+Before presenting the solution, we will do some preliminary analysis on the solution found above.\\
+
+The reason why we expect the normalization to be larger than $\sqrt{n}$ is because of the large tails. This motivates us to look more into these tail behavior. We believe that there is major contribution to $S_n$ from the larger parts random variables. Investigating this way will allow us to remove any explicit assumptions of the distribution besides the tail.\\
+
+Starting from Equation \ref{28:eq3}, plugging in the value of $s$, we want to find a $b$ such that the contribution from the small parts: \[
+	\int\limits_{1}^{n^{b}} \frac{1-\cos(\frac{t}{n^{1 / \alpha}})}{x^{\alpha + 1}}dx \ll O\left(\frac{1}{n}\right).
+\] We can see that this occurs if $b < 1 / \alpha$, using by using Taylor expansion. This rough analysis tells us that the contribution from parts of the distribution before $n^{1 / \alpha}$ are not important for the limiting distribution. In other words, only the parts greater than $n^{1 / \alpha}$ are relevant to our analysis. Now let us look at the behaviour when it is on the order of $n^{1 / \alpha}$. \\
+
+By definition, for any $b > a > 0$, if $a ^{1 / \alpha} > 1$, then we want to consider the scale:
+\begin{align*}
+	\Pr(an^{1 / \alpha}< X_1 < bn^{1 / \alpha}) & = \Pr(X_1 > an^{1 / \alpha}) - \Pr(X_1 > bn^{1 / \alpha}), \\
+	                                            & = \frac{1}{2}(a^{-\alpha}-b^{-\alpha}) \cdot \frac{1}{n}
+\end{align*}
+since this is the scale where it starts to contribute to the limiting distribution. Let us study the indicator function: \[
+	\mathbbm{1}\left( \frac{X_1}{n^{1 / \alpha}} \in (a,b) \right) \sim \Be \left( \frac{1}{2}(a^{-\alpha}-b^{-\alpha}) \cdot \frac{1}{n} \right).
+\] This parallels the Poisson convergence. If we denote the counting measure of this indicator function, we have: \[
+	N_n((a,b)) = \sum\limits_{i=1}^{n}\ind\left( \frac{X_1}{n^{1 / \alpha}} \in (a,b) \right)  \implies N(a,b) = \Poi \left( \frac{1}{2}(a^{-\alpha}-b^{-\alpha}) \right).
+\]
+Note that we are counting the number of $X_i$ that are of the order of $n^{1 / \alpha}$. Note that a Poisson r.v. is of order 1, meaning that number of $X_i$ of order $n^{1 / \alpha}$ is of constant order. This tells us that the major contribution of $S_n$ in the heavy tail case comes from a constant number of points.
+\begin{remark}
+	This is in contrast to the CLT, in which if you decompose it into small and large parts, both have significant contributions.
+\end{remark}
+More generally, we can define this constant measure as: \[
+	N_n(A) \quad \forall A \subset \R \setminus (-\delta , \delta),\quad \delta n^{1 / \alpha} > 1
+\] then: \[
+	\Pr \left( \frac{X_1}{n^{1 / \alpha}}\in A \right) = \int\limits_{A} \frac{\alpha}{2 |x|^{\alpha+1}}dx \cdot \frac{1}{n}
+\] If we think of $N_n(A)$ as a random measure, we have: \[
+	N_n(a) \implies N(A) \sim \Poi \left(
+	\int\limits_{A} \frac{\alpha}{2 |x|^{\alpha+1}}dx
+	\right) = \Poi(\mu(A))
+\]
+meaning that $N$ is a Poisson point process on $(\R \setminus (-\delta,\delta),\mathscr{B}(\R \setminus (-\delta,\delta)), \mu( \cdot))$.\\
+
+This means that $S_n$ will converge to the sum of points in this Poisson point process. Thus, the stable law is just the distribution of points in the Poisson point process.
+
+\begin{remark}
+	This Poisson point process is no longer homogeneous, since the measure is not Lebegue measurable. Most of the points in $S_n$ will go to zero, besides the finite heavy tail ones.
+\end{remark}
 
 \end{document}

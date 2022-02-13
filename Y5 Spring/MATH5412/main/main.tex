@@ -57,6 +57,7 @@ sorting=ynt
 
 \usepackage[colorlinks=true]{hyperref}
 \hypersetup{
+    % linkcolor=NavyBlue,
     linkcolor=NavyBlue,
     citecolor=ForestGreen,
     filecolor=Plum,
@@ -69,6 +70,7 @@ sorting=ynt
 
 \usepackage{thmtools}
 \usepackage[framemethod=TikZ]{mdframed}
+\usepackage[scr]{rsfso}
 
 \theoremstyle{definition}
 \mdfdefinestyle{mdbluebox}{%
@@ -200,6 +202,10 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newcommand{\Var}{\text{\textbf{Var}}}
 \newcommand{\Be}{\text{Be}}
 \newcommand{\Poi}{\text{Poisson}}
+\newcommand{\pto}{\overset{p}{\to}}
+\newcommand{\dto}{\overset{d}{\to}}
+\newcommand{\Deq}{\overset{D}{=}}
+\newcommand{\ind}{\mathbbm{1}}
 % \newcommand{\Pr}{\text{Pr}}
 
 \newcommand{\PreserveBackslash}[1]{\let\temp=\#1\let\=\temp}
@@ -207,7 +213,7 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
 \newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
 
-\renewcommand{\UrlFont}{\ttfamily\small}
+\renewcommand{\UrlFont}{\ttfamily\scriptsize}
 
 \newcommand{\bful}[1]{\underline{\textbf{#1}}}
 \pagestyle{fancy}
