@@ -1,0 +1,44 @@
+\documentclass[../main/main.tex]{subfiles}
+
+\begin{document}
+
+\section{February 10th, 2022}
+\subsection{Cont.}
+
+
+Recall from the last time, we found that most of the contribution is from the large points of scale $O(n^{1 / \alpha})$.
+
+Let us define an index set of large points: \[
+	I_n(\epsilon) = \{m \leq n: |X_m| > \epsilon n^{1 / \alpha}\}
+\] and define the sums: \[
+	\hat{S}_n(\epsilon) = \sum\limits_{m \in I_n(\epsilon)}X_m = \sum\limits_{m=1}^{n} X_m \mathbbm{1}(|x_m| > \epsilon n^{1 / \alpha})
+\] \[
+	\overline{S}_n(\epsilon) = S_n - \hat{S}_n(\epsilon) = \sum\limits_{m=1}^{n} X_m \mathbbm{1}(|X_m| \leq \epsilon \leq \epsilon ^{1 / \alpha})
+\]
+Now we have two task:
+
+\begin{itemize}
+	\item Show $\frac{\overline{S}_n(\epsilon)}{n^{1 / \alpha}}$ is small if $\epsilon$ is small
+	\item Find the limit of $\frac{\hat{S}_n(\epsilon)}{n^{1 / \alpha}}$
+\end{itemize}
+
+\begin{proof}
+	\begin{align*}
+		\E \left[ \frac{\overline{S}_n(\epsilon)}{n ^{1 / \alpha}} \right]^2 & = n^{- \frac{2}{\alpha}} \cdot n \cdot \E \left[ \overline{X_1}(\epsilon) \right]^2, \quad \overline{X_i}(\epsilon) = X_i \mathbbm{1}(|X_i| \leq \epsilon n ^{1 / \alpha}) \\
+		\E[\overline{X_1}(\epsilon)]^2                                       & = \int\limits_{0}^{\infty} 2 y \Pr(|\overline{X}_1(\epsilon)| \geq y ~ dy) \leq \int\limits_{0}^{\epsilon n^{1 / \alpha}}       2 y                                        \\
+	\end{align*}
+	Later we choose $\epsilon = \epsilon \to 0$ as $n \to \infty$.
+\end{proof}
+
+\begin{proof}
+	Proof of (2).
+	\begin{align*}
+		\E \exp \left( it \frac{\hat{S_n}(\epsilon)}{n^{1 / \alpha}} \right) = \sum\limits_{m=0}^{n} \E \left[ \exp \left( it \frac{\hat{S_n}(\epsilon)}{n^{1 / \alpha}} \right) \bigg| |I_n(\epsilon)| = m \right] \Pr(|I_n(\epsilon)| = m)
+	\end{align*}
+	We will use two facts:
+	\begin{enumerate}
+		\item $|I_n(\epsilon)|$ is $\text{Bin} \left( n , \frac{\epsilon^{-\alpha}}{n} \right)\sim \text{Poisson}(\epsilon^{-\alpha}).$ $\Pr(|X_n|>\epsilon n^{\frac{1}{\alpha}}) = \epsilon^{-\alpha} \frac{1}{n}$.
+	\end{enumerate}
+\end{proof}
+
+\end{document}

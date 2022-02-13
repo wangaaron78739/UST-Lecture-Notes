@@ -149,11 +149,24 @@ A macroscopic system has a very large number of DoF. Tracking details of each Do
 However, we can answer many questions concerning systems in and near thermodynamic equilibrium without knowledge of the motions of individual molecules or atoms.
 
 
-\subsubsection*{Thermodynamic Equilibrium System}
+\subsubsection*{Examples of Thermodynamic Equilibrium System}
 
 \begin{example}
 	A large isolated system evolving for sufficiently long time.
 \end{example}
+\begin{example}
+	A system placed in contact with a head reservoir.
+\end{example}
 
+\begin{definition}[\vocab{Time Average}]
+	For a system in thermodynamic equilibrium, the physical quantities of interest to us, e.g., pressure, elastic moduli, etc. are almost always time averages over a segment of some phase trajectory.
+\end{definition}
+\begin{definition}[\vocab{Ensemble Average}]
+	To take averages over suitably randomized group of similar systems - An ensemble of systems. (proposed by J.W. Gibbs).
+\end{definition}
+
+The equivalence of the ensemble average and time average is the ergodic hypothesis. When we do simulations, we often assume this is true.
+
+We calculate the time average during \vocab{molecular dynamics (MD) simulations} and ensemble average during \vocab{Monte Carlo (MC) simulations}
 
 \end{document}

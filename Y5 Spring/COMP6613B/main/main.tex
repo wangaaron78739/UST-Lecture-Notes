@@ -1,5 +1,4 @@
 \documentclass[12pt]{article}
-\usepackage{color}
 \usepackage[usenames,svgnames,dvipsnames]{xcolor}
 \usepackage{tikz}
 \usepackage{pgfplots}
@@ -18,13 +17,6 @@
     morecomment=[l][\color{magenta}]{\#}
 }
 
-\usepackage[
-backend=biber,
-style=alphabetic,
-sorting=ynt
-]{biblatex}
-\addbibresource{../references.bib}
-
 \usepackage{bm}
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
 \usepackage{mathtools}
@@ -41,7 +33,6 @@ sorting=ynt
 \usepackage{multicol}
 \usepackage{enumerate}
 \usepackage{enumitem}
-\usepackage{bbm}
 % \setlist{nolistsep}
 \usepackage{graphicx}
 \usepackage{gensymb}
@@ -54,14 +45,15 @@ sorting=ynt
 \usepackage{subfiles}
 \providecommand{\main}{..}
 
-\usepackage[colorlinks=true]{hyperref}
+\usepackage{hyperref}
 \hypersetup{
-    linkcolor=NavyBlue,
-    citecolor=ForestGreen,
-    filecolor=Plum,
-    urlcolor=RubineRed,
+    colorlinks=blue,
+    linkbordercolor=blue,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
 }
-\usepackage[capitalise,nameinlink]{cleveref}
 
 \usepackage{makeidx}
 \makeindex
@@ -170,6 +162,85 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 %   mdframed={style=mdblackbox}
 %]{thmblackbox}
 
+
+% Merged from http://tihlde.org/~eivindw/latex-listings-for-scala/ and 
+% http://lampsvn.epfl.ch/trac/scala/export/26099/scala-tool-support/trunk/src/latex/scaladoc.sty
+% "define" Scala
+%Keyword list taken from the scaladoc definition.
+\lstdefinelanguage{scala}{
+  morekeywords={%
+          abstract,case,catch,class,def,do,else,extends,%
+          false,final,finally,for,forSome,if,implicit,import,lazy,%
+          match,new,null,object,override,package,private,protected,%
+          return,sealed,super,this,throw,trait,true,try,type,%
+          val,var,while,with,yield},
+  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}[keywords,comments,strings]
+
+% activate the language and predefine settings
+\lstset{
+    language=Scala,%
+    xleftmargin=4mm,%
+    aboveskip=3mm,%
+    belowskip=3mm,%
+    fontadjust=true,%
+    columns=[c]fixed,%
+    keepspaces=true,%
+    basewidth={0.58em, 0.53em},%
+    tabsize=2,%
+    basicstyle=\renewcommand{\baselinestretch}{0.95}\ttfamily,%
+    commentstyle=\color{OliveGreen}\itshape,%
+    numberstyle=\tiny\color{gray},%
+    stringstyle=\color{red},%
+    keywordstyle=\color{blue}\bfseries,%
+    mathescape=true,%
+    escapechar=¤,%
+    captionpos=b,%
+    framerule=0.3pt,%
+    firstnumber=0,%
+    numbersep=1.5mm,%
+    numberstyle=\tiny,%
+}
+
+\lstdefinestyle{floating}{%
+    xleftmargin=10pt,%
+    xrightmargin=5pt,%
+    aboveskip=4mm,%
+    belowskip=4mm,%
+    fontadjust=true,%
+    columns=[c]flexible,%
+    keepspaces=true,%
+    basewidth={0.5em, 0.425em},%
+    tabsize=2,%
+    basicstyle=\renewcommand{\baselinestretch}{0.95}\ttfamily,%
+    commentstyle=\rm,%
+    keywordstyle=\bfseries,%
+    mathescape=true,%
+    captionpos=b,%
+    framerule=0.3pt,%
+    firstnumber=0,%
+    numbersep=1.5mm,%
+    numberstyle=\tiny,%
+    float=tbp,%
+    frame=tblr,%
+    framesep=5pt,%
+    framexleftmargin=3pt,%
+    abovecaptionskip=\smallskipamount,%
+    belowcaptionskip=\smallskipamount,%
+} % to define: caption, label
+
+\newcommand{\code}[1]{%
+    \lstinline[%keywordstyle=,%
+               flexiblecolumns=true,%
+               basicstyle=\ttfamily]£#1£}
+
+
 \theoremstyle{theorem}
 \declaretheorem[name=Remark,sibling=theorem,style=thmgreenbox]{remark}
 
@@ -178,7 +249,7 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{fact}[theorem]{Fact}
 
-\newcommand{\vocab}[1]{\index{\textbf{\color{blue} #1}}}
+\newcommand{\vocab}[1]{\textbf{\color{blue} #1}}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -204,8 +275,6 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
 \newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
 
-\renewcommand{\UrlFont}{\ttfamily\small}
-
 \newcommand{\bful}[1]{\underline{\textbf{#1}}}
 \pagestyle{fancy}
 \renewcommand{\sectionmark}[1]{\markright{#1}}
@@ -215,27 +284,20 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \cfoot{\fancyplain{}{\thepage}}
 
 \title{
-{\LARGE MATH5412 - Advanced Probability Theory II} \\
-\vspace*{0.5em}
-{\large Aaron Wang}\\
-\vspace*{-0.4em}
-{\small\url{aswang@connect.ust.hk}}\\
-{\large Spring 2022}\\
+{\LARGE COMP6613B - Theory of Types and Programming Languages} \\
+\textbf{\large Taught by Lionel Parreaux}\\
+\textbf{\large Notes by Aaron Wang}
 }
 
 \date{}
 
 \begin{document}
 \maketitle\thispagestyle{fancy}
-\abstract{These are notes for MATH5412 at HKUST, the second course in a two part graduate-level course taught by Bao Zhigang in Spring 2022. The main focus is as a continuation of MATH5411.}
-\setcounter{tocdepth}{2}
 \tableofcontents
 \newpage
-\subfile{../2-8/2-8}
-\subfile{../2-10/2-10}
+\subfile{../2-9/2-9}
 \appendix
 \newpage
-\printbibliography
 \addcontentsline{toc}{section}{Index}
 \printindex
 \end{document}
