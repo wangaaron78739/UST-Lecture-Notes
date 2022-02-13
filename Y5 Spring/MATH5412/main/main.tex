@@ -43,6 +43,7 @@ sorting=ynt
 \usepackage{enumitem}
 \usepackage{bbm}
 % \setlist{nolistsep}
+\setlist{itemsep=3pt}
 \usepackage{graphicx}
 \usepackage{gensymb}
 \usepackage{subcaption}
@@ -178,7 +179,7 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{fact}[theorem]{Fact}
 
-\newcommand{\vocab}[1]{\index{\textbf{\color{blue} #1}}}
+\newcommand{\vocab}[1]{\index{#1}\textbf{\color{blue} #1}}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -197,6 +198,8 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newcommand{\iprod}[2]{\left\langle{#1},{#2}\right\rangle }
 \newcommand{\E}{\text{\textbf{E}}}
 \newcommand{\Var}{\text{\textbf{Var}}}
+\newcommand{\Be}{\text{Be}}
+\newcommand{\Poi}{\text{Poisson}}
 % \newcommand{\Pr}{\text{Pr}}
 
 \newcommand{\PreserveBackslash}[1]{\let\temp=\#1\let\=\temp}

@@ -3,68 +3,79 @@
 \begin{document}
 
 \section{February 8th, 2022}
+
+This is the first lecture of this course. We will discuss a bit about the logistics of the class and an overview of the content.
+
 \subsection{Overview of the Course}
 
-Considering $S_n = \sum\limits_{i=1}^{n} X$, for regular CLT we assume that we have:
+Although the previous course, MATH5411, covered the first half of Durrett \cite{Durrett19}, this course will not be following the second half, which is largely about stochastic processes and Brownian motion, as there is another course MATH5450, Stochastic Processes, which will cover this exactly. Instead, this course will mostly look at limiting theorems, similar to the last part of MATH5411, but relaxing the i.i.d. constraints.\\
 
-\begin{itemize}
-	\item Second moment condition
-	\item In $\R$
-	\item Independence
-\end{itemize}
+In MATH5411, we considered $S_n = \sum\limits_{i=1}^{n} X_i$, but we had three assumptions:
+\begin{enumerate}
+	\item The second moment $\E[X^2]$ exists.
+	\item $X_i$ is sequence of random variables in $\R$.
+	\item $X_i$ are independent.
+\end{enumerate}
 
-In this course, we will extend CLT to remove these three conditions.
+Now, in this course, we will attempt to relax these assumptions, and these three extensions are along completely different directions. Here is a brief overview of these three extensions:
 
 \subsubsection{Stable Law}
-First, we will remove the second moment condition, leading to the \vocab{stable law, infinitely divisible distribution}.\\
 
-If the second moment exists, then there is a normalization that allows the limiting distribution go to a gaussian distribution. However, if we don't have the second moment, it depends on the tail of the distribution, giving us a class of distributions. We will be able to show that this
-No matter if it is a triangular array or a sequence of random variable.\\
+From the central limit theorem, we know that if the second moment exists, $S_n$  goes to a Gaussian distribution under an appropriate normalization. If the second moment does not exist, we have the \vocab{stable law}.\\
 
-This part will take 3-4 lectures.
+The stable law is not like Gaussian, which is universal in a sense, since as long as the second moment exists, $S_n$ goes to a Gaussian distribution under a normalization. Once you don't have a second moment, the limiting distribution depends on the tail behavior, with different tail behaviors resulting in different limiting distributions. As such, we have a \textit{class of distributions} when we don't have the second moment.\\
+
+In the last course, besides considering $S_n$, we also discussed the sum of triangular array for a given sequence of random variable. In this case, the limiting distribution might not be Gaussian, with a typical example being Poisson convergence.
+
+\begin{example}[Poisson Convergence for Rare Events]
+	Let $Y_{n,m} \sim \Be(p_n)$ where $p = p_n = \frac{c}{n}$ with $Y_{n,m}$ i.i.d. $1 \leq m \leq n$. Define $X_{n,m} = Y_{n,m} - p$.
+	Then the limiting distribution of $S_n = \sum\limits_{m=1}^{n}X_{n,m}$ approaches $\Poi(c)$.
+\end{example}
+
+If we have a sum of triangular arrays where we the second moment does not exist, the possible limiting distribution is called the \vocab{infinitely divisible distribution}. It will contain the stable law as a special case.
+
+To reiterate, in the case of triangular array, if we have the second moment, we'd get either a Gaussian or Poisson limiting distribution. For the case where we don't have the second moment, we would get a class of distribution called the infinitely divisible distribution.\\
+
+\begin{remark}
+	\noindent This part will take 3-4 lectures. References for this section can be found in Chapter 3 of Durrett \cite{Durrett19}.
+\end{remark}
 
 
 \subsubsection{Functional Limiting Theorem}
-In the previous case, we only concerned variables in $\R$. Now we will extend them to get the weak convergence of random functions.\\
+In the previous course, we were only concerned about the weak convergence of random variables in $\R$. What if we want to do the same for \textit{random vectors} in $\R^{k}$? Thinking even more broadly, we want to consider the weak convergence of \textit{random functions}, or \vocab{random processes}. This leads to the second extension which is the \vocab{functional limiting theorem}.\\
 
-This can be useful for looking at empirical distributions in statistics. For example if we have: \[
-	X \sim F, \text{ with $F$ unknown}
-\]
-If $X_1 , \ldots , X_n ~ F$ i.i.d., we can use the empirical distribution: \[
-	F_n(t) = \frac{1}{n} \sum\limits_{i=1}^{n} \mathbb{1}(X_i \leq t)
-\]
-We want to compare this distribution with the original distribution, which we can use the Kologoromov Statistics \[
-	\sqrt{n}\sup_t | F_n (t) - F(t)|
-\]
-Note that $\sqrt{n}(F_n(t)-F(t))$ is a random function with $f \in \R$.
+One typical example where the functional limiting theorem is used is when considering \textit{empirical process}.
 
-To do this, we need to prove the weak convergence of the whole stochastic process. With that, we would have the weak convergence of the random function. Later we will show that \(\sqrt{n}(F_n(t)-F(t))\) converges to the Brownian bridge.\\
+\begin{example}[Example of Needing the Weak Convergence of a Random Function]
+	Say we have \(X \sim F, \text{ with $F$ unknown}\) and we want to perform statistical inference, with a sample $X_1, \ldots,X_n \sim F$ i.i.d. We can construct the \vocab{empirical distribution} $F_n(t) = \frac{1}{n} \sum\limits_{i=1}^{n} \mathbbm{1}(X_i \leq t)$ to approximate $F$.\\
 
-Reference:
-\begin{itemize}
-	\item Convergence of Probability Measure \(\to\) Billingsley Chapter 2
-\end{itemize}
+	We then want to figure out how well this approximation is by taking it's difference $F_n(t) - F(t)$. By the law of large number, we know for any fixed $t$, the difference \(F_n(t) - F(t)\) goes to 0, since $\E[F_n(t)-F(t)] = 0$. We also know that the fluctuation is given by CLT if we multiply by $\sqrt{n}$, simply from the CLT for i.i.d. random variables.\\
 
-This part will also be quite short.
+	However, we don't only want to consider this closeness for a fixed $t$, we want to measure closeness as a \textit{whole function}. As such, we might introduce a distance between two functions, say the \vocab{Kolmogorov–Smirnov Statistics} $\coloneqq \sup_t | F_n (t) - F(t)|$. We know that this goes to zero by the \textit{Glivenko–Cantelli theorem}\footnote{\url{https://en.wikipedia.org/wiki/Glivenko\%E2\%80\%93Cantelli\_theorem}}, which was introduced in the previous course. The problem is if we want to use this statistic for hypothesis testing, then we need to know the precise distribution of this statistic under suitable normalization. It turns out the suitable normalization is $\sqrt{n}$. If we consider $X(t)=\sqrt{n}(F_n (t) - F(t))$, which is a random function, the statistic becomes $\sup_t|X(t)|$, which is still a random variable. However, to do this, we need to find the weak limit of the whole stochastic process. Eventially, $X(t)$ will go to the \textit{Brownian bridge}\footnote{\url{https://en.wikipedia.org/wiki/Brownian\_bridge}}.
+\end{example}
 
+\begin{remark}
+	This part will also be quite short.
+	References for this section can be found in Chapter 2 of Billingsley's \textit{Convergence of Probability Measure} \cite{Bill86}.
+\end{remark}
 
 \subsubsection{Martingale and it's Limiting Theorem}
 
-Roughly speaking, a martingale can be thought of the sum of a random variable. We do not need independence. Here we will introduce martingale differences, and this part will take up the majority of the course.\\
 
-Reference:
-\begin{itemize}
-	\item Durrett Chapter 5 \cite{Durrett19}
-	\item Hall and Heyde \(\to\) Martingale Limit Theory and its Application \cite{hall1980martingale}
-\end{itemize}
+Roughly speaking, a martingale can be thought of the sum of a random variable. This random variable, in martingale theory, are called the \vocab{martingale differences}, which are not necessarily independent. These martingale differences lie somewhere between uncorrelated and independent random variables, having more structure than uncorrelated variables, but are not as good as independent variables. As such, although they are not necessarily independent, they share many common features with independent random variables.\\
+
+\begin{remark}
+	This part will be a major part of this course. References can be found in Chapter 5 of \cite{Durrett19} and Hall and Heyde's \textit{Martingale Limit Theory and its Application} \cite{Hall80}.
+\end{remark}
+
 
 \subsubsection{Concentration (if time permits)}
 
+If time permits, we will also cover something called \vocab{martingale concentration}. Very roughly speaking, concentration can be thought as an analog to the law of large numbers. Recall for WLLN, we briefly described geometric concentration. The systematic discussion of concentration will mainly focus on the non-asymptotic part, but we will still be considering a function of a large number of random variables. These random variables may be independent or not, or even martingale differences. This section is not necessarily about the limiting part of probability theory, as it focuses on the non-asymptotic behavior.
 
-Reference:
-\begin{itemize}
-	\item R. Vershynin \(\to\) High-dimensional probability
-\end{itemize}
+\begin{remark}
+	References for part will be taken from Vershynin's \textit{High-Dimensional Probability} \cite{Ver19}.
+\end{remark}
 
 
 \subsection{Heavy Tail Limiting (Poisson) Convergence}
