@@ -53,6 +53,7 @@ sorting=ynt
 \graphicspath{ {../images/} }
 \usepackage[super]{nth}
 \usepackage{subfiles}
+\usepackage{centernot}
 \providecommand{\main}{..}
 
 \usepackage[colorlinks=true]{hyperref}
@@ -187,6 +188,9 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
 \renewcommand{\C}{\mathbb{C}}
+\renewcommand{\P}{\mathbb{P}}
+\DeclareRobustCommand{\chii}{{\mathpalette\irchi\relax}}
+\newcommand{\irchi}[2]{\raisebox{\depth}{$#1\chi$}} % inner command, used by \rchi
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand\Ccancel[2][black]{\renewcommand\CancelColor{\color{#1}}\cancel{#2}}
 \newcommand{\x}{\bm{x}}
@@ -206,7 +210,7 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newcommand{\dto}{\overset{d}{\to}}
 \newcommand{\Deq}{\overset{D}{=}}
 \newcommand{\ind}{\mathbbm{1}}
-% \newcommand{\Pr}{\text{Pr}}
+\renewcommand{\Pr}{\mathbb{P}}
 
 \newcommand{\PreserveBackslash}[1]{\let\temp=\#1\let\=\temp}
 \newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}

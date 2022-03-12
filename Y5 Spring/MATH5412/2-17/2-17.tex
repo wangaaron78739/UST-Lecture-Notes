@@ -1,0 +1,218 @@
+    \documentclass[../main/main.tex]{subfiles}
+
+\begin{document}
+
+\section{February 17th, 2022}
+\subsection{Proof of Stable Law Continued}
+Let $\Psi_n ^{\epsilon}(t)$ be the c.f. of $F_n^{\epsilon}$. We have:
+\[
+	\Psi_n^{\epsilon}(t) \to \Psi^{\epsilon}(t) = \int\limits_{\epsilon}^{\infty} e^{itx}\theta \epsilon^{\alpha} x^{-(\alpha + 1)} dx + \int\limits_{-\infty}^{-\epsilon} e^{itx}(1-\theta) \epsilon^{\alpha}|x|^{-(\alpha+1)}dx
+\]
+Now, we have:
+\begin{align*}
+	\E \exp \left( it \frac{\hat{S_n}(\epsilon)}{a_n} \right) & = \sum\limits_m \E \exp \left( it \frac{\hat{S_n}(\epsilon)}{a_n} \bigg\rvert |I_n(\epsilon)| = m\right) \cdot \Pr \left( |I_n(\epsilon) = m \right)                                \\
+	                                                          & \sim \sum\limits_{m=0}^{\infty}[\Psi^{\epsilon}(t)]^{m} \frac{(\epsilon^{-\alpha})^{m}e^{-\epsilon^{-\alpha}}}{m!}                                                                  \\
+	                                                          & = \exp \left( -\epsilon^{-\alpha}(1-\Psi^{\epsilon}(t)) \right)                                                                                                                     \\
+	                                                          & = \exp \left[ \int\limits_{\epsilon}^{\infty} (e^{itx}-1) \theta \alpha x^{-(\alpha+1)}dx + \int\limits_{-\infty}^{-\epsilon}(e^{itx}-1)(1-\theta)\alpha|x|^{-(\alpha+1)}dx \right]
+\end{align*}
+\begin{remark}
+	The approximation should be justified by DCT, since we need to justify the convergence of the total sum.
+\end{remark}
+Note that for the above case, $\epsilon$ is fixed. In the general case, we need to send $\epsilon \downarrow 0$. However, when $x \to 0$, $e^{itx} - 1 \sim itx$, and $x \cdot x^{-(\alpha+1)} = x^{-\alpha}$ is not integrable around 0 if $\alpha \geq 1$.
+
+\begin{remark}
+	When $\theta \neq \frac{1}{2}$, this singularity appears, which does not happen when we consider the special case.
+\end{remark}
+
+As such, we need to consider the centered sum $\exp \left( -it \frac{n \hat{\mu(\epsilon)}}{a_n} \right)$, with: \[
+	\hat{\mu(\epsilon)} = \E X_1 \ind (\epsilon a_n < |X_1| \leq a_n).
+\] As seen previously, from the assumption of the tail behavior and slowly varying function, we have:
+\begin{align*}
+	         & \Pr \left( x < \frac{X_1}{a_n} \leq y \right) = \frac{1}{n}\theta (x^{-\alpha}- y^{-\alpha})                                                                                  \\
+	\implies & n \hat{\mu(\epsilon)}a_n \to \int\limits_{\epsilon}^{1} x \theta \alpha x^{-(\alpha+1)}dx + \int\limits_{-1}^{-\epsilon} x(1-\theta)\alpha |x|^{-(\alpha+1)}dx                \\
+	\implies & \E \exp \left( it \frac{\hat{S_n(\epsilon)} - n \hat{\mu}(\epsilon)}{a_n} \right) \to \exp \left[ \int\limits_{1}^{\infty}(e^{itx}-1) \theta \alpha x^{-(\alpha+1)}dx \right. \\
+	         & \quad \quad + \int\limits_{\epsilon}^{1} (e^{-tx}-1-itx) \theta \alpha x^{-(\alpha+1)}dx                                                                                      \\
+	         & \quad \quad + \int\limits_{-1}^{-\epsilon}(e^{itx}-1 -itx) (1-\theta)\alpha |x|^{-(\alpha+1)}dx                                                                               \\
+	         & \quad \quad +\left. \int\limits_{-\infty}^{-1}(e^{itx}-1)(1-\theta)\alpha|x|^{-(\alpha+1)}dx\right]
+\end{align*}
+which is integrable.
+
+Simplifying, and sending $\epsilon \downarrow 0$, we get:
+\begin{align}\label{217:stab}
+	\exp \left[ itc + \int\limits_{0}^{\infty}(e^{itx}-1 - \frac{itx}{1+x^2}) \theta \alpha x^{-(\alpha+1)}dx + \int\limits_{-\infty}^{0} (e^{itx}-1 - \frac{itx}{1+x^2})(1-\theta) \alpha |x|^{-(\alpha+1)} dx \right].
+\end{align}
+\begin{definition}[\vocab{stable law}]
+	Distribution with characteristic function of the form \ref{217:stab}.
+\end{definition}
+
+\begin{remark}[Alternative representation] \[
+		\exp \left[ itc - b|t|^{\alpha}(1+i \kappa \text{sgn}(t) w_alpha(t)) \right]
+	\] with: \[
+		k = 2 \theta - 1 \in [-1,1], \quad w_alpha(t) = \begin{cases}
+			\tan( \frac{\pi \alpha}{2}), & \alpha \neq 1 \\
+			\frac{2}{\pi} \log |t|       & \alpha = 1
+		\end{cases} \]
+	for $0<\alpha \leq 2$. See (Brenman. 1968, page 204-206)
+\end{remark}
+
+\begin{example}
+	If $\alpha = 2$, the stable law becomes Gaussian.
+\end{example}
+
+\begin{example}
+	If $\alpha = 1$, $c=0$, $\kappa = 0$, we get the Cauchy distribution.
+\end{example}
+
+\begin{example}
+	If $\alpha = \frac{1}{2}$, $c=0$, $\kappa = 1$, $b=1$, we get density function: \[
+		(2 \pi y^{3})^{-1 / 2}\exp (- 1 / 2y), \quad y \geq 0.
+	\]
+\end{example}
+\begin{remark}
+	The density function are not known except for the above 3 cases.
+\end{remark}
+\begin{theorem}
+	$Y$ is stable law $\iff$ $Y$ is the weak limit of $\frac{\sum\limits_{i=1}^{n}X_i - b_n}{a_n}$ for a given sequence of i.i.d. $X_i$'s.
+\end{theorem}
+
+\begin{example}
+	Let $X_1, X_2, \ldots$ be i.i.d. with a density function that is symmetric about 0 and continuous and positive at 0. We claim: \[
+		\frac{1}{n}\sum\limits_{i=1}^{n} \frac{1}{X_i} \implies \text{a Cauchy distribution }(\alpha = 1, \kappa = 0).
+	\]
+\end{example}
+
+\begin{proof}
+	Consider when $x \to \infty$:
+	\begin{align*}
+		\Pr \left( \frac{1}{X_1} > x \right)  =  \Pr (0 \leq X_1 < \x^{-1}) = \int\limits_{0}^{\x^{-1}} f(y)dy = \frac{f(0)}{x}
+	\end{align*}
+	Similarly, for the left tail: \[
+		\Pr \left( \frac{1}{X_1} < -x \right)  = \frac{f(0)}{x}.
+	\] In addition, we have $\theta = \frac{1}{2}$ by assumption (of symmetry), giving us $b_n = 0$. Thus: \[
+		\Pr \left( \left| \frac{1}{X_1} \right| > a_n \right) = \frac{2f(0)}{a_n} = \frac{1}{n} \implies a_n = 2f(0) \cdot n
+	\]  Thus: \[
+		\frac{1}{n} \sum\limits_{i=1}^{n}X_i \implies \text{Cauchy}.
+	\]
+\end{proof}
+\begin{remark}
+	Whenever we prove with stable law, we check the tail behavior.
+\end{remark}
+
+Note that the centralization constant is not necessary if $\alpha < 1$.
+
+
+Consider $X_1, X_2, \ldots$ i.i.d. with exact distribution: \[
+	\Pr(X_1 > x) = \theta x^{-\alpha} \quad \Pr(X_1 < -x) = (1-\theta)x^{-\alpha}, \quad 0 < \alpha < 2, |x| \geq 1.
+\] In this case, we know that $a_n = n^{1 / \alpha}$. Meanwhile, we have:
+\begin{align*}
+	b_n & = n \E X_1 \ind (|X_n| < a_n)                                                                           \\
+	    & = n \int\limits_{1}^{n^{1 / \alpha}}(2 \theta -1) \alpha x^{-\alpha}dx \sim \begin{cases}
+		cn               & \alpha > 1 \\
+		c n \log n       & \alpha = 1 \\
+		c n^{1 / \alpha} & \alpha < 1
+	\end{cases}.
+\end{align*}
+
+Note that if $\alpha < 1$, we don't need to subtract by $b_n$ to have convergence, but we will have a different limit if we do/don't.
+
+\begin{remark}
+	If $\alpha > 1$, the constant $c n$.
+\end{remark}
+
+\subsection{Infinitely Divisible Distribution}
+
+As we mentioned previously, the stable law is the limit of $\frac{\sum\limits_{i=1}^{n}X_i - b_n}{a_n}$ for a given sequence of i.i.d. $X_i$'s.
+
+On the other hand, the \vocab{infinitely divisible distribution} is the limit of $\frac{\sum\limits_{i=1}^{n}X_{n,i} - b_n}{a_n}$ for triangular array with i.i.d. $X_{n,i}$'s for each $n$.
+
+\begin{example}
+	Gaussian $\in$ stable law, Poisson $\in$ infinitely divisible law
+\end{example}
+
+Here we won't derive the infinitely divisible distributions, but we will state some results. If interested, consult the textbook.
+
+\begin{example}[Poisoon as an infinitely divisible distribution]
+	Poisson is the limit of triangular array of Bernoulli r.v. $X_{n,1}, \ldots , X_{n,n}$ with: \[
+		\Pr(X_{n,i}=1) = 1- \Pr(X_{n,i} = 0) = \frac{\lambda}{n}
+	\] Note that the c.f. of $\Poi(\lambda)$ is $\exp(\lambda(e^{it}-1))$ which is not a stable law.
+\end{example}
+
+\begin{theorem}[\vocab{Levy-Khinchin Theorem}]
+	$Z$ has an infinitely divisible distribution \(\iff\) its c.f. is of the form: \[
+		\varphi(t) = \exp \left[ ict - \frac{\sigma^2 t^2}{2} + \int \left(e^{itx}-1-\frac{itx}{1+x^2}\right)\mu( dx)\right]
+	\] where $\mu$ is a measure (not necessarily probability measure) with: \[
+		\mu(\{0\}) = 0, \quad \quad \int \frac{x^2}{1+x^2}\mu(dx) < \infty.
+	\]
+\end{theorem}
+
+\begin{example}[Examples of infinitely divisible distributions]
+	If we consider:
+	\begin{enumerate}
+		\item  Gaussian, $\mu = 0$ measure.
+		\item Poisson, we have: \[
+			      c = \int \frac{x}{1+x^2}\mu(dx), \quad \sigma^2=0, \quad \mu(\{1\}) = \lambda \text{ (single point mass)}
+		      \]
+		\item all stable law: $\sigma^2=0$.
+		\item Compound Poisson:\\ Let $\xi_1, \xi_2, \ldots$ be i.i.d. and $N(\lambda)$ be an independent $\Poi(\lambda)$ with c.f.: \[
+			      \varphi(t) = \E \exp (it \xi_1) = \int \exp(itx) \mu_{\xi}(dx).
+		      \] Let $Z = \xi_1 + \ldots + \xi_{N(\lambda)}$ is infinitely divisible: \[
+			      \E \exp(itZ) = \exp(-\lambda(1-\varphi(t))) = \exp \left[ \lambda \int (e^{itx}-1) \right]
+		      \]
+	\end{enumerate}
+
+\end{example}
+
+This is the end of this chapter about stable law.
+
+\subsection{Functional Limit Theorems}
+
+Our aim for this chapter is to study the weak convergence in the space $C[0,1]$, which is the space of all continuous functions supported on $[0,1]$.
+
+\begin{remark}
+	The choice of considering on $[0,1]$ is just for convenience. We can do on other set as long as they are compact.
+\end{remark}
+
+The weak convergence of a function means that as $n \to \infty$,  $X_n(t) \to X(t), t \in[0,1]$ in distribution. First, we will consider the weak convergence on a much simpler space, namely $\R^{k}$. \\
+
+We denote a \vocab{random vector} as: \[
+	\vec{X} = (X^{1}, \ldots , X^{k}): (\Omega, \mathscr{F}) \to (\R^{K}, \mathscr{B})
+\] so that $X^{-1}(B)  \in \mathscr{F}, \forall B \in \mathscr{B}(\R^{k})$.\\
+
+Consider a random vector sequence $X_n = (X_n^{1}, \ldots , X_n^{k})$, $n=1, \ldots$, with c.d.f. $F_n:\R^{k}\to [0,1]$: \[
+	F_n(\vec{x}) = \Pr(X_n^{1}\leq x_1, \ldots , X_n^{k}\leq x_n).
+\]
+
+\begin{definition}[Convergence of a random vector sequence]
+	We say that $F_n$ converges to $F$ weakly if $F_n(x) \to F(x)$ at all continuity point of $F$, denoted by $F_n \implies F$ Further we say $X_n$ converges to $X$ weakly (in distribution) if $F_n \implies F$, denoted by $X_n \implies X$.
+\end{definition}
+
+\begin{definition}[Alternative definition of $X_n \implies X$]
+	We say $X_n \implies X$ if for any bounded continuous function: $f: \R^{k} \to \R$, $\E f(X_n) \to \E f(X)$.
+\end{definition}
+
+\begin{definition}[tightness]
+	We say a sequence of probability measure $\mu_n$ on $(\R^{k}, \mathscr{B}(\R^{k}))$ is \vocab{tight} if for any $\epsilon > 0, \exists M = M_{\epsilon} > 0$, s.t.: \[
+		\mu_n([-M,M]^{k}) \geq 1- \epsilon.
+	\]
+\end{definition}
+\begin{definition}[\vocab{characteristic function of random vector}]
+	The c.f. of $X = (X^{1}, \ldots , X^{k})$ is defined as: \[
+		\varphi_X(t) = \E \exp(it \cdot X) = \E \exp \left( i \sum\limits_{a=1}^{k} t_a X_a \right), \quad t = (t_1, \ldots , t_k) \in \R^{k}
+	\]
+\end{definition}
+
+\begin{theorem}[inversion formula]
+	If $A = [a_1,b_1] \times \ldots \times [a_k, b_k]$ with $\mu(\partial A) = 0$: \[
+		\mu(A) = \lim\limits_{T\to\infty} (2 \pi)^{k} \int\limits_{[-T,T]^{k}} \prod\limits_{j=1}^{k} \left( \frac{e^{-is_j a_j} - e^{is_jb_j}}{is_j} \right)\varphi(s) ds
+	\]
+\end{theorem}
+
+\begin{theorem}[continuity theorem]
+	Let $X_n, 1 \leq n \leq \infty$ be a random vectors with c.f. $\varphi_n$, then: \[
+		X_n \implies X_{\infty} \iff \varphi_n(t) \to \varphi_{\infty}(t)
+	\] for any given $t \in \R$.
+\end{theorem}
+
+
+\end{document}
+
