@@ -1,0 +1,118 @@
+\documentclass[../main/main.tex]{subfiles}
+\begin{document}
+\section{February 24th, 2022}
+\subsection{Relative Compactness and Tightness of $\{\mu_n\}$}
+\begin{definition}[\vocab{relative compactness}]
+	We say $\{\mu_n\}$ is relatively compact if for any subsequence of $\mu_n$, say $\mu_{n_k}$, one can find a further subsequence $\mu_{n_{k_{i}}}$ which converges weakly.
+\end{definition}
+
+\begin{proposition}
+	If $\mu_n \implies \mu$ in the finite-dimensional sense and if $\{\mu_n\}$ is relatively compact, then $\mu_n \implies \mu$ ($\mu_n \to \mu$ weakly).
+\end{proposition}
+
+\begin{proof} Finite-dimensional convergence means that $ \mu_n \circ \Pi_{t_1, \ldots , t_k}^{-1} \implies \mu \circ \Pi_{t_1, \ldots , t_k}^{-1}$ for any $k \in \N$ and any given $t_1, \ldots , t_k \in [0,1]$. Relative compactness means that for any $\{\mu_{n_k}\}_k$, we have $\mu_{n_{k_i}}\implies \nu_{k_i}$ which is a probability measure. But we already know that: \[
+		\mu_{n_{k_i}} \circ \Pi_{t_1, \ldots , t_n}^{-1} \implies \mu \circ \Pi_{t_1, \ldots , t_k} ^{-1}
+	\]
+	On the other hand, the finite-dimensional distribution determines the measure, meaning that: $ \nu_{k_i} = \mu.$ This further means that for any subsequence $\{\mu_{n_{k}}\}_{k}$ there exists a further $\{\mu_{n_{k}}\}_{i}$, s.t. $\mu_{n_{k_{i}}} \implies \mu$, $i \to \infty$. meaning that $\mu_{n} \implies \mu$.
+\end{proof}
+
+\begin{definition}[\vocab{tightness}]
+	We say $\{\mu_n\}$ is tight if for any $\epsilon > 0$, there exists a compact set $K = K_{\epsilon} \subset C$, s.t.: \[
+		\mu_{n} (K) \geq 1-\epsilon , \quad n \geq n_0
+	\]
+\end{definition}
+\begin{remark}
+	Roughly speaking $\{\mu_{m}\}_{n}$ are almost supported on a compact set of $C$.
+\end{remark}
+\begin{theorem}[\vocab{Prokhorov's Theorem}] tightness $\iff $ relative compactness.
+\end{theorem}
+The heuristic is that the space of a measure on a compact space is also compact. The proof is very lengthy and won't be introduced in this course.\\
+
+\begin{remark}
+	If we are considering $\R$ instead of $C$, the relation between relative compactness and tightness is easy to understand. Tightness means that it is supported by a bounded and closed set. For example if we consider $\mu_n = \frac{1}{3}\delta_0 + \frac{2}{3}\delta_n$. This is not tight, since the mass will escape to $\infty$, it is also not relatively compact, since it's limit does not go to a probability measure.
+\end{remark}
+
+Now, we will see how to show tightness. We will first use the
+\begin{theorem}[\vocab{Arzela-Ascoli Theorem}] We consider a set $A \subset C[0,1]$ is relatively compact if and only if:
+	\begin{enumerate}
+		\item $\sup\limits_{x \in A} |x(0)| < \infty$ (uniform boundedness)
+		\item $\lim\limits_{\delta\to_0}\sup\limits_{x \in A} \omega_x(\delta) = 0$, where $\omega_x(\delta) = \sup\limits_{|s - t| \leq \delta} |x(s) - x(t) | $, $0 < \delta \leq 1$ which is known as the \vocab{modulus of continuity}. (uniform equicontinuous)
+	\end{enumerate}
+\end{theorem}
+\begin{definition}[\vocab{equicontinuous} at a point $t_0$] For all $x \in A, \forall \epsilon > 0 , \exists \delta$ s.t.: \[
+		\sup\limits_{x \in A}| x(t) - x(t_0) | \leq \epsilon \quad \forall |t - t_0| \leq \delta
+	\]  is called equicontinuous.
+\end{definition}
+\begin{definition}[\vocab{uniformly equicontinuous}] $\forall \epsilon > 0 , \exists \delta$ s.t.: \[
+		\sup\limits_{x \in A}\sup\limits_{|t - s| \leq \delta}| x(t) - x(t_0) | \leq \epsilon.
+	\]
+\end{definition}
+\begin{theorem}
+	A sequence of probability measures $\{\mu_n\}$ on $C$ is tight if and only if:
+	\begin{enumerate}
+		\item For any $\eta > 0$, there exists an $a$ and $n_0$ s.t.: \[
+			      \mu_n\{(x : |x(0)| \leq a)\} \geq 1-\eta ,\quad n \geq n_0.
+		      \]
+		\item For each $\epsilon > 0$ and $\eta > 0$, there exists a $\delta$ and $n_0$ s.t. : \[
+			      \mu_n(\{x : \omega_x(\delta) \leq \epsilon\}) \geq 1- \eta, \quad n \geq n_0.
+		      \]
+	\end{enumerate}
+\end{theorem}
+We can take the intersection and closure of 1 and 2 to get a compact set by Arzela-Ascoli theorem. Proof is omitted.\\
+
+We can write 1 and 2 as: \[
+	\Pr(|X_n(0) | > a) \leq \eta \text{ and } \Pr(\omega_{X_n}(\delta)> \epsilon ) \leq \eta.
+\] and this is how we can typically prove tightness, for example using Markov inequality. However, we will stop the discussion of tightness here.
+
+\subsection{Examples of Convergence to Gaussian Process}
+We will consider two examples, the first of the weak convergence of random walk to Brownian motion, and then briefly introduce a second example of the convergence of empirical processes.
+
+\begin{definition}[\vocab{Brownian Motion on $[0,1]$}] A 1D Brownian motion is a real valued random function $ X(t), t \in[0,1] $ s.t. $X(0) = 0$ and: \begin{enumerate}
+		\item If $0 = t_0 < t_1 < \ldots < t_k$, then $X(t_1) - X(t_0) ,\ldots, X(t_k) - X(t_{k-1}) $ are independent.
+		\item If $s, t \geq 0$, then: $ X(s+t) - X(s) \sim N(0, t) $
+		\item With probability 1, $X(t)$ is continuous.
+	\end{enumerate}
+\end{definition}
+
+Note that 1 and 2 give you the finite-dimensional distribution. Fixing on a rectangle, we have:
+
+\begin{align*}
+	\Pr((X(t_1) ,\ldots , X(t_k) ) \in A_1 \times ... A_k) & =
+	\mu_x \circ \Pi_{t_1, \ldots t_k}^{-1} (A_1 \times \ldots \times A_k) \\ &= \int\limits_{A_1} dx_1 \ldots \int\limits_{A_k} d x_k \prod\limits_{m=1}^{k} \beta_{t_{m}- t_{m-1}} (x_{m-1}, x_m),
+\end{align*} where: \[
+	\beta_t(a, b) = \frac{1}{\sqrt{2 \pi t}} \exp \left( - \frac{(b-a)^2}{2t} \right)
+\]
+\begin{example}
+	If $k = 2$, then: \[
+		f_{X(t_1), X(t_2)}(x_1, x_2) \propto \exp \left( - \frac{1}{2} \begin{bmatrix}
+			x_1 & x_2
+		\end{bmatrix} \Gamma^{-1} \begin{bmatrix}
+			x_1 \\ x_2
+		\end{bmatrix} \right)
+	\] with $\Gamma = \begin{bmatrix}
+			t_1 & t_1 \\ t_1 & t_2
+		\end{bmatrix}$ $ t_1 < t_2$.
+\end{example}
+\begin{definition}[\vocab{Gaussian process}] A random function whose finite-dimensional distributions are all multivariate Gaussian.
+\end{definition}
+Note that Brownian motion is a Gaussian process with covariance. Also, once we identify the covariance, the process is determined.
+
+\begin{theorem}[\vocab{Donsker's  invariance principle} (functional CLT)]
+	Let $\xi, \ldots \xi_n$ be i.i.d. with $\E \xi_i = 0$, $\Var \xi_i = 1$. Let $S_n = \sum\limits_{i=1}^{n} \xi_i ,$ $S_0 = 0$. Define a random function in $C[0,1]$: \[
+		X_n(t) = \frac{1}{\sqrt{n}}S_{\lfloor n t \rfloor} + (nt - \lfloor nt\rfloor) \frac{1}{\sqrt{n}}\xi_{n+1}
+	\] note that this is rescaling the trajectory. Under the above assumption: \[
+		X_n(t) \implies X(t) \leftarrow \text{Brownian motion}.
+	\]
+\end{theorem}
+\begin{proof}
+	We need to prove the finite-dimensional convergence and tightness. Note that tightness will be omitted, since it is case by case basis. For the finite-dim convergence, let us denote $\varphi_{n t} = (nt - \lfloor nt\rfloor) \xi_{\lfloor nt\rfloor + 1} / \frac{1}{\sqrt{n}} \to 0$. We have:
+	\begin{align*}
+		(X_n(s), X_n(t) - X_n(s))   =        & \frac{1}{\sqrt{n}}(S_{\lfloor ns\rfloor, S_{\lfloor nt\rfloor}-S_{\lfloor ns\rfloor})}) + (\varphi_{ns}, \varphi_{nt} - \varphi_{ns}) \\
+		\implies                             & (\underbrace{N_1}_{N(0,s)}, \underbrace{N_2}_{N(0,t-s)})                                                                              \\
+		\implies  (X_n(s), X_n(t))  \implies & (N_1, N_1 + N_2)
+	\end{align*}
+	The extension to $k$ components is straightforward.
+\end{proof}
+
+\end{document}
+
