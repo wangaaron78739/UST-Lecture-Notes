@@ -1,0 +1,97 @@
+    \documentclass[../main/main.tex]{subfiles}
+
+\begin{document}
+
+\section{March 1st, 2022}
+\subsection{Applications of Functional CLT}
+To show an application, we ask what is the distribution of $\max\limits_{0<= i \leq n} S_i = M_n$. To be more precise, we are asking this for a general $\xi_i$'s. Notice that  \[
+	\frac{M_n}{\sqrt{n}} = \sup\limits_{t \in [0,1]} X_n(t) \implies \sup\limits_{t \in [0,1]} X(t)
+\] by the continuous mapping theorem. Since this is a general result, we only need to find the limiting distribution of a special case, in this case the random walk. Thus, we want to know what's the maximum point the random walk has reached. Let $\xi_i$'s i.i.d $\pm 1 \text{Ber}(\frac{1}{2})$.
+
+\begin{claim}
+	\[
+		\Pr(M_n \geq a) = 2 \Pr(S_n > a) + \Pr(S_n = a), \quad \forall a \geq 0
+	\]
+\end{claim}
+
+\begin{proof}
+	Note we don't need to consider for $a < 0$, which is trivial, since $S_0 = 0$. If $a = 0$, we have: \[
+		\Pr(M_n > 0 ) = 1 \quad \text{ since }S_0 = 0.
+	\] By law of total probability, we have: \[
+		2 \Pr(S_n > 0) + \Pr(S_n = 0) = \Pr(S_n > 0) + \Pr(S_n < 0) + \Pr(S_n = 0) = 1.
+	\]
+	If $a > 0$, we have:
+	\begin{align*}
+		\Pr(M_n \geq a) = \underbrace{\Pr(M_n  \geq a, S_n > a)}_{\Pr(S_n > a)} + \Pr(M_n \geq a , S_n < a) + \underbrace{\Pr(M_n \geq a, S_n = a)}_{ \Pr(S_n = a)}
+	\end{align*}
+	What remains is to show that $\Pr(M_n \geq a, S_n < a) = \Pr(M_n \geq a, S_n > a)$. This is true, since there is a 1-to-1 correspondence between the paths of both sides by the reflection principle. This is simply by reflecting after the first time the trajectory reaches level $a$.
+\end{proof}
+Now, for any $\alpha \geq 0$, we set $a_n = \lceil \alpha n^{1 / 2}\rceil$. We have:
+\begin{align*}
+	\Pr \left( \frac{M_n}{\sqrt{n}} \geq \alpha \right) = \Pr(M_n \geq a_n) & = 2\Pr(S_n > a_n) + \Pr(S_n = a_n)                                           \\
+	                                                                        & =  2\Pr(S_n / \sqrt{n} > a_n/ \sqrt{n}) + \Pr(S_n/ \sqrt{n} = a_n/ \sqrt{n}) \\
+	                                                                        & = 2 \Pr(N(0,1) > \alpha).
+\end{align*}
+This means that the distribution function goes to: \[
+	\Pr \left( \frac{M_n}{\sqrt{n}}\leq \alpha \right) \to 1-2 \Pr(N(0,1) > \alpha) = \frac{2}{\sqrt{2 \pi}} \int\limits_{0}^{\alpha} e^{- \frac{u^2}{2}}du , \quad \alpha \geq 0.
+\]
+\begin{remark}
+	In probability theory, the general framework is to find the limiting distribution of a specific case and also prove the universal result.
+\end{remark}
+
+Now we will consider the limiting distribution of the empirical process. This time, it converges to a Brownian bridge.
+
+\begin{definition}[\vocab{Brownian Bridge}] Let $X(t) , t \in [0,1]$ be  Brownian Motion. We say: \[
+		\mathring{X}(t) = X(t) - t X(1), \quad t \in[0,1],
+	\] is a Brownian Bridge.
+\end{definition}
+\begin{remark}
+	We call it a Brownian Bridge since $\mathring{X}(0) = \mathring{X}(1) = 0$.
+\end{remark}
+\begin{definition}[alternate defintion of Brownian Bridge] Brownian Bridge $\mathring{X}(t)$ is a Gaussian process with: \[
+		\E(\mathring{X}(t)) = 0, \quad \E(\mathring{X}(s) \mathring{X}(t)) = s \wedge t - \text{ s.t. } (s(1-t) \text{ if } s \leq t)
+	\]
+\end{definition}
+
+\begin{definition}[\vocab{empirical distribution}] Given a r.v. $\xi$ with c.d.f. $F$ (often unknown in reality), we want to estimate $F$. Let $\xi_i$ be i.i.d. samples of $\xi$. The empirical distribution is: \[
+		F_n(t) = \frac{1}{n} \sum\limits_{i=1}^{n} \ind (\xi_i \in [0,t])
+	\]
+\end{definition}
+
+The empirical distribution is often used to estimate the underlying distribution, since by the SLLN, for any fixed $t \in [0,1]$: \[
+	F_n(t) \overset{\text{a.s.}}{\to} \E \ind(\xi_i \in [0,1]) = F(t)
+\] meaning it approximates it pointwise. Using the CLT, for any fixed $t \in [0,1]$: \[
+	\sqrt{n} [F_n(t) - F(t)] \implies N(0, F(t)(1-F(t))).
+\] What we really want to know is if it can approximate it as a whole, not just pointwise convergence. This makes use of the following theorem:
+\begin{theorem}[\vocab{Glivenko-Cantelli Theorem}] \[
+		\|F_n - F\|_{\infty} = \sup\limits_{0 \leq t \leq 1} |F_n(t) - F(t) | \overset{\text{a.s.}}{\to} 0
+	\]
+\end{theorem}
+Again, this distance is called the Kolmogorov-Smirnov statistic. We might now ask what is the limiting distribution of this distance, i.e. the limiting distribution of: \[
+	\sup_{0 \leq t \leq 1} | \sqrt{n} (F_n(t)- F(t))|.
+\]
+Let us define this as a random function $X_n(t) = \sqrt{n} (F_n(t)- F(t)), t \in [0,1]$.
+\begin{remark}
+	Note that $X_n(t)$ is not in $C[0,1]$. Instead, $X_n(t) \in D[0,1]$, which is the space of functions which are right continuous with left limits.
+	We will ignore this issue. For more rigor, check the textbook.
+\end{remark}
+This is a Gaussian process, and when we choose $t=0$, then $X_n(1) = 0$. At point $t=1$, we have $X_n(1) = 0$. Thus, we might suspect that this is a Brownian Bridge.
+
+\begin{theorem}
+	The empirical process $\sqrt{n} (F_n(t) - F(t))$ converges weakly to a Gaussian process $Y(t)$ with mean 0 and covariance: \begin{equation*}
+		\E(Y(S) Y(t)) = F(s \wedge t) - F(s) F(t)
+	\end{equation*}
+	Hence, $Y(t) \overset{d}{=} \mathring{X} (F(t))$. In particular, if $F(t) = t$, i.e. $\xi_i$ are uniformly distributed, then $Y(t) = \mathring{X}(t)$. Further, by continuous mapping, we have: \[
+		\sqrt{n}\sup_{0 \leq t \leq 1} | \sqrt{n} (F_n(t)- F(t))| \implies \sup_{0<= t \leq 1}\mathring{X}(F(t)) = \sup_{0 \leq t < 1} \mathring{X}(t)
+	\] if $F$ is continuous.
+\end{theorem}
+This means that whenever $F$ is continuous, the K-S statistic is non-parametric, as it does not depend on $F$.
+\begin{remark}
+	There are other statistics that can be used, such as the Cramer Von-Mikes statistics defined as: \[
+		\int |\sqrt{n} (F_n(t) - F(t))|^2 d F(t).
+	\]
+\end{remark}
+This is the end of this chapter on functional limiting theorems.
+
+\end{document}
+
