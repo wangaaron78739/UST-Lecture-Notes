@@ -1,0 +1,142 @@
+\documentclass[../main/main.tex]{subfiles}
+
+\begin{document}
+
+\section{March 8th, 2022}
+\subsection{Properties of Conditional Expectation Cont.}
+\begin{definition}[tower property]
+	For sub $\sigma$-field $\mathcal{H}_1 \subset \mathcal{H}_2 \subset \mathscr{F}$, we have: \[
+		\E[\E[X| \mathcal{H}_2]|\mathcal{H}_1] = \E [\E[X|\mathcal{H}_1]|\mathcal{H}_2] = \E[X | \mathcal{H}_1]
+	\]
+\end{definition}
+\begin{proof}
+	Note that $\E [\E[X|\mathcal{H}_1]|\mathcal{H}_2] = \E[X | \mathcal{H}_1]$ is trivial, since $\E[X |\mathcal{H}_1]$ is $\mathcal{H}_1$-measurable so is $\mathcal{H}_2$.\\
+
+	Second, denote $Y = \E[X | \mathcal{H_2}]$. We have that:\[
+		\E[\E[X| \mathcal{H}_2]|\mathcal{H}_1] = \E[X | \mathcal{H}_1] \iff \E[Y | \mathcal{H}_1] = E[X | \H_1].
+	\]
+	By the definition of $\E[Y | \H_1]$, it shall be $\H_1$-measurable and $\E[\E[Y | \H_1] \ind_A] = \E Y \ind_A$, $A \in \H_1$. Thus, we need to show that:
+	\begin{enumerate}
+		\item $\E[X | \H_1]$ is $\H_1$-measurable (trivial)
+		\item $\E[\E[X|\H_1]\ind_A] = \E Y \ind_A$ for all $A \in \H_1$. We claim that both sides are equal to $\E X \ind_A$. The LHS is true for any $A \in \H_1$ by definition, and the RHS is true for any $A \in \H_2$ by definition of $\H[X | \H_2]$.
+	\end{enumerate}
+\end{proof}
+\begin{example} The \vocab{law of total expectation} is a special case, as we have: \[
+		\E \left[ \E [Z | \mathcal{H}] \right] = \E \left[ \E [ Z | \mathcal{H}]  | \{\emptyset, \Omega \}\right] = \E[Z | \{\emptyset, \Omega\}] = \E Z. \]
+	Note that $\E[Z | \{\emptyset , \Omega\}] = \E Z$.
+\end{example}
+\begin{corollary} Here are some corollaries of the tower property:
+	\begin{itemize}
+		\item Law of total expectation
+		\item If $Y$ is $\H$-measurable, then $\E[\E[X | \H] | Y] = \E[X | Y]$.
+		\item $\E[\E[X | Y] | f(Y)] = \E[X | f(Y)]$
+		\item $\E[\E[X | Y,Z] |Y] = \E[X |Y]$
+	\end{itemize}
+\end{corollary}
+
+\subsubsection{Additional Properties of Conditional Expectation}
+\begin{description}
+	\item[Linearity:] $\E[a X_1 + b X_2 | \H] = a \E[X_1 | \H] + B\E[X_2|\H]$
+	\item[Monotonicity:] $\E[X_1|\H] \leq \E[X_2 | \H]$ if $X_1 \leq X_2$
+	\item[Jensen:] If $\varphi: \R \to \Omega$ is convex, then $\varphi(\E[X|\H])\leq \E[\varphi(X) | \H]$
+\end{description}
+
+\subsection{Conditional Variance}
+\begin{definition}[\vocab{conditional variance}] The conditional variance is defined by: \[
+		\Var[X|\H] = \E[(X - \E[X | \H])^2 | \H] = \E[X^2 | \H] - (\E[X|\H])^2
+	\]
+\end{definition}
+\begin{theorem}[law of total variance] \[
+		\Var(X) = \underbrace{\E(\Var[X|\H])}_{\E(X-\E[X|\H])^2} + \underbrace{\Var(\E[X|\H])}_{\E(\E[X|\H]-\E X)^2}
+	\]
+\end{theorem}
+\subsection{Introduction to Martingales}
+Consider a discrete stochastic process $\{X(t), t \in T\}$, with $T$ being discrete.
+\begin{definition}[\vocab{filtration}] Let $(\Omega, \mathscr{F} ,\P)$ be a probability space. A filtration $\{\mathscr{F}_n\}_{n \geq 1}$ is a sequence of $\sigma$-fields, s.t. $\mathscr{F}_i \subseteq \mathscr{F}_{i+1}\subseteq \mathscr{F}$ for all $i$.
+\end{definition}
+Let $X_1, X_2, \ldots X_n$ be a random process on $(\Omega, \mathscr{F}, \P)$. Let $\mathscr{F} = \sigma(X_1, \ldots, X_i)$
+\begin{definition}[\vocab{adapted sequence}] A random process $\{X_n\}$ is adapted to $\{\mathscr{F}_n\}$ if $X_n$ is $\mathscr{F}_n$-measurable for all $n$.
+\end{definition}
+\begin{example}
+	$\mathscr{F}_n$: a collection of info of stock market up to day $n$. $X_n$: stock price of day $n$.
+\end{example}
+\begin{definition}[\vocab{martingale}] If $X_n$ is a sequence of r.v. and $\{\mathscr{F}_n\}$ is a filtration, with:
+	\begin{itemize}
+		\item $\E|X_n| < \infty$
+		\item $\{X_n\}$ is adapted to $\{\mathscr{F}_n\}$
+		\item $\E[X_{n+1}| \mathscr{F}_n] = X_n$ for all $n$
+	\end{itemize}
+	then we call $\{X_n\}$ to be a martingale w.r.t $\{\mathscr{F}_n\}$.
+\end{definition}
+\begin{definition}[\vocab{submartingale} and \vocab{supermartingale}] If the "=" is replaced with "$\geq$", then it is called a submartingale. If it's replaced with a "$\leq$" it is called a supermartingale.
+\end{definition}
+\begin{remark}
+	Submartingale means that the expectation is greater than previous, meaning that you're playing a favorable game. However, most casinos are supermartingales.
+\end{remark}
+
+\begin{example}Let us consider successive tosses of a fair coin: \[
+		\xi_n = \begin{cases}
+			1  & \text{ if $n$-th coin is H} \\
+			-1 & \text{ if $n$-th coin is T}
+		\end{cases}, \quad \E \xi_n = 0.
+	\] Let $X_n = \sum\limits_{i=1}^{n} \xi_i$. Then $\{X_n\}$ is a martingale w.r.t. $\{\mathscr{F}_n\}$ with $\mathscr{F}_n = \sigma(X_1, \ldots , X_n)$.
+\end{example}
+
+\begin{example}(\vocab{Polya's urn model}) Consider a urn with $r$ red and $g$ green balls. At each time we draw a ball and replace it with $c+1$ balls of the same color drawn. Let $X_n$ be the fraction of green balls after the $n$-th draw. We claim that $X_n$ is a martingale w.r.t. $\mathscr{F}_n = \sigma(X_1, ... , X_n)$.
+\end{example}
+\begin{proof}
+	We have: \[
+		\E[X_{n+1} | \mathscr{F}_n] = \E[X_{n+1} | X_n].
+	\] Suppose at step $n$, there are $i$ red and $j$ green. Then: \[
+		X_{n+1} = \begin{cases}
+			\frac{j+c}{i+j+c}, & \text{with probability } \frac{j}{j+i}  \\
+			\frac{j}{i+j+c},   & \text{with probability } \frac{i}{j+i},
+		\end{cases}
+	\] Thus: \[
+		\E \left[ X_{n+1} | X_n = \frac{j}{i+j} \right] = \frac{j+c}{i+j+c} \frac{j}{i+j} + \frac{j}{i+j+c} \frac{i}{i+j} = \frac{j}{i+j}.
+	\]
+\end{proof}
+
+\begin{example}(\vocab{Galton-Watson process})
+	Let $\xi_i^{n},\ i,n \geq 1$ be i.i.d. nonnegative integer-valued. Let $z_n$ $n>0$ be defined as: \[
+		Z_0 = 1 \quad Z_{n+1} = \begin{cases}
+			\xi_i^{n+1} + \ldots + \xi_{Z_n}^{n+1} & \text{ if } Z_n \neq 0 \\
+			0                                      & \text{ if }Z_n = 0
+		\end{cases}
+	\]
+	Here $\xi_i^{n+1}$ is the number of offspring of $i$-th individual in $n$-th generation. Let $\mathscr{F}_n = \sigma \{\xi_i^{m}, i>= 1, 1 \leq m \leq n\}$ and $\mu : \E \xi^{m}_i \in(0,\infty)$. Then: \[
+		\frac{Z_n}{\mu^{n}}\text{ is a martingale w.r.t. }\mathscr{F}_n.
+	\]
+\end{example}
+\begin{proof}
+	We claim that $\E Z_n = \mu^{n}$, since:
+	\begin{align*}
+		\E Z_{n+1} & = \sum\limits_{k=0}^{\infty}\E \left( \sum\limits_{i=1}^{k}\xi_i^{n+1}| Z_n = k \right) \P(Z_n = k) \\
+		           & = \sum\limits_{k=0}^{\infty} \left( \E \sum\limits_{i=1}^{k}\xi_i^{n+1} \right) \cdot \P (Z_n = k)  \\
+		           & = \sum\limits_{k=0}^{\infty} k \P(Z_n = k) \cdot \mu = \mu \E Z_n.
+	\end{align*}
+	To show that it's a martingale, we have:
+	\begin{align*}
+		\E \left( Z_{n+1}| \mathscr{F}_n \right) & =\sum\limits_{k=1}^{\infty}\E \left( Z_{n+1}\ind(Z_n = k) | \mathscr{F}_n\right)                              \\
+		                                         & = \sum\limits_{k=1}^{\infty} \E \left( \sum\limits_{i=0}^{k} \xi_i^{n+1}\ind (Z_n = k)| \mathscr{F}_n \right) \\
+		                                         & = \sum\limits_{k=1}^{\infty} k \ind(Z_n = k) \mu = \mu Z_n                                                    \\
+	\end{align*}
+\end{proof}
+
+\begin{example}(\vocab{de Moivre's martingale})
+	Consider an unfair coin with probability $p$ of H: \[
+		\xi_n = \begin{cases}
+			1 & n-\text{th flipping is H} \\
+			0 & \text{otherwise}
+		\end{cases} \]
+	Let $X_n = \sum\limits_{i=1}^{n}\xi_i$ and $\mathscr{F}_n = \sigma(X_1, \ldots , X_n)$. Let $Y_n = \left( \frac{1-p}{p} \right)^{X_n}$, then $Y_n$ is a martingale w.r.t. $\mathscr{F}_n$.
+\end{example}
+\begin{proof}
+	\[
+		\E [ Y_{n+1} | \mathscr{F}_n] = p \cdot \left( \frac{1-p}{p} \right)^{X_{n}+1} + (1-p) \left( \frac{p}{p} \right)^{X_{n}-1} = \left( \frac{1-p}{p} \right)^{X_n} = Y_n
+	\]
+\end{proof}
+
+
+\end{document}
+
