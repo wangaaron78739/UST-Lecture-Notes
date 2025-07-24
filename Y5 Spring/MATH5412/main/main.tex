@@ -1,3 +1,4 @@
+%! TeX program = lualatex
 \documentclass[12pt]{article}
 \usepackage{color}
 \usepackage[usenames,svgnames,dvipsnames]{xcolor}
@@ -187,7 +188,7 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
-\renewcommand{\C}{\mathbb{C}}
+\newcommand{\C}{\mathbb{C}}
 \renewcommand{\P}{\mathbb{P}}
 \DeclareRobustCommand{\chii}{{\mathpalette\irchi\relax}}
 \newcommand{\irchi}[2]{\raisebox{\depth}{$#1\chi$}} % inner command, used by \rchi
@@ -250,6 +251,9 @@ style=thmbluebox,name=Theorem,numberwithin=section]{theorem}
 \subfile{../2-17/2-17}
 \subfile{../2-22/2-22}
 \subfile{../2-24/2-24}
+\subfile{../3-1/3-1}
+\subfile{../3-3/3-3}
+\subfile{../3-8/3-8}
 \appendix
 \newpage
 \printbibliography
